@@ -26,7 +26,8 @@ get_rpoB_for_species <- function(species, seqs) {
   # flexible match: species string anywhere in the name
   hit <- which(grepl(species, names(seqs), ignore.case = TRUE))
   if (length(hit) == 0) {
-    stop("No rpoB sequence found for species: ", species)
+    message("No rpoB sequence found for species: ", species)
+    return(NULL)
   }
   if (length(hit) > 1) {
     message("Multiple rpoB sequences for ", species, ", using first match")
