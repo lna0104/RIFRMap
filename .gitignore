@@ -3,7 +3,6 @@
 .RData
 .Ruserdata
 .RDataTmp
-.vscode/*
 *.fna
 *.txt
 tmp.R
