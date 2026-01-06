@@ -131,19 +131,19 @@ ui <- dashboardPage(
             )
           ),
           
-          # Negin
+          # Curated data
           column(
             width = 12, lg = 3, xl = 2,
             bs4Card(
-              title = "Negin",
+              title = "Curated data",
               width = 12,
               status = "secondary",
               solidHeader = TRUE,
               collapsible = TRUE,
-              checkboxInput("negin_enabled", "Include data", FALSE),
-              selectInput("negin_species", "Species", choices = NULL, selected = "All species", multiple = TRUE),
-              sliderInput("negin_nstudies", "Number of studies (per mutation)", min = 1, max = 59, value = c(1, 59), step = 1),
-              sliderInput("negin_nspecies", "Number of species (per mutation)", min = 1, max = 29, value = c(1, 29), step = 1)
+              checkboxInput("curated_enabled", "Include data", FALSE),
+              selectInput("curated_species", "Species", choices = NULL, selected = "All species", multiple = TRUE),
+              sliderInput("curated_nstudies", "Number of studies (per mutation)", min = 1, max = 59, value = c(1, 59), step = 1),
+              sliderInput("curated_nspecies", "Number of species (per mutation)", min = 1, max = 29, value = c(1, 29), step = 1)
             )
           ),
           
@@ -225,7 +225,7 @@ ui <- dashboardPage(
               tags$p(
                 class = "text-muted",
                 style = "margin-bottom: 12px; font-size: 0.9rem;",
-                HTML("Source-centric view of mutation evidence. Plots highlight overlap among <b>databases</b> (CARD, CRyPTIC, DRAGdb, Yang, Negin), independent of species identity.")
+                HTML("Source-centric view of mutation evidence. Plots highlight overlap among <b>databases</b> (CARD, CRyPTIC, DRAGdb, Yang, Curated data), independent of species identity.")
               )
             ),
             

@@ -219,7 +219,7 @@ mutation_counts <- full_join(
   by = c("AA_pos_Ecoli", "AA_mutation")
 ) |>
   mutate(
-    source = "Negin",
+    source = "Curated",
     n_species = coalesce(n_species, 0L),
     n_studies = coalesce(n_studies, 0L)
   )
@@ -232,8 +232,8 @@ final_mutation_list <- mutation_species_rows |>
   mutate(species = Species) |>
   select(!Species)
 
-write.csv(final_mutation_list, "data/processed_data/Negin_processed.csv", row.names = FALSE)
-saveRDS(final_mutation_list, file = "code/RIFRMap_shiny/data/negin.rds")
+write.csv(final_mutation_list, "data/processed_data/curated_processed.csv", row.names = FALSE)
+saveRDS(final_mutation_list, file = "code/RIFRMap_shiny/data/curated.rds")
 
 # Combine data
 combined_all_rows <- bind_rows(

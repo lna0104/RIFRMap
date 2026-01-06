@@ -5,7 +5,7 @@ server <- function(input, output, session) {
   cryptic <- readRDS("data/cryptic.rds")
   dragdb  <- readRDS("data/dragdb.rds")
   yang    <- readRDS("data/yang.rds")
-  negin   <- readRDS("data/negin.rds")
+  curated   <- readRDS("data/curated.rds")
   
   
   # ----  Load sequencing data ----
@@ -52,8 +52,8 @@ server <- function(input, output, session) {
     )
     
     updateSelectInput(
-      session, "negin_species",
-      choices  = c("All species", sort(unique(negin$species))),
+      session, "curated_species",
+      choices  = c("All species", sort(unique(curated$species))),
       selected = "All species"
     )
     
@@ -65,7 +65,7 @@ server <- function(input, output, session) {
     cryptic$AA_pos_Ecoli,
     dragdb$AA_pos_Ecoli,
     yang$AA_pos_Ecoli,
-    negin$AA_pos_Ecoli
+    curated$AA_pos_Ecoli
   ) |>
     as.numeric() |>          
     na.omit() |>
@@ -133,15 +133,15 @@ server <- function(input, output, session) {
       dfs[["Yang"]] <- d
     }
     
-    ## Negin
-    if (isTRUE(input$negin_enabled)) {
-      d <- negin |>
-        filter_by_species(input$negin_species, species_col = "species")
+    ## Curated data
+    if (isTRUE(input$curated_enabled)) {
+      d <- curated |>
+        filter_by_species(input$curated_species, species_col = "species")
       
-      d <- filter_range_if(d, "n_studies", input$negin_nstudies)
-      d <- filter_range_if(d, "n_species", input$negin_nspecies)
+      d <- filter_range_if(d, "n_studies", input$curated_nstudies)
+      d <- filter_range_if(d, "n_species", input$curated_nspecies)
       
-      dfs[["Negin"]] <- d
+      dfs[["Curated"]] <- d
     }
     
     if (length(dfs) == 0) return(NULL)
@@ -169,7 +169,7 @@ server <- function(input, output, session) {
     updateCheckboxInput(session, "cryptic_enabled", value = FALSE)
     updateCheckboxInput(session, "dragdb_enabled", value = FALSE)
     updateCheckboxInput(session, "yang_enabled", value = FALSE)
-    updateCheckboxInput(session, "negin_enabled", value = FALSE)
+    updateCheckboxInput(session, "curated_enabled", value = FALSE)
     
     updateSelectInput(session, "card_species", selected = "All species")
     updateSelectInput(session, "cryptic_species", selected = "All species")
@@ -183,8 +183,8 @@ server <- function(input, output, session) {
     
     updateSliderInput(session, "dragdb_provean", value = c(-10.7, -2.6))
     updateSliderInput(session, "yang_log2fc", value = c(0, 2.7))
-    updateSliderInput(session, "negin_nstudies", value = c(1, 59))
-    updateSliderInput(session, "negin_nspecies", value = c(1, 29))
+    updateSliderInput(session, "curated_nstudies", value = c(1, 59))
+    updateSliderInput(session, "curated_nspecies", value = c(1, 29))
     
     updateTabItems(session, "sidebar", "home")
   })
@@ -876,73 +876,73 @@ server <- function(input, output, session) {
     "CARD"    = "#ead6fd",  
     "CRyPTIC" = "#ffdfba", 
     "DRAGdb"  = "#bae1ff", 
-    "Negin"   = "#fff8f0",  
+    "Curated"   = "#fff8f0",  
     "Yang"    = "#dff2e1",  
     
    
     "CARD+CRyPTIC"   = "#D1D8BE",  
     "CARD+DRAGdb"    = "#A7C1A8", 
-    "CARD+Negin"     = "#819A91",  
+    "CARD+Curated"     = "#819A91",  
     "CARD+Yang"      = "#5FB3C4", 
     
     "CRyPTIC+DRAGdb" = "#B0D19A",  
-    "CRyPTIC+Negin"  = "#34955e",  
+    "CRyPTIC+Curated"  = "#34955e",  
     "CRyPTIC+Yang"   = "#27b481", 
     
-    "DRAGdb+Negin"   = "#3cb8b2",  
+    "Curated+DRAGdb"   = "#3cb8b2",  
     "DRAGdb+Yang"    = "#8aad47",  
-    "Negin+Yang"     = "#a2cd5a", 
+    "Curated+Yang"     = "#a2cd5a", 
     
     
     "CARD+CRyPTIC+DRAGdb"  = "#ffde1a", 
-    "CARD+CRyPTIC+Negin"   = "#ffce00",  
+    "CARD+CRyPTIC+Curated"   = "#ffce00",  
     "CARD+CRyPTIC+Yang"    = "#ffa700",  
     
-    "CARD+DRAGdb+Negin"    = "#eec900",  
+    "CARD+Curated+DRAGdb"    = "#eec900",  
     "CARD+DRAGdb+Yang"     = "#e7ca52",  
-    "CARD+Negin+Yang"      = "#fecc4b",  
+    "CARD+Curated+Yang"      = "#fecc4b",  
     
-    "CRyPTIC+DRAGdb+Negin" = "#fdb414",  
+    "CRyPTIC+Curated+DRAGdb" = "#fdb414",  
     "CRyPTIC+DRAGdb+Yang"  = "#cba034",  
-    "CRyPTIC+Negin+Yang"   = "#F0AE6C",  
-    "DRAGdb+Negin+Yang"    = "#E4C07A",  
+    "CRyPTIC+Curated+Yang"   = "#F0AE6C",  
+    "Curated+DRAGdb+Yang"    = "#E4C07A",  
     
     
-    "CARD+CRyPTIC+DRAGdb+Negin" = "#ed453d",
-    "CARD+CRyPTIC+Negin+Yang"   = "#ff7f50",  
-    "CARD+DRAGdb+Negin+Yang"    = "#f40d30",  
-    "CRyPTIC+DRAGdb+Negin+Yang" = "#b31b1b",  
+    "CARD+CRyPTIC+Curated+DRAGdb" = "#ed453d",
+    "CARD+CRyPTIC+Curated+Yang"   = "#ff7f50",  
+    "CARD+Curated+DRAGdb+Yang"    = "#f40d30",  
+    "CRyPTIC+Curated+DRAGdb+Yang" = "#b31b1b",  
     
    
-    "CARD+CRyPTIC+DRAGdb+Negin+Yang" = "#ff0800",
+    "CARD+CRyPTIC+Curated+DRAGdb+Yang" = "#ff0800",
     
     "None" = "#D9D9D9"
   )
   
   legend_order <- c(
     # Singles
-    "CARD", "CRyPTIC", "DRAGdb", "Negin", "Yang",
+    "CARD", "CRyPTIC", "DRAGdb", "Curated", "Yang",
     
     # Pairs
-    "CARD+CRyPTIC", "CARD+DRAGdb", "CARD+Negin", "CARD+Yang",
-    "CRyPTIC+DRAGdb", "CRyPTIC+Negin", "CRyPTIC+Yang",
-    "DRAGdb+Negin", "DRAGdb+Yang",
-    "Negin+Yang",
+    "CARD+CRyPTIC", "CARD+DRAGdb", "CARD+Curated", "CARD+Yang",
+    "CRyPTIC+DRAGdb", "CRyPTIC+Curated", "CRyPTIC+Yang",
+    "Curated+DRAGdb", "DRAGdb+Yang",
+    "Curated+Yang",
     
     # Triples
-    "CARD+CRyPTIC+DRAGdb", "CARD+CRyPTIC+Negin", "CARD+CRyPTIC+Yang",
-    "CARD+DRAGdb+Negin", "CARD+DRAGdb+Yang", "CARD+Negin+Yang",
-    "CRyPTIC+DRAGdb+Negin", "CRyPTIC+DRAGdb+Yang", "CRyPTIC+Negin+Yang",
-    "DRAGdb+Negin+Yang",
+    "CARD+CRyPTIC+DRAGdb", "CARD+CRyPTIC+Curated", "CARD+CRyPTIC+Yang",
+    "CARD+Curated+DRAGdb", "CARD+DRAGdb+Yang", "CARD+Curated+Yang",
+    "CRyPTIC+Curated+DRAGdb", "CRyPTIC+DRAGdb+Yang", "CRyPTIC+Curated+Yang",
+    "Curated+DRAGdb+Yang",
     
     # Quadruples
-    "CARD+CRyPTIC+DRAGdb+Negin",
-    "CARD+CRyPTIC+Negin+Yang",
-    "CARD+DRAGdb+Negin+Yang",
-    "CRyPTIC+DRAGdb+Negin+Yang",
+    "CARD+Curated+CRyPTIC+DRAGdbd",
+    "CARD+Curated+CRyPTIC+Yang",
+    "CARD+Curated+DRAGdb+Yang",
+    "CRyPTIC+Curated+DRAGdb+Yang",
     
     # All
-    "CARD+CRyPTIC+DRAGdb+Negin+Yang",
+    "CARD+CRyPTIC+Curated+DRAGdb+Yang",
     
     # None 
     "None"
