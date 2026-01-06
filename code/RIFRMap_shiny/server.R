@@ -186,7 +186,7 @@ server <- function(input, output, session) {
     updateSliderInput(session, "curated_nstudies", value = c(1, 59))
     updateSliderInput(session, "curated_nspecies", value = c(1, 29))
     
-    updateTabItems(session, "sidebar", "home")
+    updateTabItems(session, "sidebar", "filters")
   })
   
   

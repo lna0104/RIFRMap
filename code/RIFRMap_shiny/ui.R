@@ -47,7 +47,8 @@ ui <- dashboardPage(
     elevation = 3,
     bs4SidebarMenu(
       id = "sidebar",
-      bs4SidebarMenuItem("Home", tabName = "home", icon = icon("sliders")),
+      bs4SidebarMenuItem("Home", tabName = "home", icon = icon("home")),
+      bs4SidebarMenuItem("Filters", tabName = "filters", icon = icon("sliders")),
       bs4SidebarMenuItem("View", tabName = "view", icon = icon("chart-simple"))
     )
   ),
@@ -61,9 +62,13 @@ ui <- dashboardPage(
     ),
     
     bs4TabItems(
-      # ---------------- HOME ----------------
       bs4TabItem(
         tabName = "home",
+        h2("Welcome to RIFRMap")
+          ),
+      # ---------------- Filters ----------------
+      bs4TabItem(
+        tabName = "filters",
         h2("RIF Resistant Data"),
         
         fluidRow(
