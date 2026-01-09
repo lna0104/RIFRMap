@@ -12,7 +12,8 @@ cran_pkgs <- c(
   "base64enc",
   "htmltools",
   "remotes",
-  "shinyWidgets"
+  "shinyWidgets",
+  "shinycssloaders"
 )
 
 install.packages(

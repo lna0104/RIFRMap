@@ -108,6 +108,9 @@ server <- function(input, output, session) {
     )
   }
   
+  spin <- function(x) shinycssloaders::withSpinner(x, color = "#0dc5c1")
+  
+  
   
   
   # ---- Load all datasets ----
@@ -383,13 +386,13 @@ server <- function(input, output, session) {
       pars <- vector(mode = "list")
       pars$dxBlocks <- 0.8  # relative space between blocks
       
-      pars$dyPos <- 1.1 # relative space for position numbers
+      pars$dyPos <- 1.2 # relative space for position numbers
       pars$dyRef <- 1.3 # relative space for reference sequence
       pars$dyBlocks <- 2.2
       
-      pars$cexPos <- 0.9 # relative font size of position numbers
-      pars$cexRef <- 0.9 # relative font size of reference sequence
-      pars$cexMut <- 0.9
+      pars$cexPos <- 1 # relative font size of position numbers
+      pars$cexRef <- 1 # relative font size of reference sequence
+      pars$cexMut <- 1
       pars$cexSpecies <- 1.1 # relative font size of species labels
       
       pars$col <- c(default     = "#000000",
@@ -883,7 +886,7 @@ server <- function(input, output, session) {
         id = "clusterWrap",
         div(
           id = "clusterPlotWrap",
-          plotOutput("clusterPlot", width = "100%", height = "85vh"),
+          spin(plotOutput("clusterPlot", width = "100%", height = "85vh")),
           tags$canvas(id = "hoverCanvas")
         )
       )
@@ -1039,7 +1042,7 @@ server <- function(input, output, session) {
           ",
           div(
             style = sprintf("width: %dpx;", w),
-            plotOutput("mutationUpset", height = "450px", width = "100%")
+            spin(plotOutput("mutationUpset", height = "450px", width = "100%"))
           )
         )
       }
@@ -1148,8 +1151,8 @@ server <- function(input, output, session) {
     
     "CARD+CRyPTIC+Curated+DRAGdb" = "#ed453d",
     "CARD+CRyPTIC+Curated+Yang"   = "#ff7f50",  
-    "CARD+Curated+DRAGdb+Yang"    = "#f40d30",  
-    "CRyPTIC+Curated+DRAGdb+Yang" = "#b31b1b",  
+    "CARD+Curated+DRAGdb+Yang"    = "#D34E4E",  
+    "CRyPTIC+Curated+DRAGdb+Yang" = "#FF5555",  
     
    
     "CARD+CRyPTIC+Curated+DRAGdb+Yang" = "#ff0800",
@@ -1401,10 +1404,12 @@ server <- function(input, output, session) {
       # LEFT: plot
       tags$div(
         class = "hm-plot",
-        girafeOutput(
-          outputId = "mutationHeatmap",
-          width  = "60vw",
-          height = paste0(heatmap_height_px(), "px")
+        spin(
+          girafeOutput(
+            outputId = "mutationHeatmap",
+            width  = "60vw",
+            height = paste0(heatmap_height_px(), "px")
+          )
         )
       ),
       

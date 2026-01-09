@@ -15,6 +15,7 @@ suppressPackageStartupMessages({
   library(base64enc)
   library(htmltools)
   library(shinyWidgets)
+  library(shinycssloaders)
 
   ## Bioconductor
   library(Biostrings)
