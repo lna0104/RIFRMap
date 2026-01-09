@@ -1,6 +1,116 @@
 server <- function(input, output, session) {
   
-  # ---- Load all datasets (once) ----
+  # ---- Global plot style ----
+  PLOT_STYLE <- list(
+    # font family: use same name everywhere
+    family = "Helvetica",
+    
+    # base sizes (ggplot)
+    base_size   = 9,
+    title_size  = 12,
+    axis_title  = 10,
+    axis_text   = 10,
+    caption     = 8,
+    
+    # colours
+    text_col    = "grey20",
+    axis_col    = "grey20",
+    tick_col    = "grey60",
+    panel_bg    = "white",
+    
+    # margins
+    plot_margin = ggplot2::margin(6, 8, 6, 8)
+  )
+  
+  theme_app <- function(
+    legend = "none",
+    x_top  = FALSE
+  ) {
+    theme_bw(base_family = PLOT_STYLE$family, base_size = PLOT_STYLE$base_size) +
+      theme(
+        plot.title      = element_text(
+          size = PLOT_STYLE$title_size,
+          colour = PLOT_STYLE$text_col
+        ),
+        plot.subtitle   = element_text(
+          size = PLOT_STYLE$base_size,
+          colour = PLOT_STYLE$text_col
+        ),
+        axis.title.x    = element_text(
+          size = PLOT_STYLE$axis_title,
+          colour = PLOT_STYLE$axis_col,
+          margin = ggplot2::margin(t = if (x_top) 8 else 0, b = if (x_top) 0 else 8)
+        ),
+        axis.title.y    = element_text(
+          size = PLOT_STYLE$axis_title,
+          colour = PLOT_STYLE$axis_col,
+          margin = ggplot2::margin(r = 8)
+        ),
+        axis.text.x     = element_text(
+          size = PLOT_STYLE$axis_text,
+          colour = PLOT_STYLE$axis_col
+        ),
+        axis.text.y     = element_text(
+          size = PLOT_STYLE$axis_text,
+          colour = PLOT_STYLE$axis_col
+        ),
+        axis.ticks      = element_line(colour = PLOT_STYLE$tick_col),
+        panel.grid      = element_blank(),
+        plot.margin     = PLOT_STYLE$plot_margin,
+        legend.position = legend
+      )
+  }
+  
+  `%||%` <- function(a, b) if (!is.null(a)) a else b
+  
+  # ----  Plot message setting ----
+  ui_message <- function(msg) {
+    div(
+      style = sprintf(
+        paste(
+          "padding:40px;",
+          "font-family:%s;",
+          "font-size:%dpx;",
+          "font-weight:normal;",
+          "color:%s;",
+          "line-height:1.4;",
+          sep = " "
+        ),
+        PLOT_STYLE$family,
+        round(PLOT_STYLE$base_size * 2),
+        PLOT_STYLE$text_col
+      ),
+      msg
+    )
+  }
+  
+  
+  plot_message <- function(
+    msg,
+    x = 0.02,
+    y = 0.98,
+    size_mult = 1.1,
+    col = PLOT_STYLE$text_col,
+    fontface = "plain"
+  ) {
+    grid::grid.newpage()
+    grid::grid.text(
+      msg,
+      x = grid::unit(x, "npc"),
+      y = grid::unit(y, "npc"),
+      just = c("left", "top"),
+      gp = grid::gpar(
+        col        = col,
+        fontsize   = PLOT_STYLE$base_size * 12/9 * size_mult,
+        fontfamily = PLOT_STYLE$family,
+        fontface   = fontface
+      )
+    )
+  }
+  
+  
+  
+  # ---- Load all datasets ----
   card    <- readRDS("data/card.rds")
   cryptic <- readRDS("data/cryptic.rds")
   dragdb  <- readRDS("data/dragdb.rds")
@@ -15,8 +125,10 @@ server <- function(input, output, session) {
   seqs <- readDNAStringSet("data/rpoB_references.fasta")
   load("data/coordinates.RData")
   
+
+
   # ---- Filter data -----
-  ## ---- Helper: species filter ("All species" = no filter) ----
+  # species filter ("All species" = no filter)
   filter_by_species <- function(df, species_selected, species_col = "species") {
     if (is.null(species_selected) || "All species" %in% species_selected) {
       return(df)
@@ -35,8 +147,8 @@ server <- function(input, output, session) {
     
     updateSelectInput(
       session, "cryptic_species",
-      choices  = c("All species", sort(unique(cryptic$species))),
-      selected = "All species"
+      choices  = c(sort(unique(cryptic$species))),
+      selected = "Mycobacterium tuberculosis"
     )
     
     updateSelectInput(
@@ -47,8 +159,8 @@ server <- function(input, output, session) {
     
     updateSelectInput(
       session, "yang_species",
-      choices  = c("All species", sort(unique(yang$species))),
-      selected = "All species"
+      choices  = c(sort(unique(yang$species))),
+      selected = "Escherichia coli"
     )
     
     updateSelectInput(
@@ -58,20 +170,6 @@ server <- function(input, output, session) {
     )
     
   }, once = TRUE)
-  
-  # AA position order from ALL data 
-  all_pos <- c(
-    card$AA_pos_Ecoli,
-    cryptic$AA_pos_Ecoli,
-    dragdb$AA_pos_Ecoli,
-    yang$AA_pos_Ecoli,
-    curated$AA_pos_Ecoli
-  ) |>
-    as.numeric() |>          
-    na.omit() |>
-    unique() |>
-    sort(decreasing = TRUE) |>
-    as.character() 
   
   ## ---- Combine selected datasets ----
   combined_rows <- reactive({
@@ -102,12 +200,13 @@ server <- function(input, output, session) {
       d <- cryptic |>
         filter_by_species(input$cryptic_species, species_col = "species")
       
-      # numeric filters (apply only to CRyPTIC rows)
+      # numeric filters 
       d <- filter_range_if(d, "coef", input$cryptic_coef)
       d <- filter_range_if(d, "counts", input$cryptic_counts)
-      d <- filter_range_if(d, "bh_corrected_p", input$cryptic_bhp)
+      d <- d |> 
+        dplyr::filter(bh_corrected_p <= as.numeric(input$cryptic_bhp))
       
-      # categorical filter (if you use it)
+      # categorical filter 
       d <- filter_in_if(d, "homoplasy", input$cryptic_homoplasy)
       
       dfs[["CRyPTIC"]] <- d
@@ -155,14 +254,6 @@ server <- function(input, output, session) {
     updateTabItems(session, "sidebar", "view")
   })
   
-  # ---- No data ui ----
-  no_data_ui <- function(msg = "No data to show") {
-    div(
-      style = "padding: 40px; text-align: center; color: #777;",
-      h6(msg)
-    )
-  }
-  
   # ---- Reset button: clear inputs + go back Home
   observeEvent(input$reset_filters, {
     updateCheckboxInput(session, "card_enabled", value = FALSE)
@@ -172,9 +263,9 @@ server <- function(input, output, session) {
     updateCheckboxInput(session, "curated_enabled", value = FALSE)
     
     updateSelectInput(session, "card_species", selected = "All species")
-    updateSelectInput(session, "cryptic_species", selected = "All species")
+    updateSelectInput(session, "cryptic_species", selected = "Mycobacterium tuberculosis")
     updateSelectInput(session, "dragdb_species", selected = "All species")
-    updateSelectInput(session, "yang_species", selected = "All species")
+    updateSelectInput(session, "yang_species", selected = "Escherichia coli")
     
     updateSliderInput(session, "cryptic_coef", value = c(-4, 9.6))
     updateSliderInput(session, "cryptic_counts", value = c(0, 2326))
@@ -190,651 +281,799 @@ server <- function(input, output, session) {
   })
   
   
-  # ----- Cluster plot -----
-  ## ----- Helper functions for cluster plot ----
-  
-  getBlockData <- function(muts, 
-                           clusters, 
-                           seqs, 
-                           refSeq_ID,
-                           coordinatesFocal,
-                           species, 
-                           clusterName, 
-                           mergeDuplicates = TRUE) {
+  # ----- Species-Cluster Tab -----
+  {
+    ## ----- Helper functions for cluster plot ----
     
-    clusterStart <- clusters$AAstart_Ecoli[clusters$Cluster == clusterName]
-    clusterEnd <- clusters$AAend_Ecoli[clusters$Cluster == clusterName]
-    clusterLength <- clusterEnd - clusterStart + 1
-    clusterShift <- ALJEbinf::translateCoordinate(pos = clusterStart,
-                                                  coordinates = coordinatesFocal,
-                                                  direction = "RefToFocal",
-                                                  AAinput = TRUE,
-                                                  AAoutput = TRUE) - clusterStart
-    block <- muts |>
-      filter(Species == species) |>
-      mutate(AA_mut_name_Ecoli = paste0("rpoB", "_", AA_original, AA_pos_Ecoli, AA_mutation))
-    block <- block |>
-      filter(!is.na(AA_pos),
-             !is.na(AA_pos_Ecoli),
-             !is.na(AA_original),
-             !is.na(AA_mutation)) |>
-      filter(AA_pos_Ecoli >= clusterStart & AA_pos_Ecoli <= clusterEnd) |>
-      arrange(AA_pos_Ecoli, AA_mutation)
-    
-    if(mergeDuplicates) {
-      block <- distinct(block, AA_pos_Ecoli, AA_mutation, .keep_all = TRUE)
-    }
-    
-    block$RelX <- rep(NA_integer_, nrow(block))
-    block$RelY <- rep(NA_integer_, nrow(block))
-    y <- 1L
-    for(i in seq_len(nrow(block))) {
-      # the following line might need adjustment if there are indels within a cluster:
-      block$RelX[i] <- block$AA_pos_Ecoli[i] - clusterStart + 1L
-      if(i > 1) {
-        if(block$AA_pos_Ecoli[i] == block$AA_pos_Ecoli[i - 1]) {
-          y <- y + 1L
-        } else {
-          y <- 1L
-        }
+    getBlockData <- function(muts, 
+                             clusters, 
+                             seqs, 
+                             refSeq_ID,
+                             coordinatesFocal,
+                             species, 
+                             clusterName, 
+                             mergeDuplicates = TRUE) {
+      
+      clusterStart <- clusters$AAstart_Ecoli[clusters$Cluster == clusterName]
+      clusterEnd <- clusters$AAend_Ecoli[clusters$Cluster == clusterName]
+      clusterLength <- clusterEnd - clusterStart + 1
+      clusterShift <- ALJEbinf::translateCoordinate(pos = clusterStart,
+                                                    coordinates = coordinatesFocal,
+                                                    direction = "RefToFocal",
+                                                    AAinput = TRUE,
+                                                    AAoutput = TRUE) - clusterStart
+      block <- muts |>
+        filter(Species == species) |>
+        mutate(AA_mut_name_Ecoli = paste0("rpoB", "_", AA_original, AA_pos_Ecoli, AA_mutation))
+      block <- block |>
+        filter(!is.na(AA_pos),
+               !is.na(AA_pos_Ecoli),
+               !is.na(AA_original),
+               !is.na(AA_mutation)) |>
+        filter(AA_pos_Ecoli >= clusterStart & AA_pos_Ecoli <= clusterEnd) |>
+        arrange(AA_pos_Ecoli, AA_mutation)
+      
+      if(mergeDuplicates) {
+        block <- distinct(block, AA_pos_Ecoli, AA_mutation, .keep_all = TRUE)
       }
-      block$RelY[i] <- y
-    }
-    
-    # add positions and original bases:
-    addInfo <- data.frame(matrix(NA_integer_,
-                                 ncol=ncol(block), 
-                                 nrow=2 * clusterLength, 
-                                 dimnames=list(NULL, colnames(block))))
-    # again, the following line might need adjustment if there are indels within a cluster:
-    addInfo$AA_pos <- (clusterStart:clusterEnd) + clusterShift
-    addInfo$AA_pos_Ecoli <- clusterStart:clusterEnd
-    addInfo$RelX <- 1:clusterLength
-    addInfo$RelY <- c(rep(-1L, clusterLength), rep(0L, clusterLength))
-    addInfo$AA_original <- seqs[[refSeq_ID]] |>
-      Biostrings::translate(genetic.code = getGeneticCode("Bacterial", full.search = TRUE)) |>
-      as.character() |>
-      substr(clusterStart + clusterShift, 
-             clusterEnd + clusterShift) |>
-      str_split("", simplify = TRUE) |>
-      as.vector()
-    addInfo <- as_tibble(addInfo)
-    
-    block <- rbind(addInfo, block)
-    block <- select(block, AA_pos, AA_pos_Ecoli, AA_original, AA_mutation, AA_mut_name_Ecoli, RelX, RelY)
-    return(block)
-  }
-  
-  renderBlock <- function(block, x0, y0, dx, dy, colcat = NULL, pars) {
-    # positions:
-    text(x0 + (block$RelX[block$RelY == -1L] - 1L) * dx,
-         1 - y0,
-         block$AA_pos[block$RelY == -1L],
-         cex = , adj = c(0.5, 0.5), srt = 90, family = pars$familyPos)
-    # original sequence:
-    text(x0 + (block$RelX[block$RelY == 0L] - 1L) * dx,
-         1 - y0 - dy * pars$dyPos,
-         block$AA_original[block$RelY == 0L],
-         cex = pars$cexRef, adj = c(0.5, 0.5), family = pars$familyRef)
-    # mutations:
-    sel <- block$RelY > 0L
-    if (any(sel)) {
-      text(x0 + (block$RelX[block$RelY > 0L] - 1L) * dx,
-           #scaled down (×0.5) to reduce excessive vertical spacing mutation rows
-           1 - y0 - dy * (pars$dyPos + pars$dyRef) - (block$RelY[block$RelY > 0L] - 1L) * dy * 0.5,
-           block$AA_mutation[block$RelY > 0L],
-           col = block$Colour[block$RelY > 0L],
-           cex = pars$cexPos, adj = c(0.5, 0.5), family = pars$familyMuts)
-    }
-  }
-  
-  getPars <- function(plot_width_px = NULL) {
-    
-    # Responsive scaling
-    if (is.null(plot_width_px) || is.na(plot_width_px)) {
-      scale <- 1
-    } else {
-      scale <- plot_width_px / 1200
-      scale <- max(0.65, min(1.0, scale))
-    }
-    
-    list(
-      # layout
-      dxBlocks = 0.40 * scale, # relative space between blockss
-      dyPos    = 0.5 * scale, # relative space for position numbers
-      dyRef    = 0.50 * scale, # relative space for reference sequence
-      dyBlocks = 0.5 * scale,
-
-      # text
-      cexPos     = 0.95 * scale,
-      cexRef     = 1.00 * scale,
-      cexSpecies = 1.00 * scale,
-      cexMuts    = 0.95 * scale,
       
-      # colors
-      col = c(
-        default     = "#000000",
-        ubiquitous  = "#3e3bff",
-        unique      = "#ff3e3b",
-        polymorphic = "#12947F"
-      ),
-      
-      # base graphics
-      mar = pmax(0.2, c(1, 0.5, 0.5, 0.5) * scale),
-      familyPos  = "sans",
-      familyMuts = "Courier",
-      familyRef  = "Courier",
-      
-      # export
-      xInchPerUnit = 0.20,
-      yInchPerUnit = 0.20,
-      imageRes     = 300,
-      
-      scale = scale
-    )
-  }
-  
-  plotMutations <- function(muts, 
-                            clusters, 
-                            seqs,
-                            coordinates,
-                            refs,
-                            gene = "rpoB", 
-                            clustersToPlot = NULL,
-                            speciesToPlot = NULL,
-                            file = NULL,
-                            colouring = "none",
-                            mergeDuplicates = TRUE,
-                            plot_width_px = getOption("cluster.plot.width", NA_real_)) {
-    
-    # initial checks:
-    if (is.null(speciesToPlot)) {
-      stop("No species to be plotted need to be provided.")
-    }
-    
-    if (!(colouring %in% c("none", "ubi", "uni", "ubiuni"))) {
-      stop("Selected option for colouring argument not supported.") 
-    }
-    
-    
-    # determine which clusters to plot:
-    if (is.null(clustersToPlot) || length(clustersToPlot) == 0) {
-      clustersToPlot <- clusters |>
-        dplyr::filter(.data$Gene == gene) |>
-        dplyr::arrange(.data$AAstart_Ecoli) |>
-        dplyr::pull(.data$Cluster) |>
-        unique()
-    } else {
-      clustersToPlot <- clustersToPlot[clustersToPlot %in% clusters$Cluster]
-      if (length(clustersToPlot) == 0) stop("clustersToPlot has no valid cluster names.")
-      clustersToPlot <- clusters |>
-        dplyr::filter(.data$Gene == gene, .data$Cluster %in% clustersToPlot) |>
-        dplyr::arrange(.data$AAstart_Ecoli) |>
-        dplyr::pull(.data$Cluster) |>
-        unique()
-    }
-    
-    
-    # delete species that don't have a reference
-    dropSpecies <- rep(TRUE, length(speciesToPlot))
-
-    for (i in seq_along(speciesToPlot)) {
-      refstrain <- refs$RefStrain[refs$Species == speciesToPlot[[i]]]
-      
-      if (length(refstrain) > 0 && !is.na(refstrain[1]) && nzchar(refstrain[1])) {
-        dropSpecies[i] <- FALSE
-      }
-    }
-    
-    if (any(dropSpecies)) {
-      warning(paste0("No reference found for the following strains: \n",
-                     paste0("  ", unique(unlist(speciesToPlot[dropSpecies])), collapse="\n"), 
-                     "\nThese strains will not be included in the plot."))
-      speciesToPlot <- speciesToPlot[!dropSpecies]
-    }
-    
-    # obtain all block data:
-    allBlocks <- vector(mode = "list", length = length(speciesToPlot))
-    names(allBlocks) <- speciesToPlot
-    
-    blockDimsX <- matrix(NA, nrow = length(speciesToPlot),
-                         ncol = length(clustersToPlot))
-    blockDimsY <- blockDimsX
-    
-    for(i in 1:length(speciesToPlot)) {
-      refSeq_ID <- refs$FASTA_name[refs$Species == speciesToPlot[[i]]]
-      
-      allBlocks[[i]] <- vector(mode = "list", length = length(clustersToPlot))
-      names(allBlocks[[i]]) <- clustersToPlot
-      for(j in 1:length(clustersToPlot)) {
-        allBlocks[[i]][[j]] <- getBlockData(muts = muts, 
-                                            clusters = clusters, 
-                                            seqs = seqs,
-                                            refSeq_ID = refSeq_ID,
-                                            coordinatesFocal = coordinates[[refSeq_ID]],
-                                            species = speciesToPlot[[i]],
-                                            clusterName = clustersToPlot[j], 
-                                            mergeDuplicates = mergeDuplicates)
-        blockDimsX[i, j] <- max(allBlocks[[i]][[j]]$RelX)
-        blockDimsY[i, j] <- max(allBlocks[[i]][[j]]$RelY)
-      }
-    }
-    
-    
-    # determine whether mutations are unique or ubiquitous (for colouring them):
-    if (colouring %in% c("ubi", "uni", "ubiuni")) {
-      filteredMuts <- muts |>
-        filter(Species %in% speciesToPlot) |>
-        mutate(AA_mut_name_Ecoli = paste0(gene, "_", AA_original, AA_pos_Ecoli, AA_mutation)) |>
-        distinct(Species, AA_mut_name_Ecoli, keep_all = TRUE) 
-      
-      nSpecies <- filteredMuts |>
-        pull(Species) |>
-        unique() |>
-        length()
-      
-      mutCounts <- filteredMuts |>
-        group_by(AA_mut_name_Ecoli) |>
-        summarise(n = n(), .groups = "drop") |>
-        select(AA_mut_name_Ecoli, n) |>
-        arrange(AA_mut_name_Ecoli) |>
-        mutate(category = case_when(n == 1 ~ "unique",
-                                    n == nSpecies ~ "ubiquitous",
-                                    TRUE ~ "polymorphic"))
-      
-    }
-    
-    # determine all plotting parameters:
-    pars <- getPars(plot_width_px = plot_width_px)
-    # calculate dx (dx = 1 / (nAA + (nCols - 1) * pars$dxBlocks))
-    xTotal <- (sum(apply(blockDimsX, 2, max)) + ncol(blockDimsX) * pars$dxBlocks)
-    dx <- 1 / xTotal
-    # calculate dy (dy = 1 / (nAA + (nRows - 1) * pars$dxBlocks))
-  
-    yTotal <- (sum(apply(blockDimsY, 1, max)) + 
-                 nrow(blockDimsY) * (pars$dyPos + pars$dyRef) +
-                 nrow(blockDimsY) * pars$dyBlocks)
-    dy <- 1 / yTotal
-    
-    # determine colours for each amino acid:
-    for(i in 1:length(speciesToPlot)) {
-      for(j in 1:length(clustersToPlot)) {
-        allBlocks[[i]][[j]]$Colour <- pars$col["default"]
-        if (colouring == "ubiuni") {
-          for(k in 1:nrow(allBlocks[[i]][[j]])) {
-            if (!is.na(allBlocks[[i]][[j]]$AA_mut_name_Ecoli[k])) {
-              category <- mutCounts[mutCounts$AA_mut_name_Ecoli == allBlocks[[i]][[j]]$AA_mut_name_Ecoli[k], 
-                                    "category"] |> pull(category)
-              allBlocks[[i]][[j]]$Colour[k] <- pars$col[category]
-            }
-          }
-        } else if (colouring == "ubi") {
-          for(k in 1:nrow(allBlocks[[i]][[j]])) {
-            if (!is.na(allBlocks[[i]][[j]]$AA_mut_name_Ecoli[k])) {
-              category <- mutCounts[mutCounts$AA_mut_name_Ecoli == allBlocks[[i]][[j]]$AA_mut_name_Ecoli[k], 
-                                    "category"] |> pull(category)
-              category[category == "unique"] <- "default"
-              allBlocks[[i]][[j]]$Colour[k] <- pars$col[category]
-            }
-          }
-        } else if (colouring == "uni") {
-          for(k in 1:nrow(allBlocks[[i]][[j]])) {
-            if (!is.na(allBlocks[[i]][[j]]$AA_mut_name_Ecoli[k])) {
-              category <- mutCounts[mutCounts$AA_mut_name_Ecoli == allBlocks[[i]][[j]]$AA_mut_name_Ecoli[k], 
-                                    "category"] |> pull(category)
-              category[category == "ubiquitous"] <- "default"
-              allBlocks[[i]][[j]]$Colour[k] <- pars$col[category]
-            }
+      block$RelX <- rep(NA_integer_, nrow(block))
+      block$RelY <- rep(NA_integer_, nrow(block))
+      y <- 1L
+      for(i in seq_len(nrow(block))) {
+        # the following line might need adjustment if there are indels within a cluster:
+        block$RelX[i] <- block$AA_pos_Ecoli[i] - clusterStart + 1L
+        if(i > 1) {
+          if(block$AA_pos_Ecoli[i] == block$AA_pos_Ecoli[i - 1]) {
+            y <- y + 1L
+          } else {
+            y <- 1L
           }
         }
+        block$RelY[i] <- y
+      }
+      
+      # add positions and original bases:
+      addInfo <- data.frame(matrix(NA_integer_,
+                                   ncol=ncol(block), 
+                                   nrow=2 * clusterLength, 
+                                   dimnames=list(NULL, colnames(block))))
+      # again, the following line might need adjustment if there are indels within a cluster:
+      addInfo$AA_pos <- (clusterStart:clusterEnd) + clusterShift
+      addInfo$AA_pos_Ecoli <- clusterStart:clusterEnd
+      addInfo$RelX <- 1:clusterLength
+      addInfo$RelY <- c(rep(-1L, clusterLength), rep(0L, clusterLength))
+      addInfo$AA_original <- seqs[[refSeq_ID]] |>
+        Biostrings::translate(genetic.code = getGeneticCode("Bacterial", full.search = TRUE)) |>
+        as.character() |>
+        substr(clusterStart + clusterShift, 
+               clusterEnd + clusterShift) |>
+        str_split("", simplify = TRUE) |>
+        as.vector()
+      addInfo <- as_tibble(addInfo)
+      
+      block <- rbind(addInfo, block)
+      block <- select(block, AA_pos, AA_pos_Ecoli, AA_original, AA_mutation, AA_mut_name_Ecoli, RelX, RelY)
+      return(block)
+    }
+    
+    renderBlock <- function(block, x0, y0, dx, dy, colcat = NULL, pars) {
+      # positions:
+      text(x0 + (block$RelX[block$RelY == -1L] - 1L) * dx,
+           1 - y0,
+           block$AA_pos[block$RelY == -1L],
+           cex = pars$cexPos, adj = c(0.5, 0.5), srt = 90, family = pars$familyPos)
+      # original sequence:
+      text(x0 + (block$RelX[block$RelY == 0L] - 1L) * dx,
+           1 - y0 - dy * pars$dyPos,
+           block$AA_original[block$RelY == 0L],
+           cex = pars$cexRef, adj = c(0.5, 0.5), family = pars$familyRef, font = 2)
+      # mutations:
+      if (length(block$AA_mutation[block$RelY > 0L]) > 0) {
+        text(x0 + (block$RelX[block$RelY > 0L] - 1L) * dx,
+             1 - y0 - dy * (pars$dyPos + pars$dyRef) - (block$RelY[block$RelY > 0L] - 1L) * dy,
+             block$AA_mutation[block$RelY > 0L],
+             col = block$Colour[block$RelY > 0L],
+             cex = pars$cexMut, adj = c(0.5, 0.5), family = pars$familyMuts)
       }
     }
     
-    # actual plotting:
-    if (!is.null(file)) {
-      fileExtension <- tools::file_ext(file)
-      if (fileExtension == "pdf") {
-        pdf(file = file,
-            width = xTotal * pars$xInchPerUnit,
-            height = yTotal * pars$yInchPerUnit)
-      } else if (fileExtension == "png") {
-        png(file = file,
-            width = xTotal * pars$xInchPerUnit,
-            height = yTotal * pars$yInchPerUnit,
-            units = "in",
-            res = pars$imageRes)
-      } else if (fileExtension %in% c("jpg", "jpeg")) {
-        jpeg(file = file,
-             units = "in",
-             width = xTotal * pars$xInchPerUnit,
-             height = yTotal * pars$yInchPerUnit,
-             res = pars$imageRes)
-      } else if (fileExtension == "tiff") {
-        tiff(file = file,
-             units = "in",
-             width = xTotal * pars$xInchPerUnit,
-             height = yTotal * pars$yInchPerUnit,
-             res = pars$imageRes)
+    
+    getPars <- function() {
+      pars <- vector(mode = "list")
+      pars$dxBlocks <- 0.8  # relative space between blocks
+      
+      pars$dyPos <- 1.1 # relative space for position numbers
+      pars$dyRef <- 1.3 # relative space for reference sequence
+      pars$dyBlocks <- 2.2
+      
+      pars$cexPos <- 0.9 # relative font size of position numbers
+      pars$cexRef <- 0.9 # relative font size of reference sequence
+      pars$cexMut <- 0.9
+      pars$cexSpecies <- 1.1 # relative font size of species labels
+      
+      pars$col <- c(default     = "#000000",
+                    ubiquitous  = "#3e3bff", 
+                    unique      = "#ff3e3b",
+                    polymorphic = "#12947F")
+      
+      pars$mar <- c(1, 1, 1, 1) + 0.1
+      pars$familyPos  <- PLOT_STYLE$family
+      pars$familyMuts <- PLOT_STYLE$family
+      pars$familyRef  <- PLOT_STYLE$family
+      
+      pars$xInchPerUnit <- 0.3
+      pars$yInchPerUnit <- 0.2
+      return(pars)
+    }
+    
+    #Create hover map for mouse movement
+    block_hover_map <- function(block, x0, y0, dx, dy, pars, species, cluster) {
+      out <- list()
+      scale <- 1.3
+      
+      # AA positions (RelY == -1)
+      idx <- which(block$RelY == -1L)
+      if (length(idx)) {
+        x <- x0 + (block$RelX[idx] - 1L) * dx
+        y <- 1 - y0
+        for (k in seq_along(idx)) {
+          out[[length(out)+1]] <- data.frame(
+            species = species, cluster = cluster,
+            kind = "pos",
+            label = as.character(block$AA_pos[idx[k]]),
+            xmin = x[k] - dx/3, xmax = x[k] + dx/3,
+            ymin = y - dy/2 * scale, ymax = y + dy/2 * scale,
+            stringsAsFactors = FALSE
+          )
+        }
+      }
+      
+      # reference letters (RelY == 0)
+      idx <- which(block$RelY == 0L)
+      if (length(idx)) {
+        x <- x0 + (block$RelX[idx] - 1L) * dx
+        y <- 1 - y0 - dy * pars$dyPos
+        for (k in seq_along(idx)) {
+          out[[length(out)+1]] <- data.frame(
+            species = species, cluster = cluster,
+            kind = "ref",
+            label = as.character(block$AA_original[idx[k]]),
+            xmin = x[k] - dx/3, xmax = x[k] + dx/3,
+            ymin = y - dy/2, ymax = y + dy/2,
+            stringsAsFactors = FALSE
+          )
+        }
+      }
+      
+      # mutations (RelY > 0)
+      idx <- which(block$RelY > 0L)
+      if (length(idx)) {
+        x <- x0 + (block$RelX[idx] - 1L) * dx
+        y <- 1 - y0 - dy * (pars$dyPos + pars$dyRef) - (block$RelY[idx] - 1L) * dy
+        for (k in seq_along(idx)) {
+          out[[length(out)+1]] <- data.frame(
+            species = species, cluster = cluster,
+            kind = "mut",
+            label = as.character(block$AA_mutation[idx[k]]),
+            colour = as.character(block$Colour[idx[k]]),
+            xmin = x[k] - dx/3, xmax = x[k] + dx/3,
+            ymin = y - dy/2, ymax = y + dy/2,
+            stringsAsFactors = FALSE
+          )
+        }
+      }
+      
+      if (!length(out)) return(NULL)
+      dplyr::bind_rows(out)
+    }
+    
+    
+    plotMutations <- function(
+      muts,
+      clusters,
+      seqs,
+      coordinates,
+      refs,
+      gene = "rpoB",
+      clustersToPlot = NULL,
+      speciesToPlot  = NULL,
+      colouring = "none",
+      mergeDuplicates = TRUE,
+      plot_width_px = getOption("cluster.plot.width", NA_real_),
+      return_dims = FALSE,
+      return_hover_map = FALSE,
+      res = 96
+    ) {
+      
+      # initial checks 
+      if (is.null(speciesToPlot) || length(speciesToPlot) == 0) {
+        stop("No species to be plotted need to be provided.")
+      }
+      
+      if (!colouring %in% c("none", "ubi", "uni", "ubiuni")) {
+        stop("Selected option for colouring argument not supported.")
+      }
+      
+      # determine clusters to plot 
+      if (is.null(clustersToPlot) || length(clustersToPlot) == 0) {
+        clustersToPlot <- clusters |>
+          dplyr::filter(.data$Gene == gene) |>
+          dplyr::arrange(.data$AAstart_Ecoli) |>
+          dplyr::pull(.data$Cluster) |>
+          unique()
       } else {
-        stop(paste0("Graphics file type (",fileExtension, ") not supported."))
-      }
-    }
-    
-    par(mar = pars$mar)
-    plot.new()
-    plot.window(
-      xlim = c(0, 1),
-      ylim = c(0, 1),
-      xaxs = "i",
-      yaxs = "i"
-    )
-    
-    y0 <- 0
-    
-    n_species  <- length(speciesToPlot)
-    n_clusters <- length(clustersToPlot)
- 
-    for (i in seq_len(n_species)) {
-      # scaled down (×0.75) to reduce excessive vertical spacing between species rows
-      if (i > 1) {
-        y0 <- y0 + dy * (max(blockDimsY[i - 1, ]) + pars$dyPos + pars$dyRef) * 0.75
-      }
-      rowLabel <- speciesToPlot[i]
-      par(xpd = NA)
-      text(0.01, 1 - y0, rowLabel, cex = pars$cexSpecies, adj = c(0, 1), font = 3)
-      par(xpd = FALSE)
-      
-      y0 <- y0 + pars$dyBlocks * dy
-      x0 <- pars$dxBlocks * dx
-      
-      for (j in seq_len(n_clusters)) {
-        if (j > 1) {
-          x0 <- x0 + dx * (max(blockDimsX[, j - 1]) + pars$dxBlocks)
-        }
+        clustersToPlot <- clustersToPlot[clustersToPlot %in% clusters$Cluster]
+        if (length(clustersToPlot) == 0) stop("clustersToPlot has no valid cluster names.")
         
-        renderBlock(allBlocks[[i]][[j]], x0, y0, dx, dy, pars = pars)
+        clustersToPlot <- clusters |>
+          dplyr::filter(.data$Gene == gene, .data$Cluster %in% clustersToPlot) |>
+          dplyr::arrange(.data$AAstart_Ecoli) |>
+          dplyr::pull(.data$Cluster) |>
+          unique()
       }
-    }
-    
-    
-    if (!is.null(file)) {
-      dev.off() 
-    }
-  }
-  
-  
-  ## ---- Process data ----
-  
-  ### ---- Cluster plot data ----
-  
-  legend_colour <- c(
-    Reference   = "#000000",
-    Ubiquitous  = "#3e3bff", 
-    Unique      = "#FF0000",
-    Polymorphic = "#12947F"
-  )
-  
-  output$legend_panel <- renderUI({
-    tags$div(
-      tags$div(
-        "Mutation type",
-        style = "font-weight: 600; margin-bottom: 10px;"
-      ),
       
-      lapply(names(legend_colour), function(name) {
-        tags$div(
-          style = "
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin: 6px 0;
-        ",
-          tags$span(
-            style = sprintf(
-              "
-            width: 14px;
-            height: 14px;
-            border-radius: 3px;
-            display: inline-block;
-            background-color: %s;
-            border: 1px solid rgba(0,0,0,0.3);
-            ",
-              legend_colour[[name]]
-            )
-          ),
-          tags$span(
-            style = "font-size: 13px;",
-            tools::toTitleCase(name)
+      if (length(clustersToPlot) == 0) {
+        stop("No clusters available to plot for this gene.")
+      }
+      
+      # drop species without a reference 
+      dropSpecies <- rep(TRUE, length(speciesToPlot))
+      
+      for (i in seq_along(speciesToPlot)) {
+        refstrain <- refs$RefStrain[refs$Species == speciesToPlot[[i]]]
+        if (length(refstrain) > 0 && !is.na(refstrain[1]) && nzchar(refstrain[1])) {
+          dropSpecies[i] <- FALSE
+        }
+      }
+      
+      if (any(dropSpecies)) {
+        warning(
+          paste0(
+            "No reference found for the following strains:\n",
+            paste0("  ", unique(unlist(speciesToPlot[dropSpecies])), collapse = "\n"),
+            "\nThese strains will not be included in the plot."
           )
         )
-      })
+        speciesToPlot <- speciesToPlot[!dropSpecies]
+      }
+      
+      if (length(speciesToPlot) == 0) {
+        stop("All selected species were dropped because reference assets are missing.")
+      }
+      
+      # obtain all block data 
+      n_species  <- length(speciesToPlot)
+      n_clusters <- length(clustersToPlot)
+      
+      allBlocks <- vector("list", length = n_species)
+      names(allBlocks) <- speciesToPlot
+      
+      blockDimsX <- matrix(NA_real_, nrow = n_species, ncol = n_clusters)
+      blockDimsY <- matrix(NA_real_, nrow = n_species, ncol = n_clusters)
+      
+      for (i in seq_along(speciesToPlot)) {
+        refSeq_ID <- refs$FASTA_name[refs$Species == speciesToPlot[[i]]][1]
+        
+        allBlocks[[i]] <- vector("list", length = n_clusters)
+        names(allBlocks[[i]]) <- clustersToPlot
+        
+        for (j in seq_along(clustersToPlot)) {
+          blk <- getBlockData(
+            muts            = muts,
+            clusters        = clusters,
+            seqs            = seqs,
+            refSeq_ID       = refSeq_ID,
+            coordinatesFocal= coordinates[[refSeq_ID]],
+            species         = speciesToPlot[[i]],
+            clusterName     = clustersToPlot[[j]],
+            mergeDuplicates = mergeDuplicates
+          )
+          
+          allBlocks[[i]][[j]] <- blk
+          blockDimsX[i, j] <- suppressWarnings(max(blk$RelX, na.rm = TRUE))
+          blockDimsY[i, j] <- suppressWarnings(max(blk$RelY, na.rm = TRUE))
+        }
+      }
+      
+      # determine mutation categories for colouring 
+      mutCounts <- NULL
+      if (colouring %in% c("ubi", "uni", "ubiuni")) {
+        filteredMuts <- muts |>
+          dplyr::filter(.data$Species %in% speciesToPlot) |>
+          dplyr::mutate(AA_mut_name_Ecoli = paste0(gene, "_", AA_original, AA_pos_Ecoli, AA_mutation)) |>
+          dplyr::distinct(Species, AA_mut_name_Ecoli, .keep_all = TRUE)
+        
+        nSpecies <- filteredMuts |>
+          dplyr::pull(Species) |>
+          unique() |>
+          length()
+        
+        mutCounts <- filteredMuts |>
+          dplyr::count(AA_mut_name_Ecoli, name = "n") |>
+          dplyr::mutate(
+            category = dplyr::case_when(
+              n == 1 ~ "unique",
+              n == nSpecies ~ "ubiquitous",
+              TRUE ~ "polymorphic"
+            )
+          )
+      }
+      
+      # plotting parameters 
+      pars <- getPars()
+      
+      # safe max per column/row
+      colMax <- apply(blockDimsX, 2, max, na.rm = TRUE)
+      rowMax <- apply(blockDimsY, 1, max, na.rm = TRUE)
+      
+      xTotal <- sum(colMax) + n_clusters * pars$dxBlocks
+      dx <- 1 / xTotal
+      
+      yTotal <- sum(rowMax) +
+        n_species * (pars$dyPos + pars$dyRef) +
+        n_species * pars$dyBlocks
+      dy <- 1 / yTotal
+      
+      # calculate width and height for UI sizing
+      width_px  <- xTotal * pars$xInchPerUnit * res
+      height_px <- yTotal * pars$yInchPerUnit * res
+      
+      if (isTRUE(return_dims)) {
+        return(list(width_px = width_px, 
+                    height_px = height_px, 
+                    xTotal = xTotal, 
+                    yTotal = yTotal, 
+                    pars = pars))
+      }
+      
+      
+      
+      # assign colours 
+      for (i in seq_along(speciesToPlot)) {
+        for (j in seq_along(clustersToPlot)) {
+          blk <- allBlocks[[i]][[j]]
+          blk$Colour <- pars$col[["default"]]
+          
+          if (!is.null(mutCounts) && "AA_mut_name_Ecoli" %in% names(blk)) {
+            # join category onto block by mutation name
+            idx <- match(blk$AA_mut_name_Ecoli, mutCounts$AA_mut_name_Ecoli)
+            cat <- mutCounts$category[idx]
+            
+            if (colouring == "ubi")    cat[cat == "unique"]      <- "default"
+            if (colouring == "uni")    cat[cat == "ubiquitous"]  <- "default"
+            if (colouring == "none")   cat[] <- "default"
+            
+            # only update where category is not NA
+            ok <- !is.na(cat)
+            blk$Colour[ok] <- pars$col[cat[ok]]
+          }
+          
+          allBlocks[[i]][[j]] <- blk
+        }
+      }
+      
+      hover_map <- tibble::tibble(
+        species = character(),
+        cluster = character(),
+        kind    = character(),
+        xmin    = numeric(),
+        xmax    = numeric(),
+        ymin    = numeric(),
+        ymax    = numeric()
+      )
+      # draw base plot 
+      graphics::par(mar = pars$mar)
+      graphics::plot.new()
+      graphics::plot.window(xlim = c(0, 1), ylim = c(0, 1), xaxs = "i", yaxs = "i")
+      plt <- graphics::par("plt")
+      
+      y0 <- 0
+      for (i in seq_len(n_species)) {
+        if (i > 1) {
+          y0 <- y0 + dy * (rowMax[i - 1] + pars$dyPos + pars$dyRef)
+        }
+        
+        rowLabel <- speciesToPlot[[i]]
+        
+        graphics::par(xpd = NA)
+        graphics::text(0, 1 - y0, rowLabel, cex = pars$cexSpecies, adj = c(0, 1), font = 2)
+        
+        y_line <- 1 - y0 - dy * 1.1
+        graphics::segments(0, y_line, 1, y_line, col = "grey70", lwd = 1)
+        graphics::par(xpd = FALSE)
+        
+        y0 <- y0 + pars$dyBlocks * dy
+        x0 <- pars$dxBlocks * dx
+        
+        for (j in seq_len(n_clusters)) {
+          if (j > 1) {
+            x0 <- x0 + dx * (colMax[j - 1] + pars$dxBlocks)
+          }
+          renderBlock(allBlocks[[i]][[j]], x0, y0, dx, dy, pars = pars)
+          hm <- block_hover_map(
+            block   = allBlocks[[i]][[j]],
+            x0      = x0, 
+            y0 = y0, 
+            dx = dx, 
+            dy = dy,
+            pars    = pars,
+            species = speciesToPlot[[i]],
+            cluster = clustersToPlot[[j]]
+          )
+          # if (!is.null(hm)) {
+          #   with(hm, rect(xmin, ymin, xmax, ymax, border = "red"))
+          # }
+          # 
+          if (!is.null(hm)) {
+            hover_map <- dplyr::bind_rows(hover_map, hm)
+          }
+        }
+      }
+      
+      #print(hover_map)
+      
+      if (isTRUE(return_hover_map)) {
+        return(list(
+          hover_map = hover_map,
+          plt = plt
+        ))
+      }
+      
+      return(invisible(NULL))
+      
+    }
+    
+    
+    # ---- Process data ----
+
+    
+    cluster_plotting_df <- reactive({
+      df0 <- combined_rows()
+      if (is.null(df0) || nrow(df0) == 0) return(NULL)
+      
+      df <- df0 |>
+        dplyr::transmute(
+          Species      = as.character(species),
+          AA_original  = as.character(AA_original),
+          AA_pos       = suppressWarnings(as.integer(AA_pos)),
+          AA_pos_Ecoli = suppressWarnings(as.integer(AA_pos_Ecoli)),
+          AA_mutation  = as.character(AA_mutation),
+          source       = as.character(source)
+        ) |>
+        dplyr::filter(
+          !is.na(Species),
+          !is.na(AA_pos_Ecoli),
+          !is.na(AA_original),
+          !is.na(AA_mutation),
+          AA_original != "",
+          AA_mutation != ""
+        ) |>
+        dplyr::distinct()
+      
+      if (nrow(df) == 0) return(NULL)
+      df
+    })
+    
+    # select species that has refs + seq + coords 
+    has_ref_assets <- function(species, refs, seqs, coordinates) {
+      ref_row <- refs[refs$Species == species, , drop = FALSE]
+      if (nrow(ref_row) == 0) return(FALSE)
+      
+      ref_id <- ref_row$FASTA_name[1]
+      if (is.na(ref_id) || ref_id == "") return(FALSE)
+      
+      if (!(ref_id %in% names(seqs))) return(FALSE)
+      if (is.null(coordinates[[ref_id]])) return(FALSE)
+      
+      TRUE
+    }
+    
+    # Species to plot (drop those without assets) 
+    cluster_species_to_plot <- reactive({
+      df <- cluster_plotting_df()
+      if (is.null(df) || nrow(df) == 0) return(character(0))
+      
+      sp <- sort(unique(df$Species))
+      
+      keep <- vapply(
+        sp,
+        has_ref_assets,
+        logical(1),
+        refs = refs,
+        seqs = seqs,
+        coordinates = coordinates
+      )
+      
+      sp2 <- sp[keep]
+      
+      # warn once per change in species selection
+      dropped <- setdiff(sp, sp2)
+      if (length(dropped) > 0) {
+        warning(
+          "Dropping species missing reference assets (refs/seqs/coordinates):\n",
+          paste0("  - ", dropped, collapse = "\n")
+        )
+      }
+      sp2
+    })
+    
+    
+    
+    # Return height and width 
+    cluster_dims <- reactive({
+      df <- cluster_plotting_df()
+      if (is.null(df) || nrow(df) == 0) return(NULL)
+      if (no_clusters_selected(input$clustersToPlot)) return(NULL)
+      
+      plotMutations(
+        muts           = df,
+        clusters       = clusters,
+        seqs           = seqs,
+        coordinates    = coordinates,
+        refs           = refs,
+        gene           = "rpoB",
+        clustersToPlot = input$clustersToPlot,
+        speciesToPlot  = cluster_species_to_plot(),
+        colouring      = "ubiuni",
+        mergeDuplicates= TRUE,
+        plot_width_px  = NA,     
+        return_dims    = TRUE
+      )
+    })
+    
+    
+    no_clusters_selected <- function(x) {
+      is.null(x) || length(x) == 0 || all(x == "")
+    }
+    
+    cluster_trigger <- reactive({
+      input$apply_filters
+      input$view_tabs
+      TRUE
+    })
+    
+    # ---- Plot ----
+    
+    ## ---- Legend panel ----
+    
+    legend_colour <- c(
+      Reference   = "#000000",
+      Ubiquitous  = "#3e3bff", 
+      Unique      = "#FF0000",
+      Polymorphic = "#12947F"
     )
-  })
-  
-  
-  cluster_plotting_df <- reactive({
-    df0 <- combined_rows()
-    if (is.null(df0) || nrow(df0) == 0) return(NULL)
     
-    df <- df0 |>
-      dplyr::transmute(
-        Species      = as.character(species),
-        AA_original  = as.character(AA_original),
-        AA_pos       = suppressWarnings(as.integer(AA_pos)),
-        AA_pos_Ecoli = suppressWarnings(as.integer(AA_pos_Ecoli)),
-        AA_mutation  = as.character(AA_mutation),
-        source       = as.character(source)
-      ) |>
-      dplyr::filter(
-        !is.na(Species),
-        !is.na(AA_pos_Ecoli),
-        !is.na(AA_original),
-        !is.na(AA_mutation),
-        AA_original != "",
-        AA_mutation != ""
-      ) |>
-      dplyr::distinct()
+    output$legend_panel <- renderUI({
+      tags$div(
+        class = "cluster-legend",
+        
+        tags$div(
+          class = "cluster-legend-title",
+          "Mutation distribution across species"
+        ),
+        
+        lapply(names(legend_colour), function(name) {
+          tags$div(
+            class = "cluster-legend-item",
+            
+            tags$span(
+              class = "cluster-legend-swatch",
+              style = sprintf("background-color: %s;", legend_colour[[name]])
+            ),
+            
+            tags$span(
+              class = "cluster-legend-label",
+              tools::toTitleCase(name)
+            )
+          )
+        })
+      )
+    })
     
-    if (nrow(df) == 0) return(NULL)
-    df
-  })
-  
-  ### ---- helper: species has refs + seq + coords ----
-  has_ref_assets <- function(species, refs, seqs, coordinates) {
-    ref_row <- refs[refs$Species == species, , drop = FALSE]
-    if (nrow(ref_row) == 0) return(FALSE)
     
-    ref_id <- ref_row$FASTA_name[1]
-    if (is.na(ref_id) || ref_id == "") return(FALSE)
+    ## ---- Cluster plot -----
     
-    if (!(ref_id %in% names(seqs))) return(FALSE)
-    if (is.null(coordinates[[ref_id]])) return(FALSE)
+    hover_map_r <- reactiveVal(NULL)
+    plt_r       <- reactiveVal(NULL)
     
-    TRUE
+    
+    output$clusterPlotUI <- renderUI({
+      div(
+        id = "clusterWrap",
+        div(
+          id = "clusterPlotWrap",
+          plotOutput("clusterPlot", width = "100%", height = "85vh"),
+          tags$canvas(id = "hoverCanvas")
+        )
+      )
+    })
+    
+
+    output$clusterPlot <- renderPlot({
+      cluster_trigger() 
+      
+      df <- cluster_plotting_df()
+      
+      if (is.null(df) || nrow(df) == 0) {
+        hover_map_r(NULL)
+        plt_r(NULL)
+        
+        session$sendCustomMessage("hoverMap", "NULL")
+        
+        plot_message("No data to show.")
+        return(invisible())
+      }
+      
+      if (no_clusters_selected(input$clustersToPlot)) {
+        hover_map_r(NULL)
+        plt_r(NULL)
+        
+        session$sendCustomMessage("hoverMap", "NULL")
+        
+        plot_message("Please select at least one cluster.")
+        return(invisible())
+        
+      }
+      
+      clustersToPlot <- clusters |> 
+        dplyr::filter(Gene == "rpoB", Cluster %in% input$clustersToPlot) |> 
+        dplyr::arrange(AAstart_Ecoli) |> dplyr::pull(Cluster) 
+      
+      
+      out <- plotMutations(
+        muts = df,
+        clusters = clusters,
+        seqs = seqs,
+        coordinates = coordinates,
+        refs = refs,
+        gene = "rpoB",
+        clustersToPlot = clustersToPlot,
+        speciesToPlot  = cluster_species_to_plot(),
+        colouring = "ubiuni",
+        mergeDuplicates = TRUE,
+        return_hover_map = TRUE
+      )
+      
+      # capture geometry from this plot
+      hover_map_r(out$hover_map)
+      plt_r(out$plt)
+      
+      },
+      width  = function() {
+        d <- cluster_dims()
+        if (is.null(d)) 300 else max(300, d$width_px)
+      },
+      height = function() {
+        d <- cluster_dims()
+        if (is.null(d)) 300 else max(150, d$height_px)
+      },
+      res = 96
+    )
+    
+    # send to js 
+    observeEvent(hover_map_r(), {
+      
+      req(hover_map_r(), plt_r())
+      
+      session$sendCustomMessage("hoverMap", list(
+        rows = hover_map_r(),
+        plt  = plt_r()
+      ))
+      
+    }, ignoreInit = TRUE)
   }
   
-  ### ---- Species to plot (drop those without assets) ----
-  cluster_species_to_plot <- reactive({
-    df <- cluster_plotting_df()
-    if (is.null(df) || nrow(df) == 0) return(character(0))
-    
-    sp <- sort(unique(df$Species))
-    
-    keep <- vapply(
-      sp,
-      has_ref_assets,
-      logical(1),
-      refs = refs,
-      seqs = seqs,
-      coordinates = coordinates
-    )
-    
-    sp2 <- sp[keep]
-    
-    # warn once per change in species selection
-    dropped <- setdiff(sp, sp2)
-    if (length(dropped) > 0) {
-      warning(
-        "Dropping species missing reference assets (refs/seqs/coordinates):\n",
-        paste0("  - ", dropped, collapse = "\n")
-      )
-    }
-    sp2
-  })
   
-  ### ---- Dynamic height ----
-  cluster_height_px <- reactive({
-    n <- length(cluster_species_to_plot())
-    if (n == 0) return(250)
+  # ---- Source Tab ----
+  ## ---- Upset Plot ----
+  {
+    n_sources <- reactive({
+      df <- combined_rows()
+      if (is.null(df) || nrow(df) == 0) return(0)
+      length(unique(na.omit(df$source)))
+    })
     
-    # container width in px (falls back if not available yet)
-    w <- session$clientData$output_clusterPlot_width %||% 900
-    
-    # smaller screens -> less height per species
-    px_per_species <- dplyr::case_when(
-      w < 600  ~ 220,   # phone
-      w < 1000 ~ 300,   # tablet / small laptop
-      TRUE     ~ 400    # desktop
-    )
-    
-    base_px <- dplyr::case_when(
-      w < 600  ~ 80,
-      w < 1000 ~ 100,
-      TRUE     ~ 120
-    )
-    
-    h <- base_px + n * px_per_species
-    max(250, min(h, 20000))
-  })
-  
-  ### ---- Plot ----
-  
-  output$clusterPlot <- renderPlot({
-    df <- cluster_plotting_df()
-    validate(need(!is.null(df) && nrow(df) > 0, "No data to show"))
-    
-    clustersToPlot <- input$clustersToPlot 
-    if (is.null(clustersToPlot) || length(clustersToPlot) == 0 || all(clustersToPlot == "")) { 
-      clustersToPlot <- NULL } 
-    else { 
-      clustersToPlot <- clusters |> 
-        dplyr::filter(Gene == "rpoB", Cluster %in% clustersToPlot) |> 
-        dplyr::arrange(AAstart_Ecoli) |> dplyr::pull(Cluster) 
+    output$mutationUpset <- renderPlot({
+      req(input$apply_filters > 0)
+      
+      df0 <- combined_rows()
+      
+      if (is.null(df0) || nrow(df0) == 0) {
+        return(ui_message("No data to show."))
       }
+      
+      df <- df0 |>
+        dplyr::transmute(
+          AA_pos_Ecoli = as.character(AA_pos_Ecoli),
+          AA_mutation  = as.character(AA_mutation),
+          source       = as.character(source)
+        ) |>
+        dplyr::filter(
+          !is.na(AA_pos_Ecoli),
+          !is.na(AA_mutation),
+          !is.na(source),
+          AA_mutation != "",
+          source != ""
+        ) |>
+        dplyr::distinct()
+      
+      if (is.null(df) || nrow(df) == 0) {
+        return(ui_message("No data to show."))
+      }
+      
+      upset_df <- df |>
+        dplyr::distinct(AA_mutation, AA_pos_Ecoli, source) |>
+        dplyr::group_by(AA_mutation, AA_pos_Ecoli) |>
+        dplyr::summarise(
+          sources = list(sort(unique(source))),
+          .groups = "drop"
+        )
+      
+      if (is.null(upset_df) || nrow(upset_df) == 0) {
+        return(ui_message("No data to show."))
+      }
+      
+      ggplot(upset_df, aes(x = sources)) +
+        geom_bar() +
+        ggupset::scale_x_upset() +
+        labs(y = "Number of mutation sites", x = "Source(s)") +
+        theme_app(legend = "none")
+    }, res = 120)
     
-    w <- session$clientData$output_clusterPlot_width %||% 900
-    options(cluster.plot.width = w)
     
-    plotMutations(
-      muts           = df,
-      clusters       = clusters,
-      seqs           = seqs,
-      coordinates    = coordinates,
-      refs           = refs,
-      gene           = "rpoB",
-      clustersToPlot = clustersToPlot,
-      speciesToPlot  = cluster_species_to_plot(),
-      colouring      = "ubiuni",
-      mergeDuplicates= TRUE
-    )
-  },
-  res = 96,
-  width  = function() session$clientData$output_clusterPlot_width %||% 900,
-  height = function() cluster_height_px()
-  )
-  
-  output$clusterPlotUI <- renderUI({
-    plotOutput("clusterPlot", width = "100%")
-  })
-  
-  
-  # ---- Upset PLot ----
-  n_sources <- reactive({
-    df <- combined_rows()
-    if (is.null(df) || nrow(df) == 0) return(0)
-    length(unique(na.omit(df$source)))
-  })
-  
-  output$mutationUpset <- renderPlot({
-    req(input$apply_filters > 0)
-    
-    df0 <- combined_rows()
-    validate(need(!is.null(df0) && nrow(df0) > 0, "No data to show"))
-    
-    df <- df0 |>
-      dplyr::transmute(
-        AA_pos_Ecoli = as.character(AA_pos_Ecoli),
-        AA_mutation  = as.character(AA_mutation),
-        source       = as.character(source)
-      ) |>
-      dplyr::filter(
-        !is.na(AA_pos_Ecoli),
-        !is.na(AA_mutation),
-        !is.na(source),
-        AA_mutation != "",
-        source != ""
-      ) |>
-      dplyr::distinct()
-    
-    validate(need(nrow(df) > 0, "No data to show"))
-    
-    upset_df <- df |>
-      dplyr::distinct(AA_mutation, AA_pos_Ecoli, source) |>
-      dplyr::group_by(AA_mutation, AA_pos_Ecoli) |>
-      dplyr::summarise(
-        sources = list(sort(unique(source))),
-        .groups = "drop"
-      )
-    
-    validate(need(nrow(upset_df) > 0, "No data to show"))
-    
-    ggplot(upset_df, aes(x = sources)) +
-      geom_bar() +
-      ggupset::scale_x_upset() +
-      theme_bw() +
-      theme(
-        panel.grid = element_blank(),
-        axis.title.x = element_blank(),
-        axis.title.y = element_text(margin = margin(r = 8))
-      ) +
-      labs(y = "Number of mutation sites")
-  }, res = 120)
-  
-  
-  
-  output$upset_container <- renderUI({
-    df <- combined_rows()
-    
-    if (is.null(df) || nrow(df) == 0) {
-      no_data_ui()
-    } else {
-      ns <- n_sources()
-      w <- ns * 300
-      div(
-        style = "
+    output$upset_container <- renderUI({
+      df <- combined_rows()
+      
+      if (is.null(df) || nrow(df) == 0) {
+        return(ui_message("No data to show."))
+      } else {
+        ns <- n_sources()
+        w <- ns * 300
+        div(
+          style = "
             display: flex;
             justify-content: center;
             overflow-x: auto;
             padding: 10px 0;
           ",
-        div(
-          style = sprintf("width: %dpx;", w),
-          plotOutput("mutationUpset", height = "450px", width = "100%")
+          div(
+            style = sprintf("width: %dpx;", w),
+            plotOutput("mutationUpset", height = "450px", width = "100%")
+          )
         )
-      )
-    }
-  })
+      }
+    })
+  }
   
-  # ---- Mutation Heatmap ----
+  ## ---- Mutation Heatmap ----
   
-  ## ---- Process data -----
+  {
+    ### ---- Process data -----
   
   all_AAs_sorted <- sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]])
   
+  selected_pos <- reactive({
+    df0 <- combined_rows()
+    if (is.null(df0) || nrow(df0) == 0) return(character(0))
+    
+    pos <- df0$AA_pos_Ecoli |>
+      suppressWarnings(as.numeric()) |>
+      na.omit() |>
+      unique() |>
+      sort(decreasing = TRUE) |>
+      as.character()
+    
+    pos
+  })
+  
+  
   hm_plotting_df <- reactive({
     df0 <- combined_rows()
-    
     if (is.null(df0) || nrow(df0) == 0) return(NULL)
+    
+    pos_levels <- selected_pos()
+    if (length(pos_levels) == 0) return(NULL)
     
     df <- df0 |>
       dplyr::transmute(
@@ -847,7 +1086,7 @@ server <- function(input, output, session) {
     req(nrow(df) > 0)
     
     base_grid <- tidyr::expand_grid(
-      AA_pos_Ecoli = all_pos,
+      AA_pos_Ecoli = pos_levels,
       AA_mutation = all_AAs_sorted
     )
     
@@ -864,14 +1103,13 @@ server <- function(input, output, session) {
       dplyr::mutate(
         source_combo = tidyr::replace_na(source_combo, "None"),
         AA_mutation  = factor(AA_mutation, levels = all_AAs_sorted),
-        AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = all_pos)
+        AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels)
       )
   })
   
 
   ## ---- colors ----
   source_palette <- c(
-    
     
     "CARD"    = "#ead6fd",  
     "CRyPTIC" = "#ffdfba", 
@@ -936,7 +1174,7 @@ server <- function(input, output, session) {
     "Curated+DRAGdb+Yang",
     
     # Quadruples
-    "CARD+Curated+CRyPTIC+DRAGdbd",
+    "CARD+Curated+CRyPTIC+DRAGdb",
     "CARD+Curated+CRyPTIC+Yang",
     "CARD+Curated+DRAGdb+Yang",
     "CRyPTIC+Curated+DRAGdb+Yang",
@@ -948,97 +1186,237 @@ server <- function(input, output, session) {
     "None"
   )
   
-  ## ---- plot ----
+  # Normalize "A+B" combo strings: trim, split, sort, re-join
+  normalize_combo <- function(x) {
+    vapply(
+      strsplit(trimws(x), "\\+"),
+      function(parts) paste(sort(parts), collapse = "+"),
+      character(1)
+    )
+  }
+  
+  ## ---- Dynamic height -----
+  
+  heatmap_height_px <- reactive({
+    pos_levels <- selected_pos()
+
+    if (is.null(pos_levels) || length(pos_levels) == 0) {
+      return(300)
+    }
+    
+    n_pos <- length(pos_levels)
+    # row height
+    row_px <- 30 
+    
+    # minimum height safeguard
+    max(300, n_pos * row_px)
+  })
+  
+  ## ---- Legend ----
+  selected_sources <- reactiveVal(NULL)
+  
+  output$heatmap_legend <- renderUI({
+    req(input$apply_filters > 0)
+    
+    df <- hm_plotting_df()
+    if (is.null(df) || nrow(df) == 0) return(NULL)
+    
+    df$source_combo <- normalize_combo(df$source_combo)
+    
+    present_levels <- legend_order[legend_order %in% unique(df$source_combo)]
+    if (length(present_levels) == 0) {
+      present_levels <- sort(unique(df$source_combo))
+    }
+    
+    # clickable legend levels (exclude "None")
+    clickable_levels <- setdiff(present_levels, "None")
+    
+    # initialise selection state once
+    sel <- selected_sources()
+    if (is.null(sel) || !identical(sort(names(sel)), sort(clickable_levels))) {
+      sel <- setNames(rep(FALSE, length(clickable_levels)), clickable_levels)
+      selected_sources(sel)
+    }
+    
+    cols <- source_palette[clickable_levels]
+    
+    tags$div(
+      class = "hm-legend-col",
+      lapply(seq_along(clickable_levels), function(i) {
+        lvl <- clickable_levels[i]
+        col <- cols[[lvl]]
+        is_on <- isTRUE(sel[[lvl]])
+        
+        actionButton(
+          inputId = paste0("legend_", i),
+          label = tags$span(
+            class = "hm-legend-btn-label",
+            tags$span(
+              class = "hm-legend-swatch",
+              style = sprintf("--swatch:%s;", col) 
+            ),
+            lvl
+          ),
+          class = paste("hm-legend-btn", if (is_on) "is-on" else "is-off"),
+          style = sprintf("--btncol:%s;", col)  
+        )
+      })
+    )
+  })
+  
+  # Select legend 
+  observeEvent(input$apply_filters, {
+    df <- hm_plotting_df()
+    if (is.null(df) || nrow(df) == 0) return()
+    
+    df$source_combo <- normalize_combo(df$source_combo)
+    
+    present_levels <- legend_order[legend_order %in% unique(df$source_combo)]
+    if (length(present_levels) == 0) {
+      present_levels <- sort(unique(df$source_combo))
+    }
+    
+    clickable_levels <- setdiff(present_levels, "None")
+    
+    # reset selection when filters re-apply
+    selected_sources(setNames(rep(FALSE, length(clickable_levels)), clickable_levels))
+    
+    lapply(seq_along(clickable_levels), function(i) {
+      observeEvent(input[[paste0("legend_", i)]], {
+        lvl <- clickable_levels[i]
+        
+        sel <- selected_sources()
+        sel[[lvl]] <- !isTRUE(sel[[lvl]])
+        selected_sources(sel)
+      }, ignoreInit = TRUE)
+    })
+  }, ignoreInit = TRUE)
+  
+  
+  
   output$mutationHeatmap <- ggiraph::renderGirafe({
     req(input$apply_filters > 0)
     
     df <- hm_plotting_df()
+    req(nrow(df) > 0)
     
-    req(df, nrow(df) > 0)
-    
-    # normalize combo names so they match palette keys
-    df$source_combo <- vapply(
-      strsplit(trimws(df$source_combo), "\\+"),
-      function(x) paste(sort(x), collapse = "+"),
-      character(1)
-    )
+    df$source_combo <- normalize_combo(df$source_combo)
     
     present_levels <- legend_order[legend_order %in% unique(df$source_combo)]
-    df$source_combo <- factor(df$source_combo, levels = present_levels)
+    if (length(present_levels) == 0) {
+      present_levels <- sort(unique(df$source_combo))
+    }
     
+    # selection state
+    sel <- selected_sources()
+    clickable_levels <- setdiff(present_levels, "None")
+    
+    if (is.null(sel) || !identical(sort(names(sel)), sort(clickable_levels))) {
+      sel <- setNames(rep(FALSE, length(clickable_levels)), clickable_levels)
+      selected_sources(sel)
+    }
+    
+    keep_levels <- names(sel)[sel]
+    
+    # if something selected → others become "None"
+    if (length(keep_levels) > 0) {
+      df$fill_group <- ifelse(df$source_combo %in% keep_levels,
+                              df$source_combo, "None")
+    } else {
+      df$fill_group <- df$source_combo
+    }
+    
+    # use ALL levels including None
+    display_levels <- unique(c(present_levels, "None"))
+    df$fill_group <- factor(df$fill_group, levels = display_levels)
+    
+    pos_levels <- selected_pos()
     n_pos <- length(unique(df$AA_pos_Ecoli))
-
+    
     p <- ggplot(
       df,
       aes(
         x = AA_mutation,
-        y = factor(AA_pos_Ecoli, levels = all_pos),
-        fill = source_combo,
+        y = factor(AA_pos_Ecoli, levels = pos_levels),
+        fill = fill_group,
         tooltip = paste0(
           "Position: ", AA_pos_Ecoli,
           "<br>AA: ", AA_mutation,
           "<br>Source: ", source_combo
-        )
+        ),
+        data_id = paste(AA_pos_Ecoli, AA_mutation)
       )
     ) +
-      ggiraph::geom_tile_interactive(
-        color = "grey80",
-        linewidth = 0.2
-      ) +
+      ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
       scale_fill_manual(
-        values = source_palette,
-        breaks = present_levels,   
-        limits = present_levels,  
-        drop = TRUE
-      ) + 
-      scale_x_discrete(position = "top") +
-      guides(
-        fill = guide_legend(
-          ncol = 1,
-          byrow = TRUE
-        )
+        values = source_palette[display_levels],
+        breaks = display_levels,
+        limits = display_levels,
+        drop = FALSE
       ) +
-      theme_bw() +
+      scale_x_discrete(position = "top", drop = FALSE) +
+      labs(x = "Amino acid", y = "Position") +
+      theme_app(legend = "none", x_top = TRUE) +
       theme(
-        panel.grid = element_blank(),
-        axis.title.x = element_text(size = 12, margin = margin(b = 30)),
-        axis.title.y = element_text(margin = margin(r = 12)),
-        axis.text.y = element_text(size = 10),
-        axis.text.x = element_text(size = 12),
-        legend.position = "right",
-        legend.title = element_text(size = 11, face = "bold"),
-        legend.text  = element_text(size = 10)
-      ) +
-      labs(
-        x = "Amino acid",
-        y = "Position",
-        fill = "Source(s)"
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15)
       )
+    
+    h_in <- heatmap_height_px() / 96
     
     ggiraph::girafe(
       ggobj = p,
-      width_svg = 12,   
-      height_svg = max(400, n_pos * 22)/96,
+      width_svg  = 12,
+      height_svg = h_in,
       options = list(
-        ggiraph::opts_hover(css = "fill-opacity:0.85;"),
-        ggiraph::opts_tooltip(css = "background-color:white; color:black;"),
+        ggiraph::opts_hover(css = "fill-opacity:1; stroke:none;"),
+        ggiraph::opts_tooltip(css = "
+        background-color: #2C3E50;
+        color: #ECF0F1;
+        padding: 5px;
+        border-radius: 2px;
+        font-family: Helvetica, sans;
+        font-size: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      "),
         ggiraph::opts_zoom(max = 3),
         ggiraph::opts_selection(type = "none")
       )
     )
   })
   
-  ## ---- heatmap container ----
+  
+  ## ---- Heatmap container ----
   
   output$heatmap_container <- renderUI({
     df <- hm_plotting_df()
     
     if (is.null(df) || nrow(df) == 0) {
-      no_data_ui()
-    } else {
-      girafeOutput("mutationHeatmap")
+      return(ui_message("No data to show."))
     }
+    
+    tags$div(
+      class = "hm-layout",
+      
+      # LEFT: plot
+      tags$div(
+        class = "hm-plot",
+        girafeOutput(
+          outputId = "mutationHeatmap",
+          width  = "60vw",
+          height = paste0(heatmap_height_px(), "px")
+        )
+      ),
+      
+      # RIGHT: legend
+      tags$div(
+        class = "hm-legend",
+        uiOutput("heatmap_legend")
+      )
+    )
   })
+  
+  }
   
   
   
@@ -1169,7 +1547,9 @@ server <- function(input, output, session) {
     req(input$apply_filters > 0)
     
     df0 <- combined_rows() 
-    validate(need(!is.null(df0) && nrow(df0) > 0, "No data to show"))
+    if (is.null(df0) || nrow(df0) == 0) {
+      return(ui_message("No data to show."))
+    }
     
     df <- df0 |>
       dplyr::transmute(
@@ -1180,7 +1560,9 @@ server <- function(input, output, session) {
         AA_mutation  = as.character(AA_mutation),
         Source       = as.character(source))
     
-    validate(need(!is.null(df) && nrow(df) > 0, "No data to show"))
+    if (is.null(df) || nrow(df) == 0) {
+      return(ui_message("No data to show."))
+    }
     
     cols <- intersect(
       c("Species", "AA_original", "AA_mutation", "AA_pos", "AA_pos_Ecoli", "Source"),

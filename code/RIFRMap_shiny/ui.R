@@ -14,7 +14,8 @@ suppressPackageStartupMessages({
   library(ggupset)
   library(base64enc)
   library(htmltools)
-  
+  library(shinyWidgets)
+
   ## Bioconductor
   library(Biostrings)
   
@@ -53,13 +54,16 @@ ui <- dashboardPage(
     )
   ),
   
-  body = dashboardBody(
+  dashboardBody(
     tags$head(
-      tags$style(HTML("
-        .filter-form .form-header { font-weight: 700; }
-        .filter-form { min-width: 320px; }
-      "))
+      tags$link(
+        rel  = 'stylesheet',
+        type = 'text/css',
+        href = 'styles.css'
+      ),
+      tags$script(src = "script.js"),
     ),
+    
     
     bs4TabItems(
       bs4TabItem(
@@ -98,10 +102,24 @@ ui <- dashboardPage(
               solidHeader = TRUE,
               collapsible = TRUE,
               checkboxInput("cryptic_enabled", "Include data", FALSE),
-              selectInput("cryptic_species", "Species", choices = NULL, selected = "All species", multiple = TRUE),
+              selectInput("cryptic_species", "Species", choices = NULL, selected = "Mycobacterium tuberculosis", multiple = TRUE),
               sliderInput("cryptic_coef", "Effect size", min = -4.0, max = 9.6, value = c(-4, 9.6), step = 0.1),
               sliderInput("cryptic_counts", "Counts", min = 0, max = 2326, value = c(0, 2326), step = 1),
-              sliderInput("cryptic_bhp", "BH p-value", min = 0, max = 1, value = c(0, 1), step = 0.01),
+              tags$div(
+                style = "width: 50vw;",
+                radioButtons(
+                  "cryptic_bhp",
+                  "BH-corrected p-value (≤)",
+                  choices = c(
+                    "0.05"  = 0.05,
+                    "0.01"  = 0.01,
+                    "0.005" = 0.005,
+                    "0.001" = 0.001
+                  ),
+                  selected = 0.05,
+                  inline = TRUE
+                )
+              ),
               selectInput("cryptic_homoplasy", "Homoplasy", choices = c("", "TRUE", "FALSE"), selected = "", width = "140px")
             )
           ),
@@ -131,7 +149,7 @@ ui <- dashboardPage(
               solidHeader = TRUE,
               collapsible = TRUE,
               checkboxInput("yang_enabled", "Include data", FALSE),
-              selectInput("yang_species", "Species", choices = NULL, selected = "All species", multiple = TRUE),
+              selectInput("yang_species", "Species", choices = NULL, selected = "Escherichia coli", multiple = TRUE),
               sliderInput("yang_log2fc", "log2FC", min = 0, max = 2.7, value = c(0, 2.7), step = 0.1)
             )
           ),
@@ -169,19 +187,19 @@ ui <- dashboardPage(
       # ---------------- VIEW ----------------
       bs4TabItem(
         tabName = "view",
-        
         tabsetPanel(
           id = "view_tabs",
           
           # ---- TAB 1: Cluster plot ----
           tabPanel(
             title = "Species–Cluster",
+            value = "cluster",
             
             div(
               style = "padding: 12px 16px;",
               tags$p(
                 class = "text-muted",
-                style = "margin-bottom: 12px; font-size: 0.9rem;",
+                style = "margin-bottom: 12px; ",
                 HTML("Species-centric mutation cluster view. Sources are ignored; patterns reflect <b>species</b> and <b>cluster</b> structure.")
               )
             ),
@@ -190,26 +208,30 @@ ui <- dashboardPage(
             fluidRow(
               ## ---- Controls ----
               column(
-                width = 2,
+                width = 3,
                 card(
-                  selectInput(
-                    inputId = "clustersToPlot",
-                    label   = "Clusters",
-                    choices = c("N", "I", "II", "III"),
-                    selected = "",
-                    multiple = TRUE
-                  ),
-                  
-                  div(
+                  card_body(
+                    div(
+                      class = "clusters-buttons",
+                      shinyWidgets::checkboxGroupButtons(
+                        inputId   = "clustersToPlot",
+                        label     = "Clusters",
+                        choices   = c("N", "I", "II", "III"),
+                        selected  = c("N", "I", "II", "III"),   
+                        direction = "horizontal",
+                        justified = TRUE
+                      ),
+                    ),
+
                     uiOutput("legend_panel")
                   )
-                ), 
+                )
               ),
               
               ## ---- Plot ----
               
               column(
-                width = 10,
+                width = 9,
                 card(
                   width = 12,
                   collapsible = FALSE,
@@ -224,12 +246,13 @@ ui <- dashboardPage(
           # ---- TAB 2: Source Plot ----
           tabPanel(
             title = "Sources",
+            value = "sources", 
             
             div(
               style = "padding: 12px 16px;",
               tags$p(
                 class = "text-muted",
-                style = "margin-bottom: 12px; font-size: 0.9rem;",
+                style = "margin-bottom: 12px; ",
                 HTML("Source-centric view of mutation evidence. Plots highlight overlap among <b>databases</b> (CARD, CRyPTIC, DRAGdb, Yang, Curated data), independent of species identity.")
               )
             ),
@@ -244,7 +267,10 @@ ui <- dashboardPage(
                 collapsible = TRUE,
                 maximizable = TRUE,
                 style = "height: 50vh; overflow-y: auto;",
-                uiOutput("upset_container")
+                div(
+                  style = "display:flex; justify-content:center;",
+                  uiOutput("upset_container")
+                )
               )
               
             ),
@@ -259,9 +285,11 @@ ui <- dashboardPage(
                 collapsible = TRUE,
                 maximizable = TRUE,
                 style = "height: 90vh; overflow-y: auto;",
-                uiOutput("heatmap_container")
+                div(
+                  style = "display: flex; justify-content: center;",
+                  uiOutput("heatmap_container")
                 )
-             
+              )
             )),
           
           # ---- TAB 3: Summary Data ----
