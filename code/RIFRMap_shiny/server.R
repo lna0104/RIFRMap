@@ -384,7 +384,7 @@ server <- function(input, output, session) {
     
     getPars <- function() {
       pars <- vector(mode = "list")
-      pars$dxBlocks <- 0.8  # relative space between blocks
+      pars$dxBlocks <- 0.5  # relative space between blocks
       
       pars$dyPos <- 1.2 # relative space for position numbers
       pars$dyRef <- 1.3 # relative space for reference sequence
@@ -410,67 +410,6 @@ server <- function(input, output, session) {
       return(pars)
     }
     
-    #Create hover map for mouse movement
-    block_hover_map <- function(block, x0, y0, dx, dy, pars, species, cluster) {
-      out <- list()
-      scale <- 1.3
-      
-      # AA positions (RelY == -1)
-      idx <- which(block$RelY == -1L)
-      if (length(idx)) {
-        x <- x0 + (block$RelX[idx] - 1L) * dx
-        y <- 1 - y0
-        for (k in seq_along(idx)) {
-          out[[length(out)+1]] <- data.frame(
-            species = species, cluster = cluster,
-            kind = "pos",
-            label = as.character(block$AA_pos[idx[k]]),
-            xmin = x[k] - dx/3, xmax = x[k] + dx/3,
-            ymin = y - dy/2 * scale, ymax = y + dy/2 * scale,
-            stringsAsFactors = FALSE
-          )
-        }
-      }
-      
-      # reference letters (RelY == 0)
-      idx <- which(block$RelY == 0L)
-      if (length(idx)) {
-        x <- x0 + (block$RelX[idx] - 1L) * dx
-        y <- 1 - y0 - dy * pars$dyPos
-        for (k in seq_along(idx)) {
-          out[[length(out)+1]] <- data.frame(
-            species = species, cluster = cluster,
-            kind = "ref",
-            label = as.character(block$AA_original[idx[k]]),
-            xmin = x[k] - dx/3, xmax = x[k] + dx/3,
-            ymin = y - dy/2, ymax = y + dy/2,
-            stringsAsFactors = FALSE
-          )
-        }
-      }
-      
-      # mutations (RelY > 0)
-      idx <- which(block$RelY > 0L)
-      if (length(idx)) {
-        x <- x0 + (block$RelX[idx] - 1L) * dx
-        y <- 1 - y0 - dy * (pars$dyPos + pars$dyRef) - (block$RelY[idx] - 1L) * dy
-        for (k in seq_along(idx)) {
-          out[[length(out)+1]] <- data.frame(
-            species = species, cluster = cluster,
-            kind = "mut",
-            label = as.character(block$AA_mutation[idx[k]]),
-            colour = as.character(block$Colour[idx[k]]),
-            xmin = x[k] - dx/3, xmax = x[k] + dx/3,
-            ymin = y - dy/2, ymax = y + dy/2,
-            stringsAsFactors = FALSE
-          )
-        }
-      }
-      
-      if (!length(out)) return(NULL)
-      dplyr::bind_rows(out)
-    }
-    
     
     plotMutations <- function(
       muts,
@@ -486,7 +425,8 @@ server <- function(input, output, session) {
       plot_width_px = getOption("cluster.plot.width", NA_real_),
       return_dims = FALSE,
       return_hover_map = FALSE,
-      res = 96
+      res = 96,
+      mut_lines_cap = 12L 
     ) {
       
       # initial checks 
@@ -618,18 +558,49 @@ server <- function(input, output, session) {
         n_species * pars$dyBlocks
       dy <- 1 / yTotal
       
-      # calculate width and height for UI sizing
+      # Calculate width and height for UI sizing
       width_px  <- xTotal * pars$xInchPerUnit * res
       height_px <- yTotal * pars$yInchPerUnit * res
       
-      if (isTRUE(return_dims)) {
-        return(list(width_px = width_px, 
-                    height_px = height_px, 
-                    xTotal = xTotal, 
-                    yTotal = yTotal, 
-                    pars = pars))
+      # Build x column map  
+      {
+        xcols <- vector("list", n_clusters)
+        
+        x0c <- pars$dxBlocks * dx
+        
+        for (j in seq_len(n_clusters)) {
+          if (j > 1) {
+            x0c <- x0c + dx * (colMax[j - 1] + pars$dxBlocks)
+          }
+          
+          n_units <- as.integer(colMax[j])
+          xmin <- x0c - dx / 2
+          xmax <- x0c + (max(1L, n_units) - 1L) * dx + dx / 2
+          
+          xcols[[j]] <- data.frame(
+            cluster = clustersToPlot[[j]],
+            x0      = x0c,     # center of RelX==1
+            n       = n_units, # number of AA columns in this cluster
+            xmin    = xmin,
+            xmax    = xmax,
+            stringsAsFactors = FALSE
+          )
+        }
+        xcols <- dplyr::bind_rows(xcols)
       }
+      #print(xcols)
       
+      if (isTRUE(return_dims)) {
+        return(list(
+          width_px  = width_px,
+          height_px = height_px,
+          xTotal    = xTotal,
+          yTotal    = yTotal,
+          pars      = pars,
+          dx        = dx,
+          xcols     = xcols
+        ))
+      }
       
       
       # assign colours 
@@ -656,15 +627,7 @@ server <- function(input, output, session) {
         }
       }
       
-      hover_map <- tibble::tibble(
-        species = character(),
-        cluster = character(),
-        kind    = character(),
-        xmin    = numeric(),
-        xmax    = numeric(),
-        ymin    = numeric(),
-        ymax    = numeric()
-      )
+      species_bands <- vector("list", n_species)
       # draw base plot 
       graphics::par(mar = pars$mar)
       graphics::plot.new()
@@ -687,6 +650,29 @@ server <- function(input, output, session) {
         graphics::par(xpd = FALSE)
         
         y0 <- y0 + pars$dyBlocks * dy
+        
+        # band y positions computed at the SAME y0 used by renderBlock()
+        y_pos <- 1 - y0
+        y_ref <- 1 - y0 - dy * pars$dyPos
+        mut_top <- 1 - y0 - dy * (pars$dyPos + pars$dyRef)
+        
+        mut_lines <- rowMax[i]
+        mut_lines_cap_i <- min(mut_lines, mut_lines_cap)
+        mut_bottom <- mut_top - dy * max(0, (mut_lines_cap_i - 1))
+        
+        # thickness/padding tuned for visual stability across devices
+        band_pos_h <- dy * 1.2
+        band_ref_h <- dy * 0.90
+        band_mut_pad <- dy * 0.55
+        
+        species_bands[[i]] <- data.frame(
+          species = rowLabel,
+          pos_ymin = y_pos - band_pos_h / 2, pos_ymax = y_pos + band_pos_h / 2,
+          ref_ymin = y_ref - band_ref_h / 2, ref_ymax = y_ref + band_ref_h / 2,
+          mut_ymin = mut_bottom - band_mut_pad, mut_ymax = mut_top + band_mut_pad,
+          stringsAsFactors = FALSE
+        )
+        
         x0 <- pars$dxBlocks * dx
         
         for (j in seq_len(n_clusters)) {
@@ -694,149 +680,275 @@ server <- function(input, output, session) {
             x0 <- x0 + dx * (colMax[j - 1] + pars$dxBlocks)
           }
           renderBlock(allBlocks[[i]][[j]], x0, y0, dx, dy, pars = pars)
-          hm <- block_hover_map(
-            block   = allBlocks[[i]][[j]],
-            x0      = x0, 
-            y0 = y0, 
-            dx = dx, 
-            dy = dy,
-            pars    = pars,
-            species = speciesToPlot[[i]],
-            cluster = clustersToPlot[[j]]
-          )
-          # if (!is.null(hm)) {
-          #   with(hm, rect(xmin, ymin, xmax, ymax, border = "red"))
-          # }
-          # 
-          if (!is.null(hm)) {
-            hover_map <- dplyr::bind_rows(hover_map, hm)
-          }
         }
       }
       
-      #print(hover_map)
-      
       if (isTRUE(return_hover_map)) {
         return(list(
-          hover_map = hover_map,
-          plt = plt
+          bands = dplyr::bind_rows(species_bands),
+          xcols = xcols,
+          dx    = dx,
+          plt   = plt
         ))
       }
       
       return(invisible(NULL))
-      
     }
     
     
     # ---- Process data ----
-
     
+    # Helper: cluster selection check
+    no_clusters_selected <- function(x) {
+      is.null(x) || !length(x) || all(is.na(x)) || all(x == "")
+    }
+    
+    # 1) Clean + normalize plotting df 
     cluster_plotting_df <- reactive({
       df0 <- combined_rows()
-      if (is.null(df0) || nrow(df0) == 0) return(NULL)
+      if (is.null(df0) || !nrow(df0)) return(NULL)
       
       df <- df0 |>
         dplyr::transmute(
-          Species      = as.character(species),
-          AA_original  = as.character(AA_original),
+          Species      = dplyr::na_if(trimws(as.character(species)), ""),
+          AA_original  = dplyr::na_if(trimws(as.character(AA_original)), ""),
+          AA_mutation  = dplyr::na_if(trimws(as.character(AA_mutation)), ""),
           AA_pos       = suppressWarnings(as.integer(AA_pos)),
           AA_pos_Ecoli = suppressWarnings(as.integer(AA_pos_Ecoli)),
-          AA_mutation  = as.character(AA_mutation),
-          source       = as.character(source)
+          source       = dplyr::na_if(trimws(as.character(source)), "")
         ) |>
         dplyr::filter(
           !is.na(Species),
           !is.na(AA_pos_Ecoli),
           !is.na(AA_original),
-          !is.na(AA_mutation),
-          AA_original != "",
-          AA_mutation != ""
+          !is.na(AA_mutation)
         ) |>
-        dplyr::distinct()
+        dplyr::distinct(Species, AA_original, AA_mutation, AA_pos, AA_pos_Ecoli, source)
       
-      if (nrow(df) == 0) return(NULL)
+      if (!nrow(df)) return(NULL)
       df
     })
     
-    # select species that has refs + seq + coords 
-    has_ref_assets <- function(species, refs, seqs, coordinates) {
-      ref_row <- refs[refs$Species == species, , drop = FALSE]
-      if (nrow(ref_row) == 0) return(FALSE)
+    # 2) Precompute which species have all reference assets 
+    ref_assets_ok <- local({
+      # Named logical: species -> TRUE/FALSE
+      cache <- NULL
       
-      ref_id <- ref_row$FASTA_name[1]
-      if (is.na(ref_id) || ref_id == "") return(FALSE)
-      
-      if (!(ref_id %in% names(seqs))) return(FALSE)
-      if (is.null(coordinates[[ref_id]])) return(FALSE)
-      
-      TRUE
-    }
-    
-    # Species to plot (drop those without assets) 
-    cluster_species_to_plot <- reactive({
-      df <- cluster_plotting_df()
-      if (is.null(df) || nrow(df) == 0) return(character(0))
-      
-      sp <- sort(unique(df$Species))
-      
-      keep <- vapply(
-        sp,
-        has_ref_assets,
-        logical(1),
-        refs = refs,
-        seqs = seqs,
-        coordinates = coordinates
-      )
-      
-      sp2 <- sp[keep]
-      
-      # warn once per change in species selection
-      dropped <- setdiff(sp, sp2)
-      if (length(dropped) > 0) {
-        warning(
-          "Dropping species missing reference assets (refs/seqs/coordinates):\n",
-          paste0("  - ", dropped, collapse = "\n")
-        )
+      function(refs, seqs, coordinates) {
+        if (!is.null(cache)) return(cache)
+        
+        # only keep rows with a valid FASTA_name
+        rr <- refs |>
+          dplyr::transmute(
+            Species = as.character(.data$Species),
+            FASTA   = dplyr::na_if(trimws(as.character(.data$FASTA_name)), "")
+          ) |>
+          dplyr::filter(!is.na(.data$Species), !is.na(.data$FASTA)) |>
+          dplyr::distinct(.data$Species, .keep_all = TRUE)
+        
+        ok <- setNames(rep(FALSE, nrow(rr)), rr$Species)
+        
+        if (nrow(rr)) {
+          has_seq  <- rr$FASTA %in% names(seqs)
+          has_coord <- vapply(rr$FASTA, function(id) !is.null(coordinates[[id]]), logical(1))
+          ok[] <- has_seq & has_coord
+        }
+        
+        cache <<- ok
+        cache
       }
-      sp2
     })
     
-    
-    
-    # Return height and width 
-    cluster_dims <- reactive({
-      df <- cluster_plotting_df()
-      if (is.null(df) || nrow(df) == 0) return(NULL)
-      if (no_clusters_selected(input$clustersToPlot)) return(NULL)
+    # 3) Species to plot (drop those without assets) + warn only when list changes
+    cluster_species_to_plot <- local({
+      last_dropped <- character(0)
       
-      plotMutations(
-        muts           = df,
-        clusters       = clusters,
-        seqs           = seqs,
-        coordinates    = coordinates,
-        refs           = refs,
-        gene           = "rpoB",
-        clustersToPlot = input$clustersToPlot,
-        speciesToPlot  = cluster_species_to_plot(),
-        colouring      = "ubiuni",
-        mergeDuplicates= TRUE,
-        plot_width_px  = NA,     
-        return_dims    = TRUE
-      )
+      reactive({
+        df <- cluster_plotting_df()
+        if (is.null(df) || !nrow(df)) return(character(0))
+        
+        sp <- sort(unique(df$Species))
+        
+        ok_map <- ref_assets_ok(refs = refs, seqs = seqs, coordinates = coordinates)
+        keep <- !is.na(ok_map[sp]) & ok_map[sp]
+        
+        sp_keep <- sp[keep]
+        dropped <- setdiff(sp, sp_keep)
+        
+        # warn only if dropped set changed
+        if (length(dropped) && !identical(sort(dropped), sort(last_dropped))) {
+          warning(
+            "Dropping species missing reference assets (refs/seqs/coordinates):\n",
+            paste0("  - ", dropped, collapse = "\n")
+          )
+          last_dropped <<- dropped
+        }
+        if (!length(dropped)) last_dropped <<- character(0)
+        
+        sp_keep
+      })
     })
     
+    # 4) Canonical ordered clusters (compute once per selection)
+    clusters_to_plot_r <- reactive({
+      if (no_clusters_selected(input$clustersToPlot)) return(character(0))
+      
+      clusters |>
+        dplyr::filter(.data$Gene == "rpoB", .data$Cluster %in% input$clustersToPlot) |>
+        dplyr::arrange(.data$AAstart_Ecoli) |>
+        dplyr::pull(.data$Cluster) |>
+        unique()
+    })
     
-    no_clusters_selected <- function(x) {
-      is.null(x) || length(x) == 0 || all(x == "")
-    }
+    # 5) Cache plot dimensions so we don’t call plotMutations twice
+    cluster_dims_r <- reactiveVal(NULL)
     
+    observeEvent(
+      list(input$apply_filters, input$clustersToPlot),
+      {
+        df <- cluster_plotting_df()
+        sp <- cluster_species_to_plot()
+        cl <- clusters_to_plot_r()
+        
+        if (is.null(df) || !nrow(df) || !length(sp) || !length(cl)) {
+          cluster_dims_r(NULL)
+          return()
+        }
+        
+        cluster_dims_r(
+          plotMutations(
+            muts            = df,
+            clusters        = clusters,
+            seqs            = seqs,
+            coordinates     = coordinates,
+            refs            = refs,
+            gene            = "rpoB",
+            clustersToPlot  = cl,
+            speciesToPlot   = sp,
+            colouring       = "ubiuni",
+            mergeDuplicates = TRUE,
+            plot_width_px   = NA,
+            return_dims     = TRUE
+          )
+        )
+      },
+      ignoreInit = TRUE
+    )
+    
+    # 6) Trigger for plot redraw 
     cluster_trigger <- reactive({
       input$apply_filters
       input$view_tabs
+      input$clustersToPlot
       TRUE
     })
     
     # ---- Plot ----
+    
+    # Store hover bands + plt for JS
+    hover_payload_r <- reactiveVal(NULL)
+    
+    output$clusterPlotUI <- renderUI({
+      div(
+        id = "clusterWrap",
+        div(
+          id = "clusterPlotWrap",
+          spin(plotOutput("clusterPlot", width = "100%", height = "85vh")),
+          tags$canvas(id = "hoverCanvas")
+        )
+      )
+    })
+    
+    output$clusterPlot <- renderPlot(
+      {
+        cluster_trigger()
+        
+        df <- cluster_plotting_df()
+        sp <- cluster_species_to_plot()
+        cl <- clusters_to_plot_r()
+
+        
+        if (is.null(df) || !nrow(df)) {
+          # reset JS overlay by default
+          hover_bands_r(NULL)
+          plt_r(NULL)
+          session$sendCustomMessage("hoverMap", "NULL")
+          
+          plot_message("No data to show.")
+          return(invisible())
+        }
+        
+        if (!length(cl)) {
+          # reset JS overlay by default
+          hover_bands_r(NULL)
+          plt_r(NULL)
+          session$sendCustomMessage("hoverMap", "NULL")
+          
+          plot_message("Please select at least one cluster.")
+          return(invisible())
+        }
+        
+        if (!length(sp)) {
+          # reset JS overlay by default
+          hover_bands_r(NULL)
+          plt_r(NULL)
+          session$sendCustomMessage("hoverMap", "NULL")
+          
+          plot_message("No selectable species (missing reference assets).")
+          return(invisible())
+        }
+        
+        out <- plotMutations(
+          muts             = df,
+          clusters         = clusters,
+          seqs             = seqs,
+          coordinates      = coordinates,
+          refs             = refs,
+          gene             = "rpoB",
+          clustersToPlot   = cl,
+          speciesToPlot    = sp,
+          colouring        = "ubiuni",
+          mergeDuplicates  = TRUE,
+          return_hover_map = TRUE # now expected to return $bands, not huge per-letter map
+        )
+        
+        # capture geometry from this plot
+        payload <- list(
+          bands = out$bands,
+          plt   = out$plt,
+          xcols = out$xcols,
+          dx = out$dx
+        )
+        
+        hover_payload_r(payload)
+        
+        invisible()
+      },
+      width = function() {
+        d <- cluster_dims_r()
+        if (is.null(d)) 300 else max(300, d$width_px)
+      },
+      height = function() {
+        d <- cluster_dims_r()
+        if (is.null(d)) 300 else max(150, d$height_px)
+      },
+      res = 96
+    )
+    
+    # Send compact bands to JS (tiny payload)
+    observeEvent(hover_payload_r(), {
+      p <- hover_payload_r()
+      
+      if (is.null(p)) {
+        session$sendCustomMessage("hoverMap", "NULL")
+        return()
+      }
+      
+      req(p$bands, p$plt, p$xcols)
+      
+      session$sendCustomMessage("hoverMap", p)
+    }, ignoreInit = TRUE)
+    
     
     ## ---- Legend panel ----
     
@@ -874,97 +986,6 @@ server <- function(input, output, session) {
       )
     })
     
-    
-    ## ---- Cluster plot -----
-    
-    hover_map_r <- reactiveVal(NULL)
-    plt_r       <- reactiveVal(NULL)
-    
-    
-    output$clusterPlotUI <- renderUI({
-      div(
-        id = "clusterWrap",
-        div(
-          id = "clusterPlotWrap",
-          spin(plotOutput("clusterPlot", width = "100%", height = "85vh")),
-          tags$canvas(id = "hoverCanvas")
-        )
-      )
-    })
-    
-
-    output$clusterPlot <- renderPlot({
-      cluster_trigger() 
-      
-      df <- cluster_plotting_df()
-      
-      if (is.null(df) || nrow(df) == 0) {
-        hover_map_r(NULL)
-        plt_r(NULL)
-        
-        session$sendCustomMessage("hoverMap", "NULL")
-        
-        plot_message("No data to show.")
-        return(invisible())
-      }
-      
-      if (no_clusters_selected(input$clustersToPlot)) {
-        hover_map_r(NULL)
-        plt_r(NULL)
-        
-        session$sendCustomMessage("hoverMap", "NULL")
-        
-        plot_message("Please select at least one cluster.")
-        return(invisible())
-        
-      }
-      
-      clustersToPlot <- clusters |> 
-        dplyr::filter(Gene == "rpoB", Cluster %in% input$clustersToPlot) |> 
-        dplyr::arrange(AAstart_Ecoli) |> dplyr::pull(Cluster) 
-      
-      
-      out <- plotMutations(
-        muts = df,
-        clusters = clusters,
-        seqs = seqs,
-        coordinates = coordinates,
-        refs = refs,
-        gene = "rpoB",
-        clustersToPlot = clustersToPlot,
-        speciesToPlot  = cluster_species_to_plot(),
-        colouring = "ubiuni",
-        mergeDuplicates = TRUE,
-        return_hover_map = TRUE
-      )
-      
-      # capture geometry from this plot
-      hover_map_r(out$hover_map)
-      plt_r(out$plt)
-      
-      },
-      width  = function() {
-        d <- cluster_dims()
-        if (is.null(d)) 300 else max(300, d$width_px)
-      },
-      height = function() {
-        d <- cluster_dims()
-        if (is.null(d)) 300 else max(150, d$height_px)
-      },
-      res = 96
-    )
-    
-    # send to js 
-    observeEvent(hover_map_r(), {
-      
-      req(hover_map_r(), plt_r())
-      
-      session$sendCustomMessage("hoverMap", list(
-        rows = hover_map_r(),
-        plt  = plt_r()
-      ))
-      
-    }, ignoreInit = TRUE)
   }
   
   
