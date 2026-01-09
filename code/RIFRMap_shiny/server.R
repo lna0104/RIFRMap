@@ -870,8 +870,7 @@ server <- function(input, output, session) {
         
         if (is.null(df) || !nrow(df)) {
           # reset JS overlay by default
-          hover_bands_r(NULL)
-          plt_r(NULL)
+          hover_payload_r(NULL)
           session$sendCustomMessage("hoverMap", "NULL")
           
           plot_message("No data to show.")
@@ -880,8 +879,7 @@ server <- function(input, output, session) {
         
         if (!length(cl)) {
           # reset JS overlay by default
-          hover_bands_r(NULL)
-          plt_r(NULL)
+          hover_payload_r(NULL)
           session$sendCustomMessage("hoverMap", "NULL")
           
           plot_message("Please select at least one cluster.")
@@ -890,8 +888,7 @@ server <- function(input, output, session) {
         
         if (!length(sp)) {
           # reset JS overlay by default
-          hover_bands_r(NULL)
-          plt_r(NULL)
+          hover_payload_r(NULL)
           session$sendCustomMessage("hoverMap", "NULL")
           
           plot_message("No selectable species (missing reference assets).")
@@ -1308,7 +1305,6 @@ server <- function(input, output, session) {
     lapply(seq_along(clickable_levels), function(i) {
       observeEvent(input[[paste0("legend_", i)]], {
         lvl <- clickable_levels[i]
-        
         sel <- selected_sources()
         sel[[lvl]] <- !isTRUE(sel[[lvl]])
         selected_sources(sel)
@@ -1316,7 +1312,9 @@ server <- function(input, output, session) {
     })
   }, ignoreInit = TRUE)
   
-  
+  observeEvent(input$reset_heatmap_legend, {
+    selected_sources(NULL)
+  })
   
   output$mutationHeatmap <- ggiraph::renderGirafe({
     req(input$apply_filters > 0)

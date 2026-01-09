@@ -287,6 +287,15 @@ ui <- dashboardPage(
                 maximizable = TRUE,
                 style = "height: 90vh; overflow-y: auto;",
                 div(
+                  style = "display:flex; justify-content:flex-end; margin-bottom:8px;",
+                  actionButton(
+                    "reset_heatmap_legend",
+                    "Reset plot",
+                    icon = icon("rotate-left"),
+                    class = "btn-outline-secondary btn-sm"
+                  )
+                ),
+                div(
                   style = "display: flex; justify-content: center;",
                   uiOutput("heatmap_container")
                 )
