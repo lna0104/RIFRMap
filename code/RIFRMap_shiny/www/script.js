@@ -7,12 +7,7 @@
 //   using xcols + dx sent from R.
 //
 // Expected Shiny message payload:
-//   {
-//     bands: <data.frame/tibble of per-species y bands>,
-//     xcols: <data.frame/tibble of per-cluster x regions>,
-//     dx:    <numeric step in plot coords>,
-//     plt:   <par("plt") fractions: [x1, x2, y1, y2]>
-//   }
+//   { bands, xcols, dx, plt }
 //
 // bands columns: species, pos_ymin,pos_ymax, ref_ymin,ref_ymax, mut_ymin,mut_ymax
 // xcols columns: cluster, x0, n, xmin, xmax
@@ -22,34 +17,17 @@
 
   // ---------- state ----------
   let SPECIES_BANDS = [];  // [{species, pos:{ymin,ymax}, ref:{}, mut:{}, total:{}}]
-  let XCOLS = [];          // [{cluster,x0,n,xmin,xmax}, ...] in plot coords (0..1)
+  let XCOLS = [];          // [{cluster,x0,n,xmin,xmax}, ...] plot coords (0..1)
   let DX = null;           // AA column step in plot coords (0..1)
-  let PLT = null;          // R plot region fractions: [x1, x2, y1, y2]
+  let PLT = null;          // par("plt") fractions: [x1, x2, y1, y2]
   let HOVER_ENABLED = false;
+
+  // cached plot-region px (recomputed only on resize)
+  let PR = null;
 
   // ---------- small utils ----------
   function byId(id) {
     return document.getElementById(id);
-  }
-
-  function isPlainObject(x) {
-    return x && typeof x === "object" && !Array.isArray(x);
-  }
-
-  function looksLikeRowObjectMap(obj) {
-    // Shiny sometimes serializes df as {"0":{...},"1":{...}}
-    if (!isPlainObject(obj)) return false;
-    const keys = Object.keys(obj);
-    if (!keys.length) return false;
-    return keys.every(k => String(+k) === k);
-  }
-
-  function clearCanvas() {
-    const canvas = byId("hoverCanvas");
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
   // Robust row decoder:
@@ -59,28 +37,26 @@
   function toRows(payload) {
     if (!payload) return [];
     if (Array.isArray(payload)) return payload;
-  
-    // Case 3: {"0": {...}, "1": {...}}
-    if (payload && typeof payload === "object" && !Array.isArray(payload)) {
+
+    if (payload && typeof payload === "object") {
       const keys = Object.keys(payload);
-  
-      // row-object map (all numeric keys)
-      if (keys.length && keys.every(k => String(+k) === k)) {
+      if (!keys.length) return [];
+
+      // Case 3: {"0": {...}, "1": {...}}
+      if (keys.every(k => String(+k) === k)) {
         return keys
           .map(k => +k)
           .sort((a, b) => a - b)
           .map(k => payload[String(k)]);
       }
-  
+
       // Case 2: column-wise object: {col: [..], ...}
-      // Find array-like columns
       const colKeys = keys.filter(k => Array.isArray(payload[k]));
       if (!colKeys.length) return [];
-  
-      // Determine row count from first array column
+
       const n = payload[colKeys[0]].length;
       const out = new Array(n);
-  
+
       for (let i = 0; i < n; i++) {
         const row = {};
         for (const k of colKeys) row[k] = payload[k][i];
@@ -88,10 +64,9 @@
       }
       return out;
     }
-  
+
     return [];
   }
-
 
   function finiteBand(ymin, ymax) {
     ymin = +ymin; ymax = +ymax;
@@ -103,7 +78,7 @@
   function buildSpeciesBandsFromBandsDf(rows) {
     const out = [];
     for (const r of rows) {
-      if (!r || !r.species) continue;
+      if (!r || r.species == null) continue;
 
       const pos = finiteBand(r.pos_ymin, r.pos_ymax);
       const ref = finiteBand(r.ref_ymin, r.ref_ymax);
@@ -121,8 +96,7 @@
         total: { ymin: Math.min(...ys), ymax: Math.max(...ys) }
       });
     }
-    // sort top → bottom
-    out.sort((a, b) => b.total.ymax - a.total.ymax);
+    out.sort((a, b) => b.total.ymax - a.total.ymax); // top → bottom
     return out;
   }
 
@@ -133,16 +107,19 @@
       const x0 = +r.x0, n = +r.n, xmin = +r.xmin, xmax = +r.xmax;
       if (![x0, n, xmin, xmax].every(Number.isFinite)) continue;
       if (n <= 0) continue;
-
       out.push({
         cluster: r.cluster != null ? String(r.cluster) : "",
-        x0, n: Math.trunc(n), xmin, xmax
+        x0,
+        n: Math.trunc(n),
+        xmin,
+        xmax
       });
     }
     return out;
   }
 
   function findSpeciesAtY(yPlot) {
+    // linear scan; keep it simple (species count usually small-ish)
     for (const s of SPECIES_BANDS) {
       if (yPlot >= s.total.ymin && yPlot <= s.total.ymax) return s;
     }
@@ -168,28 +145,30 @@
     if (!Number.isFinite(xPlot) || !Number.isFinite(DX) || DX <= 0 || !XCOLS.length) {
       return null;
     }
-  
+
     const c = findClusterAtX(xPlot);
     if (!c) return null;
-  
-    // floating index relative to x0
+
+    // index relative to x0
     const t = (xPlot - c.x0) / DX;
-  
-    // snap to nearest AA column
     let u = Math.round(t);
-  
-    // hard clamp to [0, n-1]
     u = Math.max(0, Math.min(c.n - 1, u));
-  
-    // snapped AA column center
     return c.x0 + u * DX;
+  }
+
+  function clearCanvas() {
+    const canvas = byId("hoverCanvas");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
   // ---------- Shiny message handler ----------
   if (window.Shiny) {
     Shiny.addCustomMessageHandler("hoverMap", function (msg) {
-      console.log(msg);
-  
+      // console.log(msg);
+
       if (msg === "NULL" || msg == null) {
         HOVER_ENABLED = false;
         SPECIES_BANDS = [];
@@ -199,38 +178,28 @@
         clearCanvas();
         return;
       }
-  
-      // expected {bands, xcols, dx, plt}
+
       const bandsPayload =
         (msg && msg.bands !== undefined) ? msg.bands :
         (msg && msg.rows  !== undefined) ? msg.rows  :
         msg;
-  
+
       const xcolsPayload =
         (msg && msg.xcols !== undefined) ? msg.xcols :
         null;
-  
+
       const bandsRows = toRows(bandsPayload);
       SPECIES_BANDS = buildSpeciesBandsFromBandsDf(bandsRows);
-  
+
       const xcolsRows = toRows(xcolsPayload);
       XCOLS = buildXCols(xcolsRows);
-  
+
       DX  = (msg && msg.dx  != null) ? +msg.dx  : null;
       PLT = (msg && msg.plt != null) ? msg.plt  : null;
-  
-      // enable hover if we at least have horizontal bands
+
       HOVER_ENABLED = SPECIES_BANDS.length > 0;
-  
-      console.log(
-        "hoverMap:",
-        "bands rows =", bandsRows.length,
-        "species =", SPECIES_BANDS.length,
-        "xcols rows =", xcolsRows.length,
-        "xcols =", XCOLS.length,
-        "dx =", DX,
-        "plt =", PLT
-      );
+
+      // console.log("hoverMap:", "bands=", SPECIES_BANDS.length, "xcols=", XCOLS.length, "dx=", DX, "plt=", PLT);
     });
   }
 
@@ -247,26 +216,7 @@
     const ctx = canvas.getContext("2d");
     if (!ctx) return false;
 
-    // Clear in device pixels (canvas is DPR-scaled, but ctx is transformed to CSS pixels)
-    function clear() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    function syncCanvas() {
-      const w = img.offsetWidth;
-      const h = img.offsetHeight;
-      const dpr = window.devicePixelRatio || 1;
-
-      canvas.style.width = w + "px";
-      canvas.style.height = h + "px";
-      canvas.width = Math.max(1, Math.round(w * dpr));
-      canvas.height = Math.max(1, Math.round(h * dpr));
-
-      // Draw in CSS pixels
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      clear();
-    }
-
+    // ---- sizing / DPR ----
     function plotRegionPx() {
       const W = img.offsetWidth;
       const H = img.offsetHeight;
@@ -288,20 +238,36 @@
       };
     }
 
-    // ---- overlay drawer ----
-    let lastBand = null;     // {ymin,ymax} in plot coords
-    let lastXPlot = null;    // snapped x in plot coords
-    let lastXpx = null;      // snapped x in CSS pixels
-    let lastKey = null;      // species::zone
-    let raf = false;
-    let pendingY = null;
+    function syncCanvas() {
+      const w = img.offsetWidth;
+      const h = img.offsetHeight;
 
-    function drawOverlay(band, xPix) {
-      const pr = plotRegionPx();
+      // cap DPR for speed (retina can be 2 => 4x pixels)
+      const dpr0 = window.devicePixelRatio || 1;
+      const dpr = Math.min(dpr0, 1.25);
+
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      canvas.width = Math.max(1, Math.round(w * dpr));
+      canvas.height = Math.max(1, Math.round(h * dpr));
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      PR = plotRegionPx(); // cache plot region
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function getPR() {
+      return PR || plotRegionPx();
+    }
+
+    // ---- overlay drawing (only clears plot region) ----
+    function drawOverlay(pr, band, xPix) {
       const plotW = pr.right - pr.left;
       const plotH = pr.bottom - pr.top;
 
-      clear();
+      // clear only plot region
+      ctx.clearRect(pr.left, pr.top, plotW, plotH);
 
       // Horizontal band
       if (band) {
@@ -339,27 +305,60 @@
       }
     }
 
-    function handleY(yPlot) {
+    // ---- state for throttled drawing ----
+    let lastKey = null;     // species::zone
+    let lastBand = null;    // {ymin,ymax} in plot coords
+    let lastXPlot = null;   // snapped x in plot coords
+    let lastXpx = null;     // snapped x in CSS pixels
+
+    // draw scheduling (single RAF for BOTH x and y changes)
+    let pending = null; // {band, xpx}
+    let rafDraw = false;
+
+    function requestDraw(pr, band, xpx) {
+      // avoid redundant draws
+      const sameBand =
+        (band === lastBand) ||
+        (band && lastBand && band.ymin === lastBand.ymin && band.ymax === lastBand.ymax);
+
+      const sameX = (xpx === lastXpx);
+
+      if (sameBand && sameX) return;
+
+      pending = { pr, band, xpx };
+      if (rafDraw) return;
+
+      rafDraw = true;
+      requestAnimationFrame(() => {
+        rafDraw = false;
+        if (!pending) return;
+
+        lastBand = pending.band;
+        lastXpx  = pending.xpx;
+
+        drawOverlay(pending.pr, lastBand, lastXpx);
+        pending = null;
+      });
+    }
+
+    function updateBandFromY(pr, yPlot) {
       if (!HOVER_ENABLED || !SPECIES_BANDS.length) {
         lastKey = null;
-        lastBand = null;
-        drawOverlay(null, lastXpx);
+        requestDraw(pr, null, lastXpx);
         return;
       }
 
       const s = findSpeciesAtY(yPlot);
       if (!s) {
         lastKey = null;
-        lastBand = null;
-        drawOverlay(null, lastXpx);
+        requestDraw(pr, null, lastXpx);
         return;
       }
 
       const zone = bandNameAtY(s, yPlot);
       if (!zone || !s[zone]) {
         lastKey = null;
-        lastBand = null;
-        drawOverlay(null, lastXpx);
+        requestDraw(pr, null, lastXpx);
         return;
       }
 
@@ -367,75 +366,57 @@
       if (key === lastKey) return;
 
       lastKey = key;
-      lastBand = s[zone];
-      drawOverlay(lastBand, lastXpx);
+      requestDraw(pr, s[zone], lastXpx);
     }
 
-    function scheduleY(yPlot) {
-      pendingY = yPlot;
-      if (raf) return;
-      raf = true;
-
-      requestAnimationFrame(() => {
-        raf = false;
-        if (pendingY != null) handleY(pendingY);
-      });
-    }
-
-    // ---- mouse events (snap X using xcols + dx; throttle Y with rAF) ----
+    // ---- mouse events ----
     wrap.addEventListener("mousemove", function (e) {
       if (!HOVER_ENABLED || !SPECIES_BANDS.length) {
-        clear();
+        const pr0 = getPR();
+        ctx.clearRect(pr0.left, pr0.top, pr0.right - pr0.left, pr0.bottom - pr0.top);
         return;
       }
 
       const rect = img.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
 
-      const pr = plotRegionPx();
-      if (x < pr.left || x > pr.right || y < pr.top || y > pr.bottom) {
+      const pr = getPR();
+      if (mx < pr.left || mx > pr.right || my < pr.top || my > pr.bottom) {
         lastKey = null;
         lastBand = null;
         lastXPlot = null;
         lastXpx = null;
-        clear();
+        ctx.clearRect(pr.left, pr.top, pr.right - pr.left, pr.bottom - pr.top);
         return;
       }
 
       const plotW = pr.right - pr.left;
       const plotH = pr.bottom - pr.top;
 
-      // Convert mouse → plot coords (0..1)
-      const xPlot = (x - pr.left) / plotW;
-      const yPlot = 1 - ((y - pr.top) / plotH);
+      // mouse → plot coords (0..1)
+      const xPlot = (mx - pr.left) / plotW;
+      const yPlot = 1 - ((my - pr.top) / plotH);
 
-      // Snap X to AA column centers using xcols + dx
+      // snap X (cheap) and only update if snapped col changes
       const xSnapPlot = snapXToAA(xPlot);
-
-      // Redraw ONLY when snapped column changes
       if (xSnapPlot !== lastXPlot) {
         lastXPlot = xSnapPlot;
-
-        if (xSnapPlot == null) {
-          lastXpx = null;
-        } else {
-          lastXpx = pr.left + xSnapPlot * plotW;
-        }
-
-        drawOverlay(lastBand, lastXpx);
+        lastXpx = (xSnapPlot == null) ? null : (pr.left + xSnapPlot * plotW);
+        requestDraw(pr, lastBand, lastXpx);
       }
 
-      // Band updates throttled (only redraw when band changes)
-      scheduleY(yPlot);
+      // update band (also draws via RAF only when it changes)
+      updateBandFromY(pr, yPlot);
     });
 
     wrap.addEventListener("mouseleave", function () {
+      const pr = getPR();
       lastKey = null;
       lastBand = null;
       lastXPlot = null;
       lastXpx = null;
-      clear();
+      ctx.clearRect(pr.left, pr.top, pr.right - pr.left, pr.bottom - pr.top);
     });
 
     // Keep canvas aligned with image resizing
