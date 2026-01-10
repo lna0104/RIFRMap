@@ -84,29 +84,7 @@ server <- function(input, output, session) {
     )
   }
   
-  
-  plot_message <- function(
-    msg,
-    x = 0.02,
-    y = 0.98,
-    size_mult = 1.1,
-    col = PLOT_STYLE$text_col,
-    fontface = "plain"
-  ) {
-    grid::grid.newpage()
-    grid::grid.text(
-      msg,
-      x = grid::unit(x, "npc"),
-      y = grid::unit(y, "npc"),
-      just = c("left", "top"),
-      gp = grid::gpar(
-        col        = col,
-        fontsize   = PLOT_STYLE$base_size * 12/9 * size_mult,
-        fontfamily = PLOT_STYLE$family,
-        fontface   = fontface
-      )
-    )
-  }
+
   
   spin <- function(x) shinycssloaders::withSpinner(x, color = "#0dc5c1")
   
@@ -254,7 +232,8 @@ server <- function(input, output, session) {
   
   # ---- Redirect to View tab on Apply ----
   observeEvent(input$apply_filters, {
-    updateTabItems(session, "sidebar", "view")
+    updateTabItems(session, "sidebar", "explore")
+    updateTabsetPanel(session, "explore_steps", selected = "cluster")
   })
   
   # ---- Reset button: clear inputs + go back Home
@@ -390,10 +369,10 @@ server <- function(input, output, session) {
       pars$dyRef <- 1.3 # relative space for reference sequence
       pars$dyBlocks <- 2.2
       
-      pars$cexPos <- 1 # relative font size of position numbers
-      pars$cexRef <- 1 # relative font size of reference sequence
-      pars$cexMut <- 1
-      pars$cexSpecies <- 1.1 # relative font size of species labels
+      pars$cexPos <- 0.9 # relative font size of position numbers
+      pars$cexRef <- 0.9 # relative font size of reference sequence
+      pars$cexMut <- 0.9
+      pars$cexSpecies <- 1 # relative font size of species labels
       
       pars$col <- c(default     = "#000000",
                     ubiquitous  = "#3e3bff", 
@@ -405,7 +384,7 @@ server <- function(input, output, session) {
       pars$familyMuts <- PLOT_STYLE$family
       pars$familyRef  <- PLOT_STYLE$family
       
-      pars$xInchPerUnit <- 0.3
+      pars$xInchPerUnit <- 0.2
       pars$yInchPerUnit <- 0.2
       return(pars)
     }
@@ -838,10 +817,10 @@ server <- function(input, output, session) {
     # 6) Trigger for plot redraw 
     cluster_trigger <- reactive({
       input$apply_filters
-      input$view_tabs
       input$clustersToPlot
       TRUE
     })
+    
     
     # ---- Plot ----
     
@@ -854,46 +833,46 @@ server <- function(input, output, session) {
         div(
           id = "clusterPlotWrap",
           spin(plotOutput("clusterPlot", width = "100%", height = "85vh")),
-          tags$canvas(id = "hoverCanvas")
+          tags$canvas(id = "hoverCanvas"),
+          uiOutput("clusterPlotMsg")
         )
       )
     })
     
+    # Data check and message 
+    cluster_status <- reactive({
+      cluster_trigger()
+      
+      df <- cluster_plotting_df()
+      cl <- input$clustersToPlot
+      sp <- cluster_species_to_plot()
+      
+      if (is.null(df) || nrow(df) == 0) {
+        return(list(ok = FALSE, msg = "No data to show."))
+      }
+      if (is.null(cl) || length(cl) == 0) {
+        return(list(ok = FALSE, msg = "Please select at least one cluster."))
+      }
+      if (is.null(sp) || length(sp) == 0) {
+        return(list(ok = FALSE, msg = "No selectable species (missing reference assets)."))
+      }
+      
+      list(ok = TRUE, msg = NULL)
+    })
+    
+    output$clusterPlotMsg <- renderUI({
+      st <- cluster_status()
+      if (isTRUE(st$ok)) return("NULL")
+      div(class = "plot-empty-msg", st$msg)
+    })
+    
     output$clusterPlot <- renderPlot(
       {
-        cluster_trigger()
+        st <- cluster_status()
+        print(st)
+        if (!isTRUE(st$ok)) return(invisible())
         
         df <- cluster_plotting_df()
-        sp <- cluster_species_to_plot()
-        cl <- clusters_to_plot_r()
-
-        
-        if (is.null(df) || !nrow(df)) {
-          # reset JS overlay by default
-          hover_payload_r(NULL)
-          session$sendCustomMessage("hoverMap", "NULL")
-          
-          plot_message("No data to show.")
-          return(invisible())
-        }
-        
-        if (!length(cl)) {
-          # reset JS overlay by default
-          hover_payload_r(NULL)
-          session$sendCustomMessage("hoverMap", "NULL")
-          
-          plot_message("Please select at least one cluster.")
-          return(invisible())
-        }
-        
-        if (!length(sp)) {
-          # reset JS overlay by default
-          hover_payload_r(NULL)
-          session$sendCustomMessage("hoverMap", "NULL")
-          
-          plot_message("No selectable species (missing reference assets).")
-          return(invisible())
-        }
         
         out <- plotMutations(
           muts             = df,
@@ -932,14 +911,9 @@ server <- function(input, output, session) {
       res = 96
     )
     
-    # Send compact bands to JS (tiny payload)
+    # Send compact bands to JS 
     observeEvent(hover_payload_r(), {
       p <- hover_payload_r()
-      
-      if (is.null(p)) {
-        session$sendCustomMessage("hoverMap", "NULL")
-        return()
-      }
       
       req(p$bands, p$plt, p$xcols)
       
@@ -949,39 +923,67 @@ server <- function(input, output, session) {
     
     ## ---- Legend panel ----
     
-    legend_colour <- c(
-      Reference   = "#000000",
-      Ubiquitous  = "#3e3bff", 
-      Unique      = "#FF0000",
-      Polymorphic = "#12947F"
+    legend_reference <- c(
+      Reference = "#000000"
     )
+    
+    legend_distribution <- c(
+      Ubiquitous  = "#3e3bff",
+      Polymorphic = "#12947F",
+      Unique      = "#FF0000"
+    )
+    
     
     output$legend_panel <- renderUI({
       tags$div(
         class = "cluster-legend",
         
+        ## ---- Reference section ----
         tags$div(
-          class = "cluster-legend-title",
-          "Mutation distribution across species"
+          class = "cluster-legend-section",
+          tags$div(
+            class = "cluster-legend-title",
+            "Reference sequence"
+          ),
+          lapply(names(legend_reference), function(name) {
+            tags$div(
+              class = "cluster-legend-item",
+              tags$span(
+                class = "cluster-legend-swatch",
+                style = sprintf("background-color:%s;", legend_reference[[name]])
+              ),
+              tags$span(
+                class = "cluster-legend-label",
+                "Reference"
+              )
+            )
+          })
         ),
         
-        lapply(names(legend_colour), function(name) {
+        ## ---- Distribution section ----
+        tags$div(
+          class = "cluster-legend-section",
           tags$div(
-            class = "cluster-legend-item",
-            
-            tags$span(
-              class = "cluster-legend-swatch",
-              style = sprintf("background-color: %s;", legend_colour[[name]])
-            ),
-            
-            tags$span(
-              class = "cluster-legend-label",
-              tools::toTitleCase(name)
+            class = "cluster-legend-title",
+            "Mutation distribution across species"
+          ),
+          lapply(names(legend_distribution), function(name) {
+            tags$div(
+              class = "cluster-legend-item",
+              tags$span(
+                class = "cluster-legend-swatch",
+                style = sprintf("background-color:%s;", legend_distribution[[name]])
+              ),
+              tags$span(
+                class = "cluster-legend-label",
+                name
+              )
             )
-          )
-        })
+          })
+        )
       )
     })
+    
     
   }
   

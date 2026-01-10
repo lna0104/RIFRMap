@@ -101,7 +101,7 @@ html, body,
 /* Cluster plot legend */
 
 .cluster-legend {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.4;
 }
 
@@ -131,6 +131,41 @@ html, body,
 /* Text label */
 .cluster-legend-label {
   font-size: 14px;
+}
+
+/* Outer scroll area: Y only */
+#clusterWrap{
+  position: relative;
+  width: 100%;
+  height: 85vh;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#clusterPlotWrap{
+  position: relative;
+  width: 100%;
+}
+
+.plot-empty-msg{
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 50;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.92);
+  font-size: 16px;
+  color: #2f2f2f;
+}
+
+/* Force the Shiny plot <img> to fit container width (prevents X overflow) */
+#clusterPlot img{
+  display: block;
+  width: 100% !important;   
+  height: auto !important;
+  max-width: 100% !important;
 }
 
 /* Heatmap + legend layout */
@@ -218,5 +253,20 @@ html, body,
 
 .hm-legend-text{
   display: inline-block;
+}
+
+.heatmap-card {
+  position: relative;
+}
+
+.heatmap-topbar {
+  position: absolute;
+  top: 15px;          
+  right: 20px;      
+  z-index: 5;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
