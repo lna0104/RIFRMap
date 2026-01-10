@@ -175,7 +175,7 @@ ui <- dashboardPage(
                 bs4Card(
                   title = "Yang",
                   width = 12,
-                  status = "info",
+                  status = "secondary",
                   solidHeader = TRUE,
                   collapsible = TRUE,
                   checkboxInput("yang_enabled", "Include data", FALSE),
@@ -196,7 +196,7 @@ ui <- dashboardPage(
                 bs4Card(
                   title = "Curated data",
                   width = 12,
-                  status = "secondary",
+                  status = "info",
                   solidHeader = TRUE,
                   collapsible = TRUE,
                   checkboxInput("curated_enabled", "Include data", FALSE),
@@ -265,10 +265,12 @@ ui <- dashboardPage(
               # Plot
               column(
                 width = 10,
-                card(
+                bs4Card(
+                  title = "Species-level distribution of resistance mutations",
                   width = 12,
+                  status = "info",
                   collapsible = FALSE,
-                  solidHeader = FALSE,
+                  solidHeader = TRUE,
                   style = "height: 90vh;",
                   uiOutput("clusterPlotUI")
                 )
@@ -292,7 +294,7 @@ ui <- dashboardPage(
             column(
               width = 12,
               bs4Card(
-                title = "Upset plot",
+                title = "Cross-database mutation overlap",
                 width = 12,
                 status = "info",
                 solidHeader = TRUE,
@@ -306,7 +308,7 @@ ui <- dashboardPage(
             column(
               width = 12,
               bs4Card(
-                title = "Heatmap",
+                title = "Cross-database map of resistance mutations",
                 width = 12,
                 status = "info",
                 solidHeader = TRUE,
