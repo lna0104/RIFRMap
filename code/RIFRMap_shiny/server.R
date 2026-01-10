@@ -869,10 +869,11 @@ server <- function(input, output, session) {
     output$clusterPlot <- renderPlot(
       {
         st <- cluster_status()
-        print(st)
         if (!isTRUE(st$ok)) return(invisible())
         
         df <- cluster_plotting_df()
+        cl <- input$clustersToPlot
+        sp <- cluster_species_to_plot()
         
         out <- plotMutations(
           muts             = df,
@@ -1448,184 +1449,48 @@ server <- function(input, output, session) {
   
   # ---- Summary ----
   
-  
-  ## ---- helper: ggplot -> inline <img> (base64 png) ----
-  plot_to_img <- function(p, width_px = 160, height_px = 50, dpi = 96) {
-    tf <- tempfile(fileext = ".png")
-    on.exit(unlink(tf), add = TRUE)
+  summary_table_df <- reactive({
+    df <- cluster_plotting_df()
+    req(!is.null(df), nrow(df) > 0)
     
-    ggplot2::ggsave(
-      filename = tf,
-      plot     = p,
-      width    = width_px / dpi,
-      height   = height_px / dpi,
-      dpi      = dpi,
-      units    = "in",
-      bg       = "transparent"
-    )
-    
-    b64 <- base64enc::base64encode(tf)
-    
-    htmltools::tags$img(
-      src = paste0("data:image/png;base64,", b64),
-      style = paste(
-        "display:block;",
-        "max-width:100%;",
-        "height:auto;",
-        "border:none;",
-        "background:transparent;",
-        sep = " "
-      )
-    )
-  }
-  
-  ## ---- helper: build one summary row (categorical vs numeric) ----
-  summarise_col <- function(df, v, hist_bins = 30) {
-    x <- df[[v]]
-    type <- class(x)[1]
-    
-    miss  <- sum(is.na(x) | (is.character(x) & x == ""))
-    valid <- length(x) - miss
-    
-    is_cat <- v %in% c("AA_original", "AA_mutation") || is.character(x) || is.factor(x)
-    
-    if (is_cat) {
-      x0 <- as.character(x)
-      x0 <- x0[!is.na(x0) & x0 != ""]
-      
-      tab <- table(x0)
-      tab <- sort(tab, decreasing = TRUE)
-      
-      freqs_html <- if (length(tab) == 0) {
-        ""
-      } else {
-        paste(
-          sprintf(
-            "%d. %s&nbsp;&nbsp;%d (%.1f%%)",
-            seq_along(tab),
-            names(tab),
-            as.integer(tab),
-            100 * as.integer(tab) / sum(tab)
-          ),
-          collapse = "<br>"
-        )
-      }
-      
-      p <- ggplot2::ggplot(
-        data.frame(cat = factor(names(tab), levels = rev(names(tab))),
-                   n   = as.integer(tab)),
-        ggplot2::aes(x = cat, y = n)
-      ) +
-        ggplot2::geom_col(fill = "grey70") +
-        ggplot2::coord_flip() +
-        ggplot2::theme_void() +
-        ggplot2::theme(plot.margin = ggplot2::margin(0, 0, 0, 0))
-      
-      list(
-        Variable = v,
-        Type     = type,
-        Stats    = sprintf("%d distinct values", length(tab)),
-        Freqs    = freqs_html,
-        Graph    = plot_to_img(p, width_px = 300, height_px = 200),
-        Valid    = valid,
-        Missing  = miss
-      )
-      
-    } else {
-      x0 <- suppressWarnings(as.numeric(x))
-      x0 <- x0[!is.na(x0)]
-      
-      stats_txt <- if (!length(x0)) {
-        "No valid numeric data"
-      } else {
-        htmltools::HTML(sprintf(
-          "Mean (sd): %.1f (%.1f)<br>
-           min &lt; med &lt; max: %.1f &lt; %.1f &lt; %.1f<br>
-           IQR: %.1f",
-          mean(x0),
-          stats::sd(x0),
-          min(x0),
-          stats::median(x0),
-          max(x0),
-          stats::IQR(x0)
-        ))
-      }
-      
-      p <- ggplot2::ggplot(data.frame(x = x0), ggplot2::aes(x)) +
-        ggplot2::geom_histogram(bins = hist_bins, fill = "grey70", color = "white", linewidth = 0.1) +
-        ggplot2::theme_void() +
-        ggplot2::theme(plot.margin = ggplot2::margin(0, 0, 0, 0))
-      
-      list(
-        Variable = v,
-        Type     = type,
-        Stats    = stats_txt,
-        Freqs    = sprintf("%d distinct values", length(unique(x0))),
-        Graph    = plot_to_img(p, width_px = 300, height_px = 200),
-        Valid    = valid,
-        Missing  = miss
-      )
-    }
-  }
-  
-  ## ---- UI output: summary table ----
-  output$summary_table_ui <- renderUI({
-    req(input$apply_filters > 0)
-    
-    df0 <- combined_rows() 
-    if (is.null(df0) || nrow(df0) == 0) {
-      return(ui_message("No data to show."))
-    }
-    
-    df <- df0 |>
-      dplyr::transmute(
-        Species      = as.character(species),
-        AA_original  = as.character(AA_original),
-        AA_pos       = suppressWarnings(as.integer(AA_pos)),
-        AA_pos_Ecoli = suppressWarnings(as.integer(AA_pos_Ecoli)),
-        AA_mutation  = as.character(AA_mutation),
-        Source       = as.character(source))
-    
-    if (is.null(df) || nrow(df) == 0) {
-      return(ui_message("No data to show."))
-    }
-    
-    cols <- intersect(
-      c("Species", "AA_original", "AA_mutation", "AA_pos", "AA_pos_Ecoli", "Source"),
-      names(df)
-    )
-    
-    rows <- lapply(cols, function(v) summarise_col(df, v))
-    
-    htmltools::tags$table(
-      class = "table table-sm table-striped",
-      htmltools::tags$thead(
-        htmltools::tags$tr(
-          htmltools::tags$th("Variable"),
-          htmltools::tags$th("Type"),
-          htmltools::tags$th("Stats / Values"),
-          htmltools::tags$th("Freqs (% of Valid)"),
-          htmltools::tags$th("Graph"),
-          htmltools::tags$th("Valid"),
-          htmltools::tags$th("Missing")
-        )
-      ),
-      htmltools::tags$tbody(
-        lapply(rows, function(r) {
-          htmltools::tags$tr(
-            htmltools::tags$td(r$Variable),
-            htmltools::tags$td(r$Type),
-            htmltools::tags$td(r$Stats),
-            htmltools::tags$td(style = "white-space:normal; line-height:1.25;",
-                               htmltools::HTML(r$Freqs)),
-            htmltools::tags$td(r$Graph),
-            htmltools::tags$td(r$Valid),
-            htmltools::tags$td(r$Missing)
-          )
-        })
-      )
-    )
+    df |>
+      dplyr::mutate(Gene = "rpoB") |>
+      dplyr::rename(
+        Species       = Species,
+        AA_Pos        = AA_pos,
+        AA_Pos_Ecoli  = AA_pos_Ecoli,
+        Original      = AA_original,
+        Mutation      = AA_mutation,
+        Source        = source
+      ) 
   })
+  
+  output$table_data <- DT::renderDataTable({
+    DT::datatable({
+      data <- summary_table_df()
+      data
+    })
+  })
+  
+  output$download_table <- downloadHandler(
+    filename = function() paste0("RIFRMap_table_", Sys.Date(), ".csv"),
+    content  = function(file) {
+      readr::write_csv(summary_table_df(), file)
+    }
+  )
+  
+  output$summary_table <- render_gt(
+    data <- summary_table_df() |>
+      tbl_summary() |>
+      as_gt()
+  )
+  
+    
+
+    
+  
+ 
+  
   
   
 }

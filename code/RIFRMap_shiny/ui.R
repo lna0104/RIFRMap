@@ -8,6 +8,8 @@ suppressPackageStartupMessages({
   library(dplyr)
   library(tidyr)
   library(tidyverse)
+  library(gtsummary)
+  
   
   # Plots / widgets
   library(ggplot2)
@@ -15,11 +17,12 @@ suppressPackageStartupMessages({
   library(ggupset)
   library(shinyWidgets)
   library(shinycssloaders)
+  library(gt)
   
   # UI helpers
   library(bslib)
   library(htmltools)
-  library(base64enc)
+
   
   # BioC + GitHub
   library(Biostrings)
@@ -78,7 +81,7 @@ ui <- dashboardPage(
           
           ## ---- Step 1: Select data ----
           tabPanel(
-            title = "Select data",
+            title = "Data filters",
             value = "filters",
             tags$p(
               class = "text-muted",
@@ -218,7 +221,7 @@ ui <- dashboardPage(
             fluidRow(
               column(
                 width = 12,
-                actionButton("apply_filters", "Apply filters", icon = icon("play"), class = "btn-primary"),
+                actionButton("apply_filters", "Apply", icon = icon("play"), class = "btn-primary"),
                 actionButton("reset_filters", "Reset", icon = icon("rotate-left"))
               )
             )
@@ -275,7 +278,7 @@ ui <- dashboardPage(
           
           ## ---- Step 3: Evidence support ----
           tabPanel(
-            title = "Sources Evidence",
+            title = "Database overlap",
             value = "sources",
             
             div(
@@ -330,8 +333,33 @@ ui <- dashboardPage(
           ## ---- Step 4: Summary ----
           tabPanel(
             title = "Summary",
-            value = "summary",
-            uiOutput("summary_table_ui")
+
+            fluidRow(
+              column(
+                width = 8,
+                bs4Card(
+                  title = "Data table",
+                  status = "info",
+                  width = 12,
+                  div(
+                    style = "display:flex; gap:10px; justify-content:flex-end; margin-bottom:8px;",
+                    downloadButton("download_table", "Download CSV", class = "btn btn-outline-primary btn-sm")
+                  ),
+                  DT::dataTableOutput("table_data")
+                )
+              ),
+              
+              column(
+                width = 4,
+                bs4Card(
+                  width = 12,
+                  title = "Summary",
+                  status = "info",
+                  gt_output("summary_table")
+                )
+              ),
+              
+            )
           )
         )
       )

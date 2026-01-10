@@ -9,11 +9,12 @@ cran_pkgs <- c(
   "bslib",
   "ggplot2",
   "ggupset",
-  "base64enc",
   "htmltools",
   "remotes",
   "shinyWidgets",
-  "shinycssloaders"
+  "shinycssloaders",
+  "gtsummary", 
+  "gt"
 )
 
 install.packages(
