@@ -244,7 +244,7 @@
 
       // cap DPR for speed (retina can be 2 => 4x pixels)
       const dpr0 = window.devicePixelRatio || 1;
-      const dpr = Math.min(dpr0, 1.25);
+      const dpr = (dpr0 >= 2 ? 2 : 1);
 
       canvas.style.width = w + "px";
       canvas.style.height = h + "px";
@@ -267,7 +267,7 @@
       const plotH = pr.bottom - pr.top;
 
       // clear only plot region
-      ctx.clearRect(pr.left, pr.top, plotW, plotH);
+      ctx.clearRect(pr.left - 2, pr.top - 2, plotW + 4, plotH + 4);
 
       // Horizontal band
       if (band) {
