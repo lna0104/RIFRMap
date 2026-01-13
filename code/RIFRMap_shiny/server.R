@@ -567,8 +567,7 @@ server <- function(input, output, session) {
         }
         xcols <- dplyr::bind_rows(xcols)
       }
-      #print(xcols)
-      
+
       if (isTRUE(return_dims)) {
         return(list(
           width_px  = width_px,
@@ -828,11 +827,13 @@ server <- function(input, output, session) {
     hover_payload_r <- reactiveVal(NULL)
     
     output$clusterPlotUI <- renderUI({
+      d <- cluster_dims_r()
+      w <- if (is.null(d)) 300 else max(300, d$width_px)
       div(
         id = "clusterWrap",
         div(
           id = "clusterPlotWrap",
-          spin(plotOutput("clusterPlot", width = "100%", height = "85vh")),
+          spin(plotOutput("clusterPlot", width = paste0(w, "px"), height = "85vh")),
           tags$canvas(id = "hoverCanvas"),
           uiOutput("clusterPlotMsg")
         )
@@ -1114,18 +1115,35 @@ server <- function(input, output, session) {
       AA_mutation = all_AAs_sorted
     )
     
+    # obs <- df |>
+    #   dplyr::distinct(AA_pos_Ecoli, AA_mutation, source) |>
+    #   dplyr::group_by(AA_pos_Ecoli, AA_mutation) |>
+    #   dplyr::summarise(
+    #     source_set = list(sort(unique(source))),   
+    #     .groups = "drop"
+    #   ) |>
+    #   dplyr::mutate(
+    #     source_combo = vapply(source_set, paste, collapse = "+", FUN.VALUE = character(1))
+    #   )
     obs <- df |>
-      dplyr::distinct(AA_pos_Ecoli, AA_mutation, source) |>
-      dplyr::group_by(AA_pos_Ecoli, AA_mutation) |>
-      dplyr::summarise(
-        source_combo = paste(sort(unique(source)), collapse = "+"),
+      distinct(AA_pos_Ecoli, AA_mutation, source) |>
+      group_by(AA_pos_Ecoli, AA_mutation) |>
+      summarise(
+        source_set = list(sort(unique(source))),
         .groups = "drop"
-      )
+      ) |>
+      mutate(
+        source_combo_all = vapply(source_set, \(x) paste(x, collapse = "+"), character(1)),
+        source_combo = Map(\(x, all) c(x, all), source_set, source_combo_all)
+      ) |>
+      select(-source_combo_all) |>
+      tidyr::unnest(source_combo)
     
     base_grid |>
       dplyr::left_join(obs, by = c("AA_pos_Ecoli", "AA_mutation")) |>
       dplyr::mutate(
         source_combo = tidyr::replace_na(source_combo, "None"),
+        source_set   = ifelse(is.na(source_combo), list(character(0)), source_set),
         AA_mutation  = factor(AA_mutation, levels = all_AAs_sorted),
         AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels)
       )
@@ -1270,7 +1288,7 @@ server <- function(input, output, session) {
         lvl <- clickable_levels[i]
         col <- cols[[lvl]]
         is_on <- isTRUE(sel[[lvl]])
-        
+
         actionButton(
           inputId = paste0("legend_", i),
           label = tags$span(
@@ -1316,8 +1334,18 @@ server <- function(input, output, session) {
   }, ignoreInit = TRUE)
   
   observeEvent(input$reset_heatmap_legend, {
-    selected_sources(NULL)
-  })
+    df <- hm_plotting_df()
+    req(!is.null(df), nrow(df) > 0)
+    
+    df$source_combo <- normalize_combo(df$source_combo)
+    
+    present_levels <- legend_order[legend_order %in% unique(df$source_combo)]
+    if (length(present_levels) == 0) present_levels <- sort(unique(df$source_combo))
+    
+    lvls <- setdiff(present_levels, "None")
+    
+    selected_sources(setNames(rep(FALSE, length(lvls)), lvls))
+  }, ignoreInit = TRUE)
   
   output$mutationHeatmap <- ggiraph::renderGirafe({
     req(input$apply_filters > 0)
@@ -1341,12 +1369,24 @@ server <- function(input, output, session) {
       selected_sources(sel)
     }
     
+    label_to_set <- function(lbl) sort(strsplit(lbl, "\\+")[[1]])
+    
+    has_required <- function(source_set, required) {
+      vapply(source_set, function(s) all(required %in% s), logical(1))
+    }
+    
     keep_levels <- names(sel)[sel]
     
-    # if something selected → others become "None"
+    print(sel)
+    print(keep_levels)
+    
     if (length(keep_levels) > 0) {
-      df$fill_group <- ifelse(df$source_combo %in% keep_levels,
-                              df$source_combo, "None")
+      # union of selections: keep tiles that satisfy any selected required-set
+      keep_mask <- Reduce(`|`, lapply(keep_levels, function(lbl) {
+        req_set <- label_to_set(lbl)
+        has_required(df$source_set, req_set)
+      }))
+      df$fill_group <- ifelse(keep_mask, df$source_combo, "None")
     } else {
       df$fill_group <- df$source_combo
     }
