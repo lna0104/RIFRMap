@@ -14,7 +14,8 @@ cran_pkgs <- c(
   "shinyWidgets",
   "shinycssloaders",
   "gtsummary", 
-  "gt"
+  "gt",
+  "DT"
 )
 
 install.packages(
@@ -37,3 +38,4 @@ BiocManager::install(
 if (!requireNamespace("ALJEbinf", quietly = TRUE)) {
   remotes::install_github("JanEngelstaedter/ALJEbinf", build_vignettes = TRUE)
 }
+
