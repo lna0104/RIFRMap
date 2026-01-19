@@ -29,7 +29,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 }
 
 BiocManager::install(
-  setdiff("Biostrings", rownames(installed.packages())),
+  setdiff(c("Biostrings", "DECIPHER"), rownames(installed.packages())),
   ask = FALSE,
   update = FALSE
 )
