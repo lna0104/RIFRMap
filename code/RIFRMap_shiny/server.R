@@ -919,7 +919,9 @@ server <- function(input, output, session) {
       
       req(p$bands, p$plt, p$xcols)
       
-      session$sendCustomMessage("hoverMap", p)
+      session$onFlushed(function() {
+        session$sendCustomMessage("hoverMap", p)
+      }, once = TRUE)
     }, ignoreInit = TRUE)
     
     
@@ -1377,8 +1379,8 @@ server <- function(input, output, session) {
     
     keep_levels <- names(sel)[sel]
     
-    print(sel)
-    print(keep_levels)
+    # print(sel)
+    # print(keep_levels)
     
     if (length(keep_levels) > 0) {
       # union of selections: keep tiles that satisfy any selected required-set

@@ -435,7 +435,7 @@
     if (!root) return;
 
     const obs = new MutationObserver(() => {
-      if (setupHoverOverlay()) obs.disconnect();
+      setupHoverOverlay();
     });
 
     obs.observe(root, { childList: true, subtree: true });
