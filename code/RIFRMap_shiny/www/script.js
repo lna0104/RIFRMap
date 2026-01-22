@@ -398,12 +398,13 @@
       const xPlot = (mx - pr.left) / plotW;
       const yPlot = 1 - ((my - pr.top) / plotH);
 
-      // snap X (cheap) and only update if snapped col changes
+      // snap X and only update if snapped col changes
       const xSnapPlot = snapXToAA(xPlot);
       if (xSnapPlot !== lastXPlot) {
         lastXPlot = xSnapPlot;
-        lastXpx = (xSnapPlot == null) ? null : (pr.left + xSnapPlot * plotW);
-        requestDraw(pr, lastBand, lastXpx);
+      
+        const xpxNew = (xSnapPlot == null) ? null : (pr.left + xSnapPlot * plotW);
+        requestDraw(pr, lastBand, xpxNew);
       }
 
       // update band (also draws via RAF only when it changes)

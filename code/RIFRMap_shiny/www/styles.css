@@ -167,23 +167,25 @@ html, body,
 }
 
 /* Heatmap + legend layout */
+/* ---------- Layout ---------- */
 .hm-layout{
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  justify-content: flex-start;  
+  justify-content: flex-start;
 }
 
-/* Plot should shrink inside flex row instead of overflowing */
+/* Plot area */
 .hm-plot{
   flex: 1 1 auto;
-  min-width: 0;            
-  overflow: hidden;        
+  min-width: 0;
+  overflow: hidden;
+
   position: relative;
   z-index: 1;
 }
 
-/* Legend stays clickable above plot */
+/* Legend column */
 .hm-legend{
   flex: 0 0 260px;
   max-height: 85vh;
@@ -191,12 +193,11 @@ html, body,
   padding-top: 3rem;
 
   position: relative;
-  z-index: 5;              
-  background: transparent; 
+  z-index: 5;
+  background: transparent;
 }
 
-
-/* Legend container: one item per row */
+/* Legend container */
 .hm-legend-col{
   display: flex;
   flex-direction: column;
@@ -204,7 +205,7 @@ html, body,
   margin: 8px 0 12px 0;
 }
 
-/* Button base */
+/* ---------- Legend buttons ---------- */
 .hm-legend-btn{
   padding: 4px 10px;
   border-radius: 14px;
@@ -212,9 +213,11 @@ html, body,
   line-height: 1.2;
   white-space: nowrap;
   width: fit-content;
+
+  transition: transform 80ms ease, box-shadow 120ms ease, opacity 120ms ease;
 }
 
-/* OFF state */
+/* OFF state (normal / shown) */
 .hm-legend-btn.is-off{
   background: #fff;
   border: 1px solid #ddd;
@@ -223,13 +226,27 @@ html, body,
   box-shadow: none;
 }
 
-/* ON state (uses --btncol passed from R) */
+/* ON state (clicked = hidden) */
 .hm-legend-btn.is-on{
-  background: var(--btncol);
-  border: 1px solid var(--btncol);
-  color: #fff;
+  background: #f1f5f9;        /* light grey */
+  border: 1px solid #cbd5e1;  /* grey border */
+  color: #64748b;             /* grey text */
   opacity: 1;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  box-shadow: none;
+}
+
+/* Swatch always shows the real color */
+.hm-legend-swatch{
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  display: inline-block;
+  background: var(--swatch);
+  border: 1px solid rgba(0,0,0,0.25);
+}
+
+.hm-legend-btn.is-on .hm-legend-text{
+  text-decoration: none;
 }
 
 /* Label layout inside button */
@@ -239,32 +256,49 @@ html, body,
   gap: 6px;
 }
 
-/* Color swatch (uses --swatch passed from R) */
-.hm-legend-swatch{
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
-  display: inline-block;
-  background: var(--swatch);
-  border: 1px solid rgba(0,0,0,0.2);
+/* ---------- Heatmap card + Reset button ---------- */
+.heatmap-card{
+  position: relative;     /* anchor absolute toolbar */
 }
 
-.hm-legend-text{
-  display: inline-block;
-}
-
-.heatmap-card {
-  position: relative;
-}
-
-.heatmap-topbar {
+/* Make toolbar truly above SVG */
+.heatmap-topbar{
   position: absolute;
-  top: 15px;          
-  right: 20px;      
-  z-index: 5;
+  top: 12px;
+  right: 16px;
+
+  z-index: 10000;         /* above any svg overlay */
+  pointer-events: auto;
 
   display: flex;
   align-items: center;
   gap: 8px;
+
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(4px);
+
+  /* ensure the box itself is clickable */
+}
+
+/* Force everything inside toolbar to accept clicks */
+.heatmap-topbar,
+.heatmap-topbar *{
+  pointer-events: auto !important;
+}
+
+/* Keep plot layers below toolbar */
+.heatmap-card .plot-center,
+.heatmap-card .hm-layout,
+.heatmap-card .hm-plot{
+  position: relative;
+  z-index: 1;
+}
+
+/* Optional: give the reset button a clearer target */
+.heatmap-topbar .btn{
+  border-radius: 12px;
+  padding: 4px 10px;
 }
 

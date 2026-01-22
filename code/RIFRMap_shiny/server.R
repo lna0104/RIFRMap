@@ -1110,7 +1110,7 @@ server <- function(input, output, session) {
     
     # now add common styling
     p <- p +
-      labs(x = "Amino acid", y = "Position", fill = "No. species") +
+      labs(x = "Amino acid", y = "Position (E. coli coordinate)", fill = "No. species") +
       theme_app(legend = "right", x_top = TRUE) +
       theme(
         axis.title.x = element_text(size = 15),
@@ -1118,7 +1118,6 @@ server <- function(input, output, session) {
         legend.title = element_text(size = 13, face = "bold"),
         legend.text  = element_text(size = 12)
       )
-    
 
     
     # height scaling: prevent insane svg height
@@ -1328,16 +1327,7 @@ server <- function(input, output, session) {
       AA_mutation = all_AAs_sorted
     )
     
-    # obs <- df |>
-    #   dplyr::distinct(AA_pos_Ecoli, AA_mutation, source) |>
-    #   dplyr::group_by(AA_pos_Ecoli, AA_mutation) |>
-    #   dplyr::summarise(
-    #     source_set = list(sort(unique(source))),   
-    #     .groups = "drop"
-    #   ) |>
-    #   dplyr::mutate(
-    #     source_combo = vapply(source_set, paste, collapse = "+", FUN.VALUE = character(1))
-    #   )
+    
     obs <- df |>
       distinct(AA_pos_Ecoli, AA_mutation, source) |>
       group_by(AA_pos_Ecoli, AA_mutation) |>
@@ -1349,14 +1339,14 @@ server <- function(input, output, session) {
         source_combo_all = vapply(source_set, \(x) paste(x, collapse = "+"), character(1)),
         source_combo = Map(\(x, all) c(x, all), source_set, source_combo_all)
       ) |>
-      select(-source_combo_all) |>
+      select(-c(source_combo_all, source_set)) |>
       tidyr::unnest(source_combo)
     
+
     base_grid |>
       dplyr::left_join(obs, by = c("AA_pos_Ecoli", "AA_mutation")) |>
       dplyr::mutate(
         source_combo = tidyr::replace_na(source_combo, "None"),
-        source_set   = ifelse(is.na(source_combo), list(character(0)), source_set),
         AA_mutation  = factor(AA_mutation, levels = all_AAs_sorted),
         AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels)
       )
@@ -1373,7 +1363,7 @@ server <- function(input, output, session) {
     "Yang"    = "#dff2e1",  
     
    
-    "CARD+CRyPTIC"   = "#D1D8BE",  
+    "CARD+CRyPTIC"   = "#629FAD",  
     "CARD+DRAGdb"    = "#A7C1A8", 
     "CARD+Curated"     = "#819A91",  
     "CARD+Yang"      = "#5FB3C4", 
@@ -1468,201 +1458,213 @@ server <- function(input, output, session) {
   })
   
   ## ---- Legend ----
+  
   selected_sources <- reactiveVal(NULL)
   
-  output$heatmap_legend <- renderUI({
-    req(input$apply_filters > 0)
-    
-    df <- hm_plotting_df()
-    if (is.null(df) || nrow(df) == 0) return(NULL)
-    
-    df$source_combo <- normalize_combo(df$source_combo)
-    
-    present_levels <- legend_order[legend_order %in% unique(df$source_combo)]
-    if (length(present_levels) == 0) {
-      present_levels <- sort(unique(df$source_combo))
-    }
-    
-    # clickable legend levels (exclude "None")
-    clickable_levels <- setdiff(present_levels, "None")
-    
-    # initialise selection state once
-    sel <- selected_sources()
-    if (is.null(sel) || !identical(sort(names(sel)), sort(clickable_levels))) {
-      sel <- setNames(rep(FALSE, length(clickable_levels)), clickable_levels)
-      selected_sources(sel)
-    }
-    
-    cols <- source_palette[clickable_levels]
-    
-    tags$div(
-      class = "hm-legend-col",
-      lapply(seq_along(clickable_levels), function(i) {
-        lvl <- clickable_levels[i]
-        col <- cols[[lvl]]
-        is_on <- isTRUE(sel[[lvl]])
-
-        actionButton(
-          inputId = paste0("legend_", i),
-          label = tags$span(
-            class = "hm-legend-btn-label",
-            tags$span(
-              class = "hm-legend-swatch",
-              style = sprintf("--swatch:%s;", col) 
-            ),
-            lvl
-          ),
-          class = paste("hm-legend-btn", if (is_on) "is-on" else "is-off"),
-          style = sprintf("--btncol:%s;", col)  
-        )
-      })
+  safe_id <- function(x) gsub("[^A-Za-z0-9_]+", "_", x)
+  
+  notify_reselect <- function(where = "heatmap") {
+    shiny::showNotification(
+      paste0(
+        "Please select the legend again"
+      ),
+      type = "message",
+      duration = 6
     )
-  })
+  }
   
-  # Select legend 
-  observeEvent(input$apply_filters, {
-    df <- hm_plotting_df()
-    if (is.null(df) || nrow(df) == 0) return()
-    
-    df$source_combo <- normalize_combo(df$source_combo)
-    
-    present_levels <- legend_order[legend_order %in% unique(df$source_combo)]
-    if (length(present_levels) == 0) {
-      present_levels <- sort(unique(df$source_combo))
-    }
-    
-    clickable_levels <- setdiff(present_levels, "None")
-    
-    # reset selection when filters re-apply
-    selected_sources(setNames(rep(FALSE, length(clickable_levels)), clickable_levels))
-    
-    lapply(seq_along(clickable_levels), function(i) {
-      observeEvent(input[[paste0("legend_", i)]], {
-        lvl <- clickable_levels[i]
-        sel <- selected_sources()
-        sel[[lvl]] <- !isTRUE(sel[[lvl]])
-        selected_sources(sel)
-      }, ignoreInit = TRUE)
-    })
-  }, ignoreInit = TRUE)
-  
-  observeEvent(input$reset_heatmap_legend, {
-    df <- hm_plotting_df()
-    req(!is.null(df), nrow(df) > 0)
-    
+  get_clickable_levels <- function(df) {
     df$source_combo <- normalize_combo(df$source_combo)
     
     present_levels <- legend_order[legend_order %in% unique(df$source_combo)]
     if (length(present_levels) == 0) present_levels <- sort(unique(df$source_combo))
     
-    lvls <- setdiff(present_levels, "None")
+    setdiff(present_levels, "None")
+  }
+  
+  sync_selected_sources <- function(clickable_levels) {
+    sel <- selected_sources()
+    if (is.null(sel)) sel <- setNames(logical(0), character(0))
     
-    selected_sources(setNames(rep(FALSE, length(lvls)), lvls))
+    # make sel exactly match clickable levels; default FALSE
+    sel2 <- setNames(rep(FALSE, length(clickable_levels)), clickable_levels)
+    sel2[intersect(names(sel), clickable_levels)] <- sel[intersect(names(sel), clickable_levels)]
+    
+    selected_sources(sel2)
+    sel2
+  }
+  
+  output$heatmap_legend <- renderUI({
+    req(input$apply_filters > 0)
+    df <- hm_plotting_df()
+    validate(need(!is.null(df) && nrow(df) > 0, "No data to show."))
+    
+    clickable_levels <- get_clickable_levels(df)
+    sel <- sync_selected_sources(clickable_levels)
+    
+    cols <- source_palette[clickable_levels]
+    
+    tags$div(
+      class = "hm-legend-col",
+      lapply(clickable_levels, function(lvl) {
+        col <- cols[lvl]
+        if (is.na(col) || length(col) == 0) col <- "#D9D9D9"
+        
+        # SAFE: use [] not [[ ]]
+        is_on <- isTRUE(sel[lvl])
+        
+        actionButton(
+          inputId = paste0("legend__", safe_id(lvl)),
+          label = tags$span(
+            class = "hm-legend-btn-label",
+            tags$span(class = "hm-legend-swatch", style = sprintf("--swatch:%s;", col)),
+            tags$span(class = "hm-legend-text", lvl)
+          ),
+          class = paste("hm-legend-btn", if (is_on) "is-on" else "is-off"),
+          style = sprintf("--btncol:%s;", col)
+        )
+      })
+    )
+    
+    
+  })
+  
+  # Reset selection when filters re-apply 
+  observeEvent(input$apply_filters, {
+    df <- hm_plotting_df()
+    if (is.null(df) || nrow(df) == 0) {
+      selected_sources(NULL)
+      return()
+    }
+    
+    clickable_levels <- get_clickable_levels(df)
+    selected_sources(setNames(rep(FALSE, length(clickable_levels)), clickable_levels))
+  }, ignoreInit = TRUE)
+  
+  
+  # Handle legend button clicks (single observer, stable IDs)
+  observe({
+    req(input$apply_filters > 0)
+    
+    df <- hm_plotting_df()
+    if (is.null(df) || nrow(df) == 0) return()
+    
+    clickable_levels <- get_clickable_levels(df)
+    sel <- sync_selected_sources(clickable_levels)
+    
+    for (lvl in clickable_levels) {
+      id <- paste0("legend__", safe_id(lvl))
+      
+      local({
+        lvl_local <- lvl
+        id_local  <- id
+        observeEvent(input[[id_local]], {
+          sel <- selected_sources()
+          if (is.null(sel) || !(lvl_local %in% names(sel))) {
+            notify_reselect("legend")
+            return()
+          }
+          sel[lvl_local] <- !isTRUE(sel[lvl_local])   # SAFE
+          selected_sources(sel)
+        }, ignoreInit = TRUE)
+      })
+    }
+  })
+  
+  observeEvent(input$reset_heatmap_legend, {
+    df <- hm_plotting_df()
+    req(!is.null(df), nrow(df) > 0)
+    
+    clickable_levels <- get_clickable_levels(df)
+    selected_sources(setNames(rep(FALSE, length(clickable_levels)), clickable_levels))
   }, ignoreInit = TRUE)
   
   output$mutationHeatmap <- ggiraph::renderGirafe({
     req(input$apply_filters > 0)
     
-    df <- hm_plotting_df()
-    req(nrow(df) > 0)
-    
-    df$source_combo <- normalize_combo(df$source_combo)
-    
-    present_levels <- legend_order[legend_order %in% unique(df$source_combo)]
-    if (length(present_levels) == 0) {
-      present_levels <- sort(unique(df$source_combo))
-    }
-    
-    # selection state
-    sel <- selected_sources()
-    clickable_levels <- setdiff(present_levels, "None")
-    
-    if (is.null(sel) || !identical(sort(names(sel)), sort(clickable_levels))) {
-      sel <- setNames(rep(FALSE, length(clickable_levels)), clickable_levels)
-      selected_sources(sel)
-    }
-    
-    label_to_set <- function(lbl) sort(strsplit(lbl, "\\+")[[1]])
-    
-    has_required <- function(source_set, required) {
-      vapply(source_set, function(s) all(required %in% s), logical(1))
-    }
-    
-    keep_levels <- names(sel)[sel]
-    
-    # print(sel)
-    # print(keep_levels)
-    
-    if (length(keep_levels) > 0) {
-      # union of selections: keep tiles that satisfy any selected required-set
-      keep_mask <- Reduce(`|`, lapply(keep_levels, function(lbl) {
-        req_set <- label_to_set(lbl)
-        has_required(df$source_set, req_set)
-      }))
-      df$fill_group <- ifelse(keep_mask, df$source_combo, "None")
-    } else {
-      df$fill_group <- df$source_combo
-    }
-    
-    # use ALL levels including None
-    display_levels <- unique(c(present_levels, "None"))
-    df$fill_group <- factor(df$fill_group, levels = display_levels)
-    
-    pos_levels <- selected_pos()
-    n_pos <- length(unique(df$AA_pos_Ecoli))
-    
-    p <- ggplot(
-      df,
-      aes(
-        x = AA_mutation,
-        y = factor(AA_pos_Ecoli, levels = pos_levels),
-        fill = fill_group,
-        tooltip = paste0(
-          "Position: ", AA_pos_Ecoli,
-          "<br>AA: ", AA_mutation,
-          "<br>Source: ", source_combo
-        ),
-        data_id = paste(AA_pos_Ecoli, AA_mutation)
-      )
-    ) +
-      ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
-      scale_fill_manual(
-        values = source_palette[display_levels],
-        breaks = display_levels,
-        limits = display_levels,
-        drop = FALSE
+    tryCatch({
+      df <- hm_plotting_df()
+      validate(need(!is.null(df) && nrow(df) > 0, "No data to show."))
+      
+      df$source_combo <- normalize_combo(df$source_combo)
+      
+      present_levels <- legend_order[legend_order %in% unique(df$source_combo)]
+      if (length(present_levels) == 0) present_levels <- sort(unique(df$source_combo))
+      
+      clickable_levels <- setdiff(present_levels, "None")
+      sel <- sync_selected_sources(clickable_levels)
+      
+      keep_levels <- names(sel)[sel]
+      
+      # if legend selected => disappear
+      if (length(keep_levels) > 0) {
+        drop_mask <- df$source_combo %in% keep_levels
+        df$fill_group <- ifelse(drop_mask, "None", df$source_combo)
+      } else {
+        df$fill_group <- df$source_combo
+      }
+      
+      display_levels <- unique(c(present_levels, "None"))
+      df$fill_group <- factor(df$fill_group, levels = display_levels)
+      
+      pos_levels <- selected_pos()
+      
+      p <- ggplot(
+        df,
+        aes(
+          x = AA_mutation,
+          y = factor(AA_pos_Ecoli, levels = pos_levels),
+          fill = fill_group,
+          tooltip = paste0(
+            "Position: ", AA_pos_Ecoli,
+            "<br>AA: ", AA_mutation,
+            "<br>Source: ", source_combo
+          ),
+          data_id = paste(AA_pos_Ecoli, AA_mutation)
+        )
       ) +
-      scale_x_discrete(position = "top", drop = FALSE) +
-      labs(x = "Amino acid", y = "Position") +
-      theme_app(legend = "none", x_top = TRUE) +
-      theme(
-        axis.title.x = element_text(size = 15),
-        axis.title.y = element_text(size = 15)
+        ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
+        scale_fill_manual(
+          values = source_palette[display_levels],
+          breaks = display_levels,
+          limits = display_levels,
+          drop = FALSE
+        ) +
+        scale_x_discrete(position = "top", drop = FALSE) +
+        labs(x = "Amino acid", y = "Position") +
+        theme_app(legend = "none", x_top = TRUE) +
+        theme(
+          axis.title.x = element_text(size = 15),
+          axis.title.y = element_text(size = 15)
+        )
+      
+      h_in <- heatmap_height_px() / 96
+      
+      ggiraph::girafe(
+        ggobj = p,
+        width_svg  = 12,
+        height_svg = h_in,
+        options = list(
+          ggiraph::opts_hover(css = "fill-opacity:1; stroke:none;"),
+          ggiraph::opts_tooltip(css = "
+          background-color: #2C3E50;
+          color: #ECF0F1;
+          padding: 5px;
+          border-radius: 2px;
+          font-family: Helvetica, sans;
+          font-size: 10px;
+          box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        "),
+          ggiraph::opts_zoom(max = 3),
+          ggiraph::opts_selection(type = "none")
+        )
       )
-    
-    h_in <- heatmap_height_px() / 96
-    
-    ggiraph::girafe(
-      ggobj = p,
-      width_svg  = 12,
-      height_svg = h_in,
-      options = list(
-        ggiraph::opts_hover(css = "fill-opacity:1; stroke:none;"),
-        ggiraph::opts_tooltip(css = "
-        background-color: #2C3E50;
-        color: #ECF0F1;
-        padding: 5px;
-        border-radius: 2px;
-        font-family: Helvetica, sans;
-        font-size: 10px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      "),
-        ggiraph::opts_zoom(max = 3),
-        ggiraph::opts_selection(type = "none")
-      )
-    )
+      
+    }, error = function(e) {
+      notify_reselect("heatmap")
+      ggiraph::girafe(ggobj = ggplot() + theme_void())
+    })
   })
-  
   
   ## ---- Heatmap container ----
   
@@ -1765,6 +1767,10 @@ server <- function(input, output, session) {
     ggplot(plot_df, aes(x = reorder(AA_mut_name_Ecoli, n, FUN = sum), y = n)) +
       geom_col() +
       coord_flip() +
+      scale_y_continuous(
+        breaks = scales::breaks_width(1),   
+        labels = scales::label_number(accuracy = 1)
+      ) +
       theme_app(legend = "top") +
       theme(
         axis.title.x = element_text(size=13),

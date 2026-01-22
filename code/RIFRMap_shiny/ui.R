@@ -89,7 +89,7 @@ ui <- dashboardPage(
         tabsetPanel(
           id = "explore_steps",
           
-          ## ---- Tab 1: Data filters ----
+          ## ---- Tab 1: Data Filters ----
           tabPanel(
             title = "Data Filters",
             value = "filters",
@@ -252,7 +252,7 @@ ui <- dashboardPage(
               class = "step-intro",
               tags$p(
                 class = "text-muted",
-                HTML("Species-centric mutation cluster view. Sources are ignored; patterns reflect <b>species</b> and <b>cluster</b> structure.")
+                HTML("Species-centric mutation cluster view. Data sources are not considered; the plot visualises the distribution of resistance mutations within each species across <i>rpoB</i> clusters.")
               )
             ),
             
@@ -294,7 +294,7 @@ ui <- dashboardPage(
             )
           ),
           
-          ## ---- Tab 3: Mutation frequency ----
+          ## ---- Tab 3: Mutation Frequency ----
           tabPanel(
             title = "Mutation Frequency",
             value = "frequency",
@@ -303,7 +303,8 @@ ui <- dashboardPage(
               class = "step-intro",
               tags$p(
                 class = "text-muted",
-                HTML("Click a tile to display the full list of species carrying that amino acid substitution.")
+                HTML("Heatmap summarises how widely each mutation is distributed across species. Each tile represents an amino-acid position (<i>E. coli</i> coordinates) and substituted residue, coloured by the number of species carrying that mutation. 
+                     Data sources are ignored.")
               )
             ),
             
@@ -350,7 +351,7 @@ ui <- dashboardPage(
               class = "step-intro",
               tags$p(
                 class = "text-muted",
-                HTML("Source-centric view of mutation evidence. Plots highlight overlap among <b>databases</b> (CARD, CRyPTIC, DRAGdb, Yang, Curated data), independent of species identity.")
+                HTML("Source-centric view of mutation evidence. Plots highlight overlap among databases (CARD, CRyPTIC, DRAGdb, Yang, Curated data), independent of species identity.")
               )
             ),
             
@@ -379,6 +380,13 @@ ui <- dashboardPage(
                 maximizable = TRUE,
                 class = "heatmap-card",  
                 style = "height: 90vh; overflow-y: auto;",
+                div(
+                  class = "step-intro",
+                  tags$p(
+                    class = "text-muted",
+                    HTML("Double-click legend items to hide/show source groups. Use Reset to restore the full heatmap view.")
+                  )
+                ),
                 
                 div(
                   class = "heatmap-topbar",
@@ -406,7 +414,7 @@ ui <- dashboardPage(
             
             
             fluidRow(
-              # ---- LEFT: summary table ----
+              # left: summary table 
               column(
                 width = 4,
                 bs4Card(
@@ -418,7 +426,7 @@ ui <- dashboardPage(
                 )
               ),
               
-              # ---- RIGHT: two histograms stacked ----
+              # right: two histograms stacked 
               column(
                 width = 8,
                 
