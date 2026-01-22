@@ -14,10 +14,13 @@ suppressPackageStartupMessages({
   # Plots / widgets
   library(ggplot2)
   library(ggiraph)
+  library(plotly)
   library(ggupset)
   library(shinyWidgets)
   library(shinycssloaders)
   library(gt)
+  library(wesanderson)
+  library(RColorBrewer)
   
   # UI helpers
   library(bslib)
@@ -55,7 +58,8 @@ ui <- dashboardPage(
     bs4SidebarMenu(
       id = "sidebar",
       bs4SidebarMenuItem("Home",    tabName = "home",    icon = icon("home")),
-      bs4SidebarMenuItem("Explore", tabName = "explore", icon = icon("compass"))
+      bs4SidebarMenuItem("Documentation", tabName = "doc", icon = icon("book-open")),
+      bs4SidebarMenuItem("Explorer", tabName = "explorer", icon = icon("compass"))
     )
   ),
   
@@ -72,16 +76,22 @@ ui <- dashboardPage(
         h2("Welcome to RIFRMap")
       ),
       
-      ## ---------------- Explore ----------------
+      ## ---------------- Documentation ----------------
       bs4TabItem(
-        tabName = "explore",
+        tabName = "doc",
+        h2("Information")
+      ),
+      
+      ## ---------------- Explorer ----------------
+      bs4TabItem(
+        tabName = "explorer",
         
         tabsetPanel(
           id = "explore_steps",
           
-          ## ---- Step 1: Select data ----
+          ## ---- Tab 1: Data filters ----
           tabPanel(
-            title = "Data filters",
+            title = "Data Filters",
             value = "filters",
             tags$p(
               class = "text-muted",
@@ -119,8 +129,11 @@ ui <- dashboardPage(
                   checkboxInput("cryptic_enabled", "Include data", FALSE),
                   selectInput(
                     "cryptic_species", "Species",
-                    choices = NULL, selected = "Mycobacterium tuberculosis", multiple = TRUE
+                    choices  = "Mycobacterium tuberculosis",
+                    selected = "Mycobacterium tuberculosis",
+                    multiple = FALSE
                   ),
+                  tags$script(HTML("$('#cryptic_species').prop('disabled', true);")),
                   sliderInput(
                     "cryptic_coef", "Effect size",
                     min = -4.0, max = 9.6, value = c(-4, 9.6), step = 0.1
@@ -181,8 +194,11 @@ ui <- dashboardPage(
                   checkboxInput("yang_enabled", "Include data", FALSE),
                   selectInput(
                     "yang_species", "Species",
-                    choices = NULL, selected = "Escherichia coli", multiple = TRUE
+                    choices  = "Escherichia coli",
+                    selected = "Escherichia coli",
+                    multiple = FALSE
                   ),
+                  tags$script(HTML("$('#yang_species').prop('disabled', true);")),
                   sliderInput(
                     "yang_log2fc", "log2FC",
                     min = 0, max = 2.7, value = c(0, 2.7), step = 0.1
@@ -227,9 +243,9 @@ ui <- dashboardPage(
             )
           ),
           
-          ## ---- Step 2: Species patterns ----
+          ## ---- Tab 2: Mutation Map ----
           tabPanel(
-            title = "Species patterns",
+            title = "Mutation Map",
             value = "cluster",
             
             div(
@@ -278,9 +294,56 @@ ui <- dashboardPage(
             )
           ),
           
-          ## ---- Step 3: Evidence support ----
+          ## ---- Tab 3: Mutation frequency ----
           tabPanel(
-            title = "Database overlap",
+            title = "Mutation Frequency",
+            value = "frequency",
+            
+            div(
+              class = "step-intro",
+              tags$p(
+                class = "text-muted",
+                HTML("Click a tile to display the full list of species carrying that amino acid substitution.")
+              )
+            ),
+            
+            fluidRow(
+              # --- Heatmap card ---
+              column(
+                width = 8,
+                bs4Card(
+                  width = 12,
+                  title = "Species count per amino acid substitution",
+                  status = "info",
+                  solidHeader = TRUE,
+                  div(
+                    style = "height: 850px; overflow-y: auto; border: 1px solid #eee;",
+                    ggiraph::girafeOutput("heatmap_pos_mut", height = "1200px")
+                  )
+                )
+              ),
+              
+              # --- Species list card ---
+              column(
+                width = 4,
+                bs4Card(
+                  width = 12,
+                  title = "Species in selected tile",
+                  status = "info",
+                  solidHeader = TRUE,
+                  
+                  uiOutput("selected_tile_info"),
+                  
+                  DT::DTOutput("selected_tile_species_table")
+                )
+              )
+            )
+          ),
+          
+          
+          ## ---- Tab 4: Source Overlap ----
+          tabPanel(
+            title = "Source Overlap",
             value = "sources",
             
             div(
@@ -332,13 +395,68 @@ ui <- dashboardPage(
             )
           ),
           
-          ## ---- Step 4: Summary ----
+          
+          ## ---- Tab 5: Summary ----
           tabPanel(
             title = "Summary",
-
+            tags$p(
+              class = "text-muted",
+              HTML("The summary table and histograms update dynamically based on selected filters.")
+            ),
+            
+            
             fluidRow(
+              # ---- LEFT: summary table ----
+              column(
+                width = 4,
+                bs4Card(
+                  width = 12,
+                  title = "Summary",
+                  status = "info",
+                  solidHeader = TRUE,
+                  gt_output("summary_table")
+                )
+              ),
+              
+              # ---- RIGHT: two histograms stacked ----
               column(
                 width = 8,
+                
+                bs4Card(
+                  width = 12,
+                  title = "Top AA mutations across species",
+                  status = "info",
+                  solidHeader = TRUE,
+                  plotOutput("bar_aa_mut_name", height = "320px")
+                ),
+          
+                
+                bs4Card(
+                  width = 12,
+                  title = "AA_Pos histogram",
+                  status = "info",
+                  solidHeader = TRUE,
+                  plotOutput("hist_aa_pos", height = "280px")
+                ),
+                
+                bs4Card(
+                  width = 12,
+                  title = "AA_Pos_Ecoli histogram",
+                  status = "info",
+                  solidHeader = TRUE,
+                  plotOutput("hist_aa_pos_ecoli", height = "280px")
+                )
+              )
+            )
+          ),
+          
+          ## ---- Tab 6: Download ----
+          tabPanel(
+            title = "Download",
+            
+            fluidRow(
+              column(
+                width = 12,
                 bs4Card(
                   title = "Data table",
                   status = "info",
@@ -347,19 +465,9 @@ ui <- dashboardPage(
                     style = "display:flex; gap:10px; justify-content:flex-end; margin-bottom:8px;",
                     downloadButton("download_table", "Download CSV", class = "btn btn-outline-primary btn-sm")
                   ),
-                  DT::dataTableOutput("table_data")
+                  DT::DTOutput("table_data")
                 )
-              ),
-              
-              column(
-                width = 4,
-                bs4Card(
-                  width = 12,
-                  title = "Summary",
-                  status = "info",
-                  gt_output("summary_table")
-                )
-              ),
+              )
               
             )
           )

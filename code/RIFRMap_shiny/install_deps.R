@@ -15,7 +15,9 @@ cran_pkgs <- c(
   "shinycssloaders",
   "gtsummary", 
   "gt",
-  "DT"
+  "DT",
+  "wesanderson",
+  "RColorBrewer"
 )
 
 install.packages(

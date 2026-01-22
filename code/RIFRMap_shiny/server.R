@@ -232,7 +232,7 @@ server <- function(input, output, session) {
   
   # ---- Redirect to View tab on Apply ----
   observeEvent(input$apply_filters, {
-    updateTabItems(session, "sidebar", "explore")
+    updateTabItems(session, "sidebar", "explorer")
     updateTabsetPanel(session, "explore_steps", selected = "cluster")
   })
   
@@ -991,8 +991,219 @@ server <- function(input, output, session) {
     
   }
   
+  # ---- Mutation Frequency Tab ----
+
+  output$heatmap_pos_mut <- ggiraph::renderGirafe({
+    df <- cluster_plotting_df()
+    req(df, nrow(df) > 0)
+    
+    all_AAs_sorted <- sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]])
+    
+    heat_df <- df |>
+      dplyr::filter(!is.na(AA_pos_Ecoli), !is.na(AA_mutation), !is.na(Species)) |>
+      dplyr::group_by(AA_pos_Ecoli, AA_mutation) |>
+      dplyr::summarise(
+        n_species = dplyr::n_distinct(Species),
+        .groups = "drop"
+      ) |>
+      tidyr::complete(
+        AA_pos_Ecoli,
+        AA_mutation = all_AAs_sorted,
+        fill = list(n_species = 0)
+      )
+    
+    pos_levels <- heat_df$AA_pos_Ecoli |>
+      unique() |>
+      as.numeric() |>
+      sort() |>
+      as.character()
+    
+    n_pos <- length(pos_levels)
+    bar_h_cm <- max(4, min(10, 0.15 * n_pos))
+    
+    heat_df <- heat_df |>
+      dplyr::mutate(
+        AA_mutation  = factor(AA_mutation, levels = all_AAs_sorted),
+        AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels),
+        tooltip_txt = paste0(
+          "<b>Position:</b> ", AA_pos_Ecoli,
+          "<br><b>AA:</b> ", AA_mutation,
+          "<br><b>No. species:</b> ", n_species,
+          "<br><i>Click tile to view species list</i>"
+        ),
+        tile_id = paste(AA_pos_Ecoli, AA_mutation)
+      )
+    
+    max_n <- max(heat_df$n_species, na.rm = TRUE)
+    if (is.na(max_n) || max_n < 0) max_n <- 0
+    
+    cols <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
+    
+    # choose fill mapping
+    if (max_n < 4) {
+      levs <- 0:max_n
+      heat_df <- heat_df |> dplyr::mutate(fill_val = factor(n_species, levels = levs))
+      
+      box_cols <- c("white", cols[seq(10, 90, length.out = max(1, max_n))])
+      names(box_cols) <- as.character(levs)
+      
+      p <- ggplot(
+        heat_df,
+        aes(
+          x = AA_mutation,
+          y = AA_pos_Ecoli,
+          fill = fill_val,
+          tooltip = tooltip_txt,
+          data_id = tile_id
+        )
+      ) +
+        ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
+        scale_x_discrete(position = "top", drop = FALSE) +
+        scale_fill_manual(
+          values = box_cols,
+          breaks = as.character(levs),
+          labels = as.character(levs),
+          drop = FALSE
+        ) +
+        guides(
+          fill = guide_legend(
+            title = "No. species",
+            keyheight = grid::unit(0.5, "cm"),
+            keywidth  = grid::unit(0.5, "cm")
+          )
+        )
+      
+    } else {
+      if (max_n <= 0) max_n <- 1
+      heat_df <- heat_df |> dplyr::mutate(fill_val = n_species)
+      
+      vals <- c(0, seq(1, max_n, length.out = length(cols)))
+      vals_scaled <- vals / max_n
+      
+      p <- ggplot(
+        heat_df,
+        aes(
+          x = AA_mutation,
+          y = AA_pos_Ecoli,
+          fill = fill_val,
+          tooltip = tooltip_txt,
+          data_id = tile_id
+        )
+      ) +
+        ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
+        scale_x_discrete(position = "top", drop = FALSE) +
+        scale_fill_gradientn(
+          colours = c("white", cols),
+          values  = vals_scaled,
+          limits  = c(0, max_n),
+          breaks  = c(0, 1, max_n),
+          labels  = as.character(c(0, 1, max_n)),
+          oob     = scales::squish
+        ) +
+        guides(
+          fill = guide_colourbar(
+            barheight = grid::unit(bar_h_cm, "cm"),
+            barwidth  = grid::unit(0.6, "cm")
+          )
+        )
+    }
+    
+    # now add common styling
+    p <- p +
+      labs(x = "Amino acid", y = "Position", fill = "No. species") +
+      theme_app(legend = "right", x_top = TRUE) +
+      theme(
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        legend.title = element_text(size = 13, face = "bold"),
+        legend.text  = element_text(size = 12)
+      )
+    
+
+    
+    # height scaling: prevent insane svg height
+    h_in <- max(5, min(35, 0.35 * n_pos))
+    
+    ggiraph::girafe(
+      ggobj = p,
+      width_svg  = 12,
+      height_svg = h_in,
+      options = list(
+        ggiraph::opts_hover(css = "fill-opacity:1; stroke:black; stroke-width:0.6px;"),
+        ggiraph::opts_tooltip(css = "
+        background-color: #2C3E50;
+        color: #ECF0F1;
+        padding: 6px;
+        border-radius: 3px;
+        font-family: Helvetica, sans;
+        font-size: 11px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      "),
+        ggiraph::opts_zoom(max = 3),
+        ggiraph::opts_selection(type = "single", only_shiny = TRUE, css = "stroke:#ff3b30; stroke-width:2px;"),
+        ggiraph::opts_sizing(rescale = TRUE)
+      )
+    ) |>
+      ggiraph::girafe_options(
+        opts_toolbar(position = "topright", saveaspng = FALSE)
+      )
+  })
   
-  # ---- Source Tab ----
+  # In the UI, my output id is "heatmap_pos_mut" => Shiny will create an input input$heatmap_pos_mut_selected
+  
+  # Clicked tile -> species list 
+  
+  selected_tile_species <- reactive({
+    df <- cluster_plotting_df()
+    req(df, nrow(df) > 0)
+    
+    sel_id <- input$heatmap_pos_mut_selected
+    req(!is.null(sel_id), nzchar(sel_id))
+    
+    parts <- strsplit(sel_id, " ")[[1]]
+    req(length(parts) >= 2)
+    
+    pos <- suppressWarnings(as.numeric(parts[1]))
+    aa  <- parts[2]
+    req(!is.na(pos), nzchar(aa))
+    
+    spp <- df |>
+      dplyr::filter(AA_pos_Ecoli == pos, AA_mutation == aa) |>
+      dplyr::distinct(Species) |>
+      dplyr::arrange(Species)
+    
+    list(pos = pos, aa = aa, species = spp)
+  })
+  
+  
+  output$selected_tile_info <- renderUI({
+    x <- selected_tile_species()
+    tags$div(
+      style = "margin-bottom:8px; font-weight:600;",
+      sprintf("AA_Pos_Ecoli = %s; Mutation = %s (%d species)",
+              x$pos, x$aa, nrow(x$species))
+    )
+  })
+  
+  
+  output$selected_tile_species_table <- DT::renderDT({
+    x <- selected_tile_species()
+    spp <- x$species
+    
+    DT::datatable(
+      spp,
+      rownames = FALSE,
+      options = list(
+        pageLength = 10,
+        scrollY = "260px",
+        dom = "l tip" 
+      )
+    )
+  })
+
+  
+  
+  # ---- Source Overlap Tab ----
   ## ---- Upset Plot ----
   {
     n_sources <- reactive({
@@ -1468,13 +1679,12 @@ server <- function(input, output, session) {
       # LEFT: plot
       tags$div(
         class = "hm-plot",
-        spin(
-          girafeOutput(
-            outputId = "mutationHeatmap",
-            width  = "60vw",
-            height = paste0(heatmap_height_px(), "px")
-          )
+        girafeOutput(
+          outputId = "mutationHeatmap",
+          width  = "60vw",
+          height = paste0(heatmap_height_px(), "px")
         )
+        
       ),
       
       # RIGHT: legend
@@ -1489,14 +1699,18 @@ server <- function(input, output, session) {
   
   
   
-  # ---- Summary ----
+  # ---- Data ----
   
-  summary_table_df <- reactive({
+  table_df <- reactive({
     df <- cluster_plotting_df()
     req(!is.null(df), nrow(df) > 0)
     
     df |>
-      dplyr::mutate(Gene = "rpoB") |>
+      dplyr::mutate(
+        Gene = "rpoB",
+        AA_mut_name = paste0(AA_original, AA_pos, AA_mutation),
+        AA_mut_name_Ecoli = paste0(AA_original, AA_pos_Ecoli, AA_mutation)
+        ) |>
       dplyr::rename(
         Species       = Species,
         AA_Pos        = AA_pos,
@@ -1507,9 +1721,10 @@ server <- function(input, output, session) {
       ) 
   })
   
+  
   output$table_data <- DT::renderDataTable({
     DT::datatable({
-      data <- summary_table_df()
+      data <- table_df()
       data
     })
   })
@@ -1517,22 +1732,86 @@ server <- function(input, output, session) {
   output$download_table <- downloadHandler(
     filename = function() paste0("RIFRMap_table_", Sys.Date(), ".csv"),
     content  = function(file) {
-      readr::write_csv(summary_table_df(), file)
+      readr::write_csv(table_df(), file)
     }
   )
   
-  output$summary_table <- render_gt(
-    data <- summary_table_df() |>
+  # ---- Summary ----
+  output$summary_table <- render_gt({
+    data <- table_df()
+    
+    data |>
+      select(-c(AA_Pos, AA_Pos_Ecoli, AA_mut_name, AA_mut_name_Ecoli, Original, Mutation)) |>
       tbl_summary() |>
       as_gt()
-  )
-  
-    
+  })
 
+  
+  output$bar_aa_mut_name <- renderPlot({
+    df <- table_df()
+    req(df, nrow(df) > 0, all(c("AA_mut_name_Ecoli") %in% names(df)))
     
+    top_muts <- df |>
+      dplyr::mutate(AA_mut_name_Ecoli = as.character(AA_mut_name_Ecoli)) |>
+      dplyr::count(AA_mut_name_Ecoli, sort = TRUE) |>
+      dplyr::slice_head(n = 15) |>
+      dplyr::pull(AA_mut_name_Ecoli)
+    
+    plot_df <- df |>
+      dplyr::mutate(AA_mut_name_Ecoli = as.character(AA_mut_name_Ecoli)) |>
+      dplyr::filter(AA_mut_name_Ecoli %in% top_muts) |>
+      dplyr::count(AA_mut_name_Ecoli)
+    
+    ggplot(plot_df, aes(x = reorder(AA_mut_name_Ecoli, n, FUN = sum), y = n)) +
+      geom_col() +
+      coord_flip() +
+      theme_app(legend = "top") +
+      theme(
+        axis.title.x = element_text(size=13),
+        axis.title.y = element_text(size=13),
+        legend.title = element_text(size = 13, face = "bold"),
+        legend.text  = element_text(size = 12)
+      ) +
+      labs(
+        x = "AA mutation (E. coli coordinate)",
+        y = "Number of observations"
+      ) 
+  })
   
- 
   
   
+  output$hist_aa_pos <- renderPlot({
+    df <- table_df()
+    req(df, nrow(df) > 0, "AA_Pos" %in% names(df))
+    
+    ggplot(df, aes(x = AA_Pos)) +
+      geom_histogram(bins = 30) +
+      theme_app() +
+      theme(
+        axis.title.x = element_text(size=13),
+        axis.title.y = element_text(size=13)
+      ) +
+      labs(
+        x = "Amino acid position",
+        y = "Number of observations"
+      )
+  })
   
+  output$hist_aa_pos_ecoli <- renderPlot({
+    df <- table_df()
+    req(df, nrow(df) > 0, "AA_Pos_Ecoli" %in% names(df))
+    
+    ggplot(df, aes(x = AA_Pos_Ecoli)) +
+      geom_histogram(bins = 30) +
+      theme_app() +
+      theme(
+        axis.title.x = element_text(size=13),
+        axis.title.y = element_text(size=13)
+      ) +
+      labs(
+        x = "Amino acid position (E. coli coordinate)",
+        y = "Number of observations"
+      )
+  })
 }
+
