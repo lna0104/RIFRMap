@@ -1749,32 +1749,44 @@ server <- function(input, output, session) {
       )
   })
   
-  refcode_links <- function(ref_codes, ref_table,
-                            code_col = "Ref_code",
-                            url_col  = "Link") {
+  refcode_links_tooltip <- function(ref_codes, ref_table,
+                                    code_col  = "Ref_code",
+                                    url_col   = "link",
+                                    title_col = "Full_ref") {
     
-    # named vector: code -> url
-    key <- setNames(as.character(ref_table[[url_col]]),
-                    as.character(ref_table[[code_col]]))
+    # map: code -> url / tooltip text
+    url_map   <- setNames(as.character(ref_table[[url_col]]),
+                          as.character(ref_table[[code_col]]))
+    
+    tip_map   <- setNames(as.character(ref_table[[title_col]]),
+                          as.character(ref_table[[code_col]]))
     
     vapply(as.character(ref_codes), function(s) {
       s <- trimws(s)
       if (!nzchar(s) || is.na(s)) return("")
       
+      # split codes safely (comma/semicolon separators only)
       codes <- unlist(strsplit(s, "\\s*[,;]\\s*"))
       codes <- trimws(codes)
       codes <- codes[nzchar(codes)]
-
+      
       out <- vapply(codes, function(code) {
-        url <- key[[code]]
+        url <- url_map[[code]]
+        tip <- tip_map[[code]]
+        
+        code_esc <- htmltools::htmlEscape(code)
+        tip_esc  <- htmltools::htmlEscape(ifelse(is.null(tip) || is.na(tip) || !nzchar(tip),
+                                                 code, tip))
+        
         if (!is.null(url) && !is.na(url) && nzchar(url)) {
           sprintf(
-            '<a href="%s" target="_blank" rel="noopener">%s</a>',
+            '<a href="%s" target="_blank" rel="noopener" title="%s">%s</a>',
             htmltools::htmlEscape(url),
-            htmltools::htmlEscape(code)
+            tip_esc,
+            code_esc
           )
         } else {
-          htmltools::htmlEscape(code)  # no link found → plain text
+          sprintf('<span title="%s">%s</span>', tip_esc, code_esc)
         }
       }, character(1))
       
@@ -1782,33 +1794,29 @@ server <- function(input, output, session) {
     }, character(1))
   }
   
-  output$table_data <- DT::renderDataTable({
+  
+   output$table_data <- DT::renderDataTable({
     data <- table_df()
-    
-    # Make Ref_codes clickable 
+  
     if ("Ref_codes" %in% names(data)) {
       data <- data |>
-        dplyr::mutate(Ref_codes = refcode_links(Ref_codes, curated_refs))
+        dplyr::mutate(Ref_codes = refcode_links_tooltip(
+          Ref_codes,
+          curated_refs,
+          code_col  = "Ref_code",
+          url_col   = "Link",
+          title_col = "Full_ref"
+        ))
     }
-    
+  
     DT::datatable(
       data,
-      escape = FALSE,        
+      escape = FALSE,     # IMPORTANT for HTML
       rownames = FALSE,
-      options = list(
-        scrollX = TRUE,
-        pageLength = 25
-      )
+      options = list(scrollX = TRUE, pageLength = 25)
     )
   })
-  
-  
-  # output$table_data <- DT::renderDataTable({
-  #   DT::datatable({
-  #     data <- table_df()
-  #     data
-  #   })
-  # })
+
   
   output$download_table <- downloadHandler(
     filename = function() paste0("RIFRMap_table_", Sys.Date(), ".csv"),
