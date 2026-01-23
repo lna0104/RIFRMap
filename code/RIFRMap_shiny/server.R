@@ -98,6 +98,10 @@ server <- function(input, output, session) {
   yang    <- readRDS("data/yang.rds")
   curated   <- readRDS("data/curated.rds")
   
+  # ---- Load curated data refs ----
+  
+  curated_refs <- read_csv("data/RIFR_mutations_survey_references.csv", show_col_types = FALSE)
+  
   
   # ----  Load sequencing data ----
   
@@ -681,7 +685,7 @@ server <- function(input, output, session) {
       is.null(x) || !length(x) || all(is.na(x)) || all(x == "")
     }
     
-    # 1) Clean + normalize plotting df 
+    # Clean and normalize plotting df 
     cluster_plotting_df <- reactive({
       df0 <- combined_rows()
       if (is.null(df0) || !nrow(df0)) return(NULL)
@@ -692,8 +696,7 @@ server <- function(input, output, session) {
           AA_original  = dplyr::na_if(trimws(as.character(AA_original)), ""),
           AA_mutation  = dplyr::na_if(trimws(as.character(AA_mutation)), ""),
           AA_pos       = suppressWarnings(as.integer(AA_pos)),
-          AA_pos_Ecoli = suppressWarnings(as.integer(AA_pos_Ecoli)),
-          source       = dplyr::na_if(trimws(as.character(source)), "")
+          AA_pos_Ecoli = suppressWarnings(as.integer(AA_pos_Ecoli))
         ) |>
         dplyr::filter(
           !is.na(Species),
@@ -701,13 +704,13 @@ server <- function(input, output, session) {
           !is.na(AA_original),
           !is.na(AA_mutation)
         ) |>
-        dplyr::distinct(Species, AA_original, AA_mutation, AA_pos, AA_pos_Ecoli, source)
+        dplyr::distinct(Species, AA_original, AA_mutation, AA_pos, AA_pos_Ecoli)
       
       if (!nrow(df)) return(NULL)
       df
     })
     
-    # 2) Precompute which species have all reference assets 
+    # Precompute which species have all reference assets 
     ref_assets_ok <- local({
       # Named logical: species -> TRUE/FALSE
       cache <- NULL
@@ -737,7 +740,7 @@ server <- function(input, output, session) {
       }
     })
     
-    # 3) Species to plot (drop those without assets) + warn only when list changes
+    # Species to plot (drop those without assets) + warn only when list changes
     cluster_species_to_plot <- local({
       last_dropped <- character(0)
       
@@ -767,7 +770,7 @@ server <- function(input, output, session) {
       })
     })
     
-    # 4) Canonical ordered clusters (compute once per selection)
+    # Canonical ordered clusters (compute once per selection)
     clusters_to_plot_r <- reactive({
       if (no_clusters_selected(input$clustersToPlot)) return(character(0))
       
@@ -778,7 +781,7 @@ server <- function(input, output, session) {
         unique()
     })
     
-    # 5) Cache plot dimensions so we don’t call plotMutations twice
+    # Cache plot dimensions so we don’t call plotMutations twice
     cluster_dims_r <- reactiveVal(NULL)
     
     observeEvent(
@@ -942,7 +945,7 @@ server <- function(input, output, session) {
       tags$div(
         class = "cluster-legend",
         
-        ## ---- Reference section ----
+        # Reference section 
         tags$div(
           class = "cluster-legend-section",
           tags$div(
@@ -964,7 +967,7 @@ server <- function(input, output, session) {
           })
         ),
         
-        ## ---- Distribution section ----
+        # Distribution section 
         tags$div(
           class = "cluster-legend-section",
           tags$div(
@@ -994,8 +997,21 @@ server <- function(input, output, session) {
   # ---- Mutation Frequency Tab ----
 
   output$heatmap_pos_mut <- ggiraph::renderGirafe({
-    df <- cluster_plotting_df()
-    req(df, nrow(df) > 0)
+    df0 <- combined_rows()
+    req(df0, nrow(df0) > 0)
+    
+    df <- df0 |>
+      dplyr::transmute(
+        AA_pos_Ecoli = as.character(AA_pos_Ecoli),
+        AA_mutation  = as.character(AA_mutation),
+        Species       = as.character(species)
+      ) |>
+      dplyr::filter(
+        !is.na(AA_pos_Ecoli),
+        !is.na(AA_mutation),
+        !is.na(Species)
+      ) |>
+      dplyr::distinct()
     
     all_AAs_sorted <- sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]])
     
@@ -1015,7 +1031,7 @@ server <- function(input, output, session) {
     pos_levels <- heat_df$AA_pos_Ecoli |>
       unique() |>
       as.numeric() |>
-      sort() |>
+      sort(decreasing = TRUE) |>
       as.character()
     
     n_pos <- length(pos_levels)
@@ -1229,9 +1245,7 @@ server <- function(input, output, session) {
         dplyr::filter(
           !is.na(AA_pos_Ecoli),
           !is.na(AA_mutation),
-          !is.na(source),
-          AA_mutation != "",
-          source != ""
+          !is.na(source)
         ) |>
         dplyr::distinct()
       
@@ -1704,7 +1718,7 @@ server <- function(input, output, session) {
   # ---- Data ----
   
   table_df <- reactive({
-    df <- cluster_plotting_df()
+    df <- combined_rows()
     req(!is.null(df), nrow(df) > 0)
     
     df |>
@@ -1712,24 +1726,89 @@ server <- function(input, output, session) {
         Gene = "rpoB",
         AA_mut_name = paste0(AA_original, AA_pos, AA_mutation),
         AA_mut_name_Ecoli = paste0(AA_original, AA_pos_Ecoli, AA_mutation)
-        ) |>
+      ) |>
       dplyr::rename(
-        Species       = Species,
+        Species       = species,
         AA_Pos        = AA_pos,
         AA_Pos_Ecoli  = AA_pos_Ecoli,
         Original      = AA_original,
         Mutation      = AA_mutation,
         Source        = source
-      ) 
+      ) |>
+      dplyr::select(
+        Species,
+        Gene,
+        AA_Pos_Ecoli,
+        AA_Pos,
+        Original,
+        Mutation,
+        AA_mut_name_Ecoli,
+        AA_mut_name,
+        Source,
+        Ref_codes
+      )
   })
   
+  refcode_links <- function(ref_codes, ref_table,
+                            code_col = "Ref_code",
+                            url_col  = "Link") {
+    
+    # named vector: code -> url
+    key <- setNames(as.character(ref_table[[url_col]]),
+                    as.character(ref_table[[code_col]]))
+    
+    vapply(as.character(ref_codes), function(s) {
+      s <- trimws(s)
+      if (!nzchar(s) || is.na(s)) return("")
+      
+      codes <- unlist(strsplit(s, "\\s*[,;]\\s*"))
+      codes <- trimws(codes)
+      codes <- codes[nzchar(codes)]
+
+      out <- vapply(codes, function(code) {
+        url <- key[[code]]
+        if (!is.null(url) && !is.na(url) && nzchar(url)) {
+          sprintf(
+            '<a href="%s" target="_blank" rel="noopener">%s</a>',
+            htmltools::htmlEscape(url),
+            htmltools::htmlEscape(code)
+          )
+        } else {
+          htmltools::htmlEscape(code)  # no link found → plain text
+        }
+      }, character(1))
+      
+      paste(out, collapse = "; ")
+    }, character(1))
+  }
   
   output$table_data <- DT::renderDataTable({
-    DT::datatable({
-      data <- table_df()
-      data
-    })
+    data <- table_df()
+    
+    # Make Ref_codes clickable 
+    if ("Ref_codes" %in% names(data)) {
+      data <- data |>
+        dplyr::mutate(Ref_codes = refcode_links(Ref_codes, curated_refs))
+    }
+    
+    DT::datatable(
+      data,
+      escape = FALSE,        
+      rownames = FALSE,
+      options = list(
+        scrollX = TRUE,
+        pageLength = 25
+      )
+    )
   })
+  
+  
+  # output$table_data <- DT::renderDataTable({
+  #   DT::datatable({
+  #     data <- table_df()
+  #     data
+  #   })
+  # })
   
   output$download_table <- downloadHandler(
     filename = function() paste0("RIFRMap_table_", Sys.Date(), ".csv"),
@@ -1743,7 +1822,7 @@ server <- function(input, output, session) {
     data <- table_df()
     
     data |>
-      select(-c(AA_Pos, AA_Pos_Ecoli, AA_mut_name, AA_mut_name_Ecoli, Original, Mutation)) |>
+      select(-c(AA_Pos, AA_Pos_Ecoli, AA_mut_name, AA_mut_name_Ecoli, Original, Mutation, Ref_codes)) |>
       tbl_summary() |>
       as_gt()
   })
@@ -1768,8 +1847,10 @@ server <- function(input, output, session) {
       geom_col() +
       coord_flip() +
       scale_y_continuous(
+        limits = c(0, NA),   
         breaks = scales::breaks_width(1),   
-        labels = scales::label_number(accuracy = 1)
+        labels = scales::label_number(accuracy = 1),
+        expand = c(0, 0)  
       ) +
       theme_app(legend = "top") +
       theme(

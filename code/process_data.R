@@ -22,7 +22,7 @@ cryptic_raw_data <- read.csv("./data/raw_data/CRyPTIC_muts.csv", stringsAsFactor
 card_raw_data <- read.table("./data/raw_data/CARD_snps.txt", header = TRUE, sep = "\t")
 dragdb_raw_data <- read.csv("./data/raw_data/DRAGdb_RIF.csv", header = FALSE,
                             stringsAsFactors = FALSE)
-muts <- read.csv("./data/raw_data/muts.csv") #reported data from Negin's study
+muts <- read.csv("./data/raw_data/muts.csv") #curated data
 
 # Load sequencing data
 seqs <- readDNAStringSet("./data/rpoB_references.fasta")
@@ -193,7 +193,7 @@ write.csv(mut_list_Yang, "data/processed_data/Yang_processed.csv", row.names = F
 saveRDS(mut_list_Yang, file = "code/RIFRMap_shiny/data/yang.rds")
 
 
-## 5. Negin's data
+## 5. Curated data (Negin's data)
 
 mutation_raw <- muts |>
   filter(!is.na(AA_pos_Ecoli), !is.na(AA_original), !is.na(AA_mutation)) |>
@@ -224,9 +224,15 @@ mutation_counts <- full_join(
     n_studies = coalesce(n_studies, 0L)
   )
 
-mutation_species_rows <- mutation_raw |>
-  distinct(Species, AA_pos, AA_original, AA_pos_Ecoli, AA_mutation)
 
+mutation_species_rows <- mutation_raw |>
+  distinct(Species, AA_pos, AA_original, AA_pos_Ecoli, AA_mutation, Ref_code) |>
+  dplyr::group_by(Species, AA_pos, AA_original, AA_pos_Ecoli, AA_mutation) |>
+  dplyr::summarise(
+    Ref_codes = paste(sort(unique(Ref_code)), collapse = ", "),
+    .groups   = "drop"
+  )
+  
 final_mutation_list <- mutation_species_rows |>
   left_join(mutation_counts, by = c("AA_pos_Ecoli", "AA_mutation")) |>
   mutate(species = Species) |>

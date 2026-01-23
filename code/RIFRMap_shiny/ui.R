@@ -409,7 +409,7 @@ ui <- dashboardPage(
             title = "Summary",
             tags$p(
               class = "text-muted",
-              HTML("The summary table and histograms update dynamically based on selected filters.")
+              HTML("Summary table and histograms update dynamically based on selected filters.")
             ),
             
             
