@@ -1,3 +1,4 @@
+#shiny::runApp('code/RIFRMap_shiny')
 ## ---- load packages ----
 suppressPackageStartupMessages({
   # Core UI
@@ -25,6 +26,7 @@ suppressPackageStartupMessages({
   # UI helpers
   library(bslib)
   library(htmltools)
+  library(fresh)
 
   
   # BioC + GitHub

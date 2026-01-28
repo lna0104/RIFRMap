@@ -17,7 +17,8 @@ cran_pkgs <- c(
   "gt",
   "DT",
   "wesanderson",
-  "RColorBrewer"
+  "RColorBrewer",
+  "fresh"
 
 )
 
