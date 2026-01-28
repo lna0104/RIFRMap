@@ -88,7 +88,23 @@ server <- function(input, output, session) {
   
   spin <- function(x) shinycssloaders::withSpinner(x, color = "#0dc5c1")
   
+  # ---- Go to Documentation tab ----
+  observeEvent(input$go_docs, {
+    bs4Dash::updateTabItems(
+      session = session,
+      inputId = "sidebar",  
+      selected = "doc"       
+    )
+  }, ignoreInit = TRUE)
   
+  # ---- Go to Explorer tab ----
+  observeEvent(input$go_explorer, {
+    bs4Dash::updateTabItems(
+      session = session,
+      inputId = "sidebar",
+      selected = "explorer"
+    )
+  }, ignoreInit = TRUE)
   
   
   # ---- Load all datasets ----
@@ -1721,6 +1737,10 @@ server <- function(input, output, session) {
     df <- combined_rows()
     req(!is.null(df), nrow(df) > 0)
     
+    if (!"Ref_codes" %in% colnames(df)) {
+      df$Ref_codes <- NA_character_
+    }
+    
     df |>
       dplyr::mutate(
         Gene = "rpoB",
@@ -1811,7 +1831,7 @@ server <- function(input, output, session) {
   
     DT::datatable(
       data,
-      escape = FALSE,     # IMPORTANT for HTML
+      escape = FALSE,    
       rownames = FALSE,
       options = list(scrollX = TRUE, pageLength = 25)
     )

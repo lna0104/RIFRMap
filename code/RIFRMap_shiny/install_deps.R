@@ -18,6 +18,7 @@ cran_pkgs <- c(
   "DT",
   "wesanderson",
   "RColorBrewer"
+
 )
 
 install.packages(
