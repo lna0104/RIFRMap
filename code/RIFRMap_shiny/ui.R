@@ -128,7 +128,7 @@ ui <- dashboardPage(
           
           p(
             tags$b("RIFRMap"), " enables systematic exploration of these resistance-associated mutations across diverse species and multiple curated data sources, including CARD, CRyPTIC, DRAGdb, Yang, and additional curated datasets. 
-          By integrating these resources into a unified interface, RIFRMap enables comparative exploration, dynamic filtering, and deeper insights into the evolutionary patterns of rifampicin resistance."
+          By integrating these resources into a unified interface, RIFRMap enables comparative exploration, dynamic filtering, and deeper insights into the rifampicin resistant patterns."
           )
         ),
         
