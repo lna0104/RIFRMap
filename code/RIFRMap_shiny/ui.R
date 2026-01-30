@@ -477,6 +477,11 @@ ui <- dashboardPage(
                   collapsible = FALSE,
                   solidHeader = TRUE,
                   style = "height: 90vh;",
+                  tags$div(
+                    class = "text-muted",
+                    style = "font-size: 0.85em; margin-bottom: 6px;",
+                    "Note: Mutations outside the defined clusters are not shown."
+                  ),
                   uiOutput("clusterPlotUI")
                 )
               )

@@ -404,7 +404,7 @@ server <- function(input, output, session) {
       pars$familyMuts <- PLOT_STYLE$family
       pars$familyRef  <- PLOT_STYLE$family
       
-      pars$xInchPerUnit <- 0.2
+      pars$xInchPerUnit <- 0.25
       pars$yInchPerUnit <- 0.2
       return(pars)
     }
@@ -558,7 +558,7 @@ server <- function(input, output, session) {
       dy <- 1 / yTotal
       
       # Calculate width and height for UI sizing
-      width_px  <- xTotal * pars$xInchPerUnit * res
+      width_px  <- xTotal * pars$xInchPerUnit * res 
       height_px <- yTotal * pars$yInchPerUnit * res
       
       # Build x column map  
@@ -906,7 +906,7 @@ server <- function(input, output, session) {
           speciesToPlot    = sp,
           colouring        = "ubiuni",
           mergeDuplicates  = TRUE,
-          return_hover_map = TRUE # now expected to return $bands, not huge per-letter map
+          return_hover_map = TRUE 
         )
         
         # capture geometry from this plot
