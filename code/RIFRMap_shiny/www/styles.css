@@ -228,12 +228,17 @@ html, body,
 
 /* ON state (clicked = hidden) */
 .hm-legend-btn.is-on{
-  background: #f1f5f9;        /* light grey */
-  border: 1px solid #cbd5e1;  /* grey border */
-  color: #64748b;             /* grey text */
+  background: var(--btncol);    
+  border: 1px solid rgba(0,0,0,0.15);
+  color: #222;                 
   opacity: 1;
-  box-shadow: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
+
+.hm-legend-btn.is-on:active{
+  transform: scale(0.97);
+}
+
 
 /* Swatch always shows the real color */
 .hm-legend-swatch{

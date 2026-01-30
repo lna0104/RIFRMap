@@ -1316,417 +1316,324 @@ server <- function(input, output, session) {
   ## ---- Mutation Heatmap ----
   
   {
-    ### ---- Process data -----
-  
-  all_AAs_sorted <- sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]])
-  
-  selected_pos <- reactive({
-    df0 <- combined_rows()
-    if (is.null(df0) || nrow(df0) == 0) return(character(0))
+    ### ---- Constants ----
+    source_levels  <- c("CARD", "CRyPTIC", "DRAGdb", "Curated", "Yang", "None")
+    all_AAs_sorted <- sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]])
     
-    pos <- df0$AA_pos_Ecoli |>
-      suppressWarnings(as.numeric()) |>
-      na.omit() |>
-      unique() |>
-      sort(decreasing = TRUE) |>
-      as.character()
-    
-    pos
-  })
-  
-  
-  hm_plotting_df <- reactive({
-    df0 <- combined_rows()
-    if (is.null(df0) || nrow(df0) == 0) return(NULL)
-    
-    pos_levels <- selected_pos()
-    if (length(pos_levels) == 0) return(NULL)
-    
-    df <- df0 |>
-      dplyr::transmute(
-        AA_pos_Ecoli = as.character(AA_pos_Ecoli),
-        AA_mutation  = as.character(AA_mutation),
-        source       = as.character(source)
-      ) |>
-      dplyr::distinct()
-    
-    req(nrow(df) > 0)
-    
-    base_grid <- tidyr::expand_grid(
-      AA_pos_Ecoli = pos_levels,
-      AA_mutation = all_AAs_sorted
+    source_palette <- c(
+      CARD    = "#ead6fd",
+      CRyPTIC = "#ffdfba",
+      DRAGdb  = "#bae1ff",
+      Curated = "#fff8f0",
+      Yang    = "#dff2e1",
+      None    = "grey85"
     )
     
     
-    obs <- df |>
-      distinct(AA_pos_Ecoli, AA_mutation, source) |>
-      group_by(AA_pos_Ecoli, AA_mutation) |>
-      summarise(
-        source_set = list(sort(unique(source))),
-        .groups = "drop"
-      ) |>
-      mutate(
-        source_combo_all = vapply(source_set, \(x) paste(x, collapse = "+"), character(1)),
-        source_combo = Map(\(x, all) c(x, all), source_set, source_combo_all)
-      ) |>
-      select(-c(source_combo_all, source_set)) |>
-      tidyr::unnest(source_combo)
+    selected_sources <- reactiveVal(NULL) 
     
-
-    base_grid |>
-      dplyr::left_join(obs, by = c("AA_pos_Ecoli", "AA_mutation")) |>
-      dplyr::mutate(
-        source_combo = tidyr::replace_na(source_combo, "None"),
-        AA_mutation  = factor(AA_mutation, levels = all_AAs_sorted),
-        AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels)
-      )
-  })
-  
-
-  ## ---- colors ----
-  source_palette <- c(
+    ### ---- Helpers ----
+    safe_id <- function(x) gsub("[^A-Za-z0-9_]+", "_", x)
     
-    "CARD"    = "#ead6fd",  
-    "CRyPTIC" = "#ffdfba", 
-    "DRAGdb"  = "#bae1ff", 
-    "Curated"   = "#fff8f0",  
-    "Yang"    = "#dff2e1",  
-    
-   
-    "CARD+CRyPTIC"   = "#629FAD",  
-    "CARD+DRAGdb"    = "#A7C1A8", 
-    "CARD+Curated"     = "#819A91",  
-    "CARD+Yang"      = "#5FB3C4", 
-    
-    "CRyPTIC+DRAGdb" = "#B0D19A",  
-    "CRyPTIC+Curated"  = "#34955e",  
-    "CRyPTIC+Yang"   = "#27b481", 
-    
-    "Curated+DRAGdb"   = "#3cb8b2",  
-    "DRAGdb+Yang"    = "#8aad47",  
-    "Curated+Yang"     = "#a2cd5a", 
-    
-    
-    "CARD+CRyPTIC+DRAGdb"  = "#ffde1a", 
-    "CARD+CRyPTIC+Curated"   = "#ffce00",  
-    "CARD+CRyPTIC+Yang"    = "#ffa700",  
-    
-    "CARD+Curated+DRAGdb"    = "#eec900",  
-    "CARD+DRAGdb+Yang"     = "#e7ca52",  
-    "CARD+Curated+Yang"      = "#fecc4b",  
-    
-    "CRyPTIC+Curated+DRAGdb" = "#fdb414",  
-    "CRyPTIC+DRAGdb+Yang"  = "#cba034",  
-    "CRyPTIC+Curated+Yang"   = "#F0AE6C",  
-    "Curated+DRAGdb+Yang"    = "#E4C07A",  
-    
-    
-    "CARD+CRyPTIC+Curated+DRAGdb" = "#ed453d",
-    "CARD+CRyPTIC+Curated+Yang"   = "#ff7f50",  
-    "CARD+Curated+DRAGdb+Yang"    = "#D34E4E",  
-    "CRyPTIC+Curated+DRAGdb+Yang" = "#FF5555",  
-    
-   
-    "CARD+CRyPTIC+Curated+DRAGdb+Yang" = "#ff0800",
-    
-    "None" = "#D9D9D9"
-  )
-  
-  legend_order <- c(
-    # Singles
-    "CARD", "CRyPTIC", "DRAGdb", "Curated", "Yang",
-    
-    # Pairs
-    "CARD+CRyPTIC", "CARD+DRAGdb", "CARD+Curated", "CARD+Yang",
-    "CRyPTIC+DRAGdb", "CRyPTIC+Curated", "CRyPTIC+Yang",
-    "Curated+DRAGdb", "DRAGdb+Yang",
-    "Curated+Yang",
-    
-    # Triples
-    "CARD+CRyPTIC+DRAGdb", "CARD+CRyPTIC+Curated", "CARD+CRyPTIC+Yang",
-    "CARD+Curated+DRAGdb", "CARD+DRAGdb+Yang", "CARD+Curated+Yang",
-    "CRyPTIC+Curated+DRAGdb", "CRyPTIC+DRAGdb+Yang", "CRyPTIC+Curated+Yang",
-    "Curated+DRAGdb+Yang",
-    
-    # Quadruples
-    "CARD+Curated+CRyPTIC+DRAGdb",
-    "CARD+Curated+CRyPTIC+Yang",
-    "CARD+Curated+DRAGdb+Yang",
-    "CRyPTIC+Curated+DRAGdb+Yang",
-    
-    # All
-    "CARD+CRyPTIC+Curated+DRAGdb+Yang",
-    
-    # None 
-    "None"
-  )
-  
-  # Normalize "A+B" combo strings: trim, split, sort, re-join
-  normalize_combo <- function(x) {
-    vapply(
-      strsplit(trimws(x), "\\+"),
-      function(parts) paste(sort(parts), collapse = "+"),
-      character(1)
-    )
-  }
-  
-  ## ---- Dynamic height -----
-  
-  heatmap_height_px <- reactive({
-    pos_levels <- selected_pos()
-
-    if (is.null(pos_levels) || length(pos_levels) == 0) {
-      return(300)
+    notify_reselect <- function(where = "heatmap") {
+      shiny::showNotification("Please select the legend again", type = "message", duration = 6)
     }
     
-    n_pos <- length(pos_levels)
-    # row height
-    row_px <- 30 
-    
-    # minimum height safeguard
-    max(300, n_pos * row_px)
-  })
-  
-  ## ---- Legend ----
-  
-  selected_sources <- reactiveVal(NULL)
-  
-  safe_id <- function(x) gsub("[^A-Za-z0-9_]+", "_", x)
-  
-  notify_reselect <- function(where = "heatmap") {
-    shiny::showNotification(
-      paste0(
-        "Please select the legend again"
-      ),
-      type = "message",
-      duration = 6
-    )
-  }
-  
-  get_clickable_levels <- function(df) {
-    df$source_combo <- normalize_combo(df$source_combo)
-    
-    present_levels <- legend_order[legend_order %in% unique(df$source_combo)]
-    if (length(present_levels) == 0) present_levels <- sort(unique(df$source_combo))
-    
-    setdiff(present_levels, "None")
-  }
-  
-  sync_selected_sources <- function(clickable_levels) {
-    sel <- selected_sources()
-    if (is.null(sel)) sel <- setNames(logical(0), character(0))
-    
-    # make sel exactly match clickable levels; default FALSE
-    sel2 <- setNames(rep(FALSE, length(clickable_levels)), clickable_levels)
-    sel2[intersect(names(sel), clickable_levels)] <- sel[intersect(names(sel), clickable_levels)]
-    
-    selected_sources(sel2)
-    sel2
-  }
-  
-  output$heatmap_legend <- renderUI({
-    req(input$apply_filters > 0)
-    df <- hm_plotting_df()
-    validate(need(!is.null(df) && nrow(df) > 0, "No data to show."))
-    
-    clickable_levels <- get_clickable_levels(df)
-    sel <- sync_selected_sources(clickable_levels)
-    
-    cols <- source_palette[clickable_levels]
-    
-    tags$div(
-      class = "hm-legend-col",
-      lapply(clickable_levels, function(lvl) {
-        col <- cols[lvl]
-        if (is.na(col) || length(col) == 0) col <- "#D9D9D9"
-        
-        # SAFE: use [] not [[ ]]
-        is_on <- isTRUE(sel[lvl])
-        
-        actionButton(
-          inputId = paste0("legend__", safe_id(lvl)),
-          label = tags$span(
-            class = "hm-legend-btn-label",
-            tags$span(class = "hm-legend-swatch", style = sprintf("--swatch:%s;", col)),
-            tags$span(class = "hm-legend-text", lvl)
-          ),
-          class = paste("hm-legend-btn", if (is_on) "is-on" else "is-off"),
-          style = sprintf("--btncol:%s;", col)
-        )
-      })
-    )
-    
-    
-  })
-  
-  # Reset selection when filters re-apply 
-  observeEvent(input$apply_filters, {
-    df <- hm_plotting_df()
-    if (is.null(df) || nrow(df) == 0) {
-      selected_sources(NULL)
-      return()
+    get_clickable_levels <- function(df) {
+      present <- unique(as.character(df$source))
+      present <- present[!is.na(present)]
+      present_levels <- source_levels[source_levels %in% present]
+      if (length(present_levels) == 0) present_levels <- sort(present)
+      setdiff(present_levels, "None")
     }
     
-    clickable_levels <- get_clickable_levels(df)
-    selected_sources(setNames(rep(FALSE, length(clickable_levels)), clickable_levels))
-  }, ignoreInit = TRUE)
-  
-  
-  # Handle legend button clicks (single observer, stable IDs)
-  observe({
-    req(input$apply_filters > 0)
-    
-    df <- hm_plotting_df()
-    if (is.null(df) || nrow(df) == 0) return()
-    
-    clickable_levels <- get_clickable_levels(df)
-    sel <- sync_selected_sources(clickable_levels)
-    
-    for (lvl in clickable_levels) {
-      id <- paste0("legend__", safe_id(lvl))
+    sync_selected_sources <- function(clickable_levels) {
+      sel <- selected_sources()
+      if (is.null(sel)) sel <- setNames(logical(0), character(0))
       
-      local({
-        lvl_local <- lvl
-        id_local  <- id
-        observeEvent(input[[id_local]], {
-          sel <- selected_sources()
-          if (is.null(sel) || !(lvl_local %in% names(sel))) {
-            notify_reselect("legend")
-            return()
-          }
-          sel[lvl_local] <- !isTRUE(sel[lvl_local])   # SAFE
-          selected_sources(sel)
-        }, ignoreInit = TRUE)
-      })
+      sel2 <- setNames(rep(FALSE, length(clickable_levels)), clickable_levels)
+      keep <- intersect(names(sel), clickable_levels)
+      sel2[keep] <- sel[keep]
+      
+      selected_sources(sel2)
+      sel2
     }
-  })
-  
-  observeEvent(input$reset_heatmap_legend, {
-    df <- hm_plotting_df()
-    req(!is.null(df), nrow(df) > 0)
     
-    clickable_levels <- get_clickable_levels(df)
-    selected_sources(setNames(rep(FALSE, length(clickable_levels)), clickable_levels))
-  }, ignoreInit = TRUE)
-  
-  output$mutationHeatmap <- ggiraph::renderGirafe({
-    req(input$apply_filters > 0)
+    ### ---- Positions ----
+    selected_pos <- reactive({
+      df0 <- combined_rows()
+      if (is.null(df0) || nrow(df0) == 0) return(character(0))
+      
+      df0$AA_pos_Ecoli |>
+        suppressWarnings(as.numeric()) |>
+        na.omit() |>
+        unique() |>
+        sort(decreasing = TRUE) |>
+        as.character()
+    })
     
-    tryCatch({
+    ### ---- Plot data ----
+    hm_plotting_df <- reactive({
+      df0 <- combined_rows()
+      if (is.null(df0) || nrow(df0) == 0) return(NULL)
+      
+      pos_levels <- selected_pos()
+      if (!length(pos_levels)) return(NULL)
+      
+      df <- df0 |>
+        dplyr::transmute(
+          AA_pos_Ecoli = as.character(AA_pos_Ecoli),
+          AA_mutation  = as.character(AA_mutation),
+          source       = as.character(source)
+        ) |>
+        dplyr::filter(!is.na(AA_pos_Ecoli), !is.na(AA_mutation), !is.na(source)) |>
+        dplyr::distinct()
+      
+      df
+    })
+    
+    clickable_levels_r <- reactive({
+      df <- hm_plotting_df()
+      if (is.null(df) || !nrow(df)) return(character(0))
+      get_clickable_levels(df)
+    })
+    
+    ### ---- Dynamic height ----
+    heatmap_height_px <- reactive({
+      pos_levels <- selected_pos()
+      if (!length(pos_levels)) return(300)
+      max(300, length(pos_levels) * 30)
+    })
+    
+    ### ---- Legend UI ----
+    output$heatmap_legend <- renderUI({
+      req(input$apply_filters > 0)
       df <- hm_plotting_df()
       validate(need(!is.null(df) && nrow(df) > 0, "No data to show."))
       
-      df$source_combo <- normalize_combo(df$source_combo)
-      
-      present_levels <- legend_order[legend_order %in% unique(df$source_combo)]
-      if (length(present_levels) == 0) present_levels <- sort(unique(df$source_combo))
-      
-      clickable_levels <- setdiff(present_levels, "None")
+      clickable_levels <- get_clickable_levels(df)
       sel <- sync_selected_sources(clickable_levels)
-      
-      keep_levels <- names(sel)[sel]
-      
-      # if legend selected => disappear
-      if (length(keep_levels) > 0) {
-        drop_mask <- df$source_combo %in% keep_levels
-        df$fill_group <- ifelse(drop_mask, "None", df$source_combo)
-      } else {
-        df$fill_group <- df$source_combo
-      }
-      
-      display_levels <- unique(c(present_levels, "None"))
-      df$fill_group <- factor(df$fill_group, levels = display_levels)
-      
-      pos_levels <- selected_pos()
-      
-      p <- ggplot(
-        df,
-        aes(
-          x = AA_mutation,
-          y = factor(AA_pos_Ecoli, levels = pos_levels),
-          fill = fill_group,
-          tooltip = paste0(
-            "Position: ", AA_pos_Ecoli,
-            "<br>AA: ", AA_mutation,
-            "<br>Source: ", source_combo
-          ),
-          data_id = paste(AA_pos_Ecoli, AA_mutation)
-        )
-      ) +
-        ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
-        scale_fill_manual(
-          values = source_palette[display_levels],
-          breaks = display_levels,
-          limits = display_levels,
-          drop = FALSE
-        ) +
-        scale_x_discrete(position = "top", drop = FALSE) +
-        labs(x = "Amino acid", y = "Position") +
-        theme_app(legend = "none", x_top = TRUE) +
-        theme(
-          axis.title.x = element_text(size = 15),
-          axis.title.y = element_text(size = 15)
-        )
-      
-      h_in <- heatmap_height_px() / 96
-      
-      ggiraph::girafe(
-        ggobj = p,
-        width_svg  = 12,
-        height_svg = h_in,
-        options = list(
-          ggiraph::opts_hover(css = "fill-opacity:1; stroke:none;"),
-          ggiraph::opts_tooltip(css = "
-          background-color: #2C3E50;
-          color: #ECF0F1;
-          padding: 5px;
-          border-radius: 2px;
-          font-family: Helvetica, sans;
-          font-size: 10px;
-          box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        "),
-          ggiraph::opts_zoom(max = 3),
-          ggiraph::opts_selection(type = "none")
-        )
-      )
-      
-    }, error = function(e) {
-      notify_reselect("heatmap")
-      ggiraph::girafe(ggobj = ggplot() + theme_void())
-    })
-  })
-  
-  ## ---- Heatmap container ----
-  
-  output$heatmap_container <- renderUI({
-    df <- hm_plotting_df()
-    
-    if (is.null(df) || nrow(df) == 0) {
-      return(ui_message("No data to show."))
-    }
-    
-    tags$div(
-      class = "hm-layout",
-      
-      # LEFT: plot
+
       tags$div(
-        class = "hm-plot",
-        girafeOutput(
-          outputId = "mutationHeatmap",
-          width  = "60vw",
-          height = paste0(heatmap_height_px(), "px")
+        class = "hm-legend-col",
+        lapply(clickable_levels, function(lvl) {
+          col <- source_palette[[lvl]]
+          if (is.null(col) || is.na(col) || !nzchar(col)) col <- "#D9D9D9"
+          
+          is_on <- isTRUE(sel[[lvl]])
+          
+          actionButton(
+            inputId = paste0("legend__", safe_id(lvl)),
+            label = tags$span(
+              class = "hm-legend-btn-label",
+              tags$span(class = "hm-legend-swatch", style = sprintf("--swatch:%s;", col)),
+              tags$span(class = "hm-legend-text", lvl)
+            ),
+            class = paste("hm-legend-btn", if (is_on) "is-on" else "is-off"),
+            style = sprintf("--btncol:%s;", col)
+          )
+        })
+      )
+    })
+    
+    ### ---- Legend resets ----
+    observeEvent(input$apply_filters, {
+      selected_sources(NULL)
+    }, ignoreInit = TRUE)
+    
+    observeEvent(input$reset_heatmap_legend, {
+      selected_sources(NULL)
+    }, ignoreInit = TRUE)
+    
+    ### ---- Legend clicks ----
+    legend_observers_created <- reactiveVal(character(0))
+    
+    observe({
+      req(input$apply_filters > 0)
+      df <- hm_plotting_df()
+      if (is.null(df) || nrow(df) == 0) return()
+      
+      clickable_levels <- get_clickable_levels(df)
+      sync_selected_sources(clickable_levels)
+      
+      ids <- paste0("legend__", safe_id(clickable_levels))
+      created <- legend_observers_created()
+      new_ids <- setdiff(ids, created)
+      if (!length(new_ids)) return()
+      
+      legend_observers_created(c(created, new_ids))
+      
+      for (j in seq_along(clickable_levels)) {
+        id <- ids[j]
+        lvl <- clickable_levels[j]
+        if (!(id %in% new_ids)) next
+        
+        local({
+          lvl_local <- lvl
+          id_local  <- id
+          observeEvent(input[[id_local]], {
+            sel <- selected_sources()
+            if (is.null(sel) || !(lvl_local %in% names(sel))) return()
+            sel[[lvl_local]] <- !isTRUE(sel[[lvl_local]])
+            selected_sources(sel)
+          }, ignoreInit = TRUE)
+        })
+      }
+    })
+    
+    
+    ### ---- Heatmap ----
+    output$mutationHeatmap <- ggiraph::renderGirafe({
+      req(input$apply_filters > 0)
+      
+      tryCatch({
+        df <- hm_plotting_df()
+        validate(need(!is.null(df) && nrow(df) > 0, "No data to show."))
+        
+        pos_levels <- selected_pos()
+        
+        clickable_levels <- get_clickable_levels(df)
+        sel <- sync_selected_sources(clickable_levels)
+        
+        keep_levels <- names(sel)[sel]
+        
+        if (length(keep_levels) == 0) {
+          keep_levels <- clickable_levels
+        }
+        
+        df <- df %>%
+          filter(source %in% keep_levels)
+        
+        base_grid <- tidyr::expand_grid(
+          AA_pos_Ecoli = pos_levels,
+          AA_mutation  = all_AAs_sorted
         )
         
-      ),
+        df_fill <- base_grid |>
+          dplyr::left_join(df, by = c("AA_pos_Ecoli", "AA_mutation")) |>
+          dplyr::group_by(AA_pos_Ecoli, AA_mutation) |>
+          dplyr::mutate(source = if (all(is.na(source))) "None" else source) |>
+          dplyr::ungroup() |>
+          dplyr::filter(!is.na(source)) |>
+          dplyr::mutate(
+            AA_mutation  = factor(AA_mutation, levels = all_AAs_sorted),
+            AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels),
+            source       = factor(source, levels = source_levels)
+          )
+        
+        # vertical stripes inside each tile
+        df_strip <- df_fill |>
+          dplyr::mutate(
+            x_fac = factor(as.character(AA_mutation), levels = all_AAs_sorted),
+            y_fac = factor(as.character(AA_pos_Ecoli), levels = pos_levels),
+            x_num = as.numeric(x_fac),
+            y_num = as.numeric(y_fac)
+          ) |>
+          dplyr::group_by(x_fac, y_fac) |>
+          dplyr::arrange(source, .by_group = TRUE) |>
+          dplyr::mutate(
+            all_sources = paste(sort(unique(as.character(source))), collapse = ", "),
+            k = dplyr::n(),
+            i = dplyr::row_number(),
+            ymin = y_num - 0.5,
+            ymax = y_num + 0.5,
+            xmin = (x_num - 0.5) + (i - 1) / k,
+            xmax = (x_num - 0.5) +  i      / k
+          ) |>
+          dplyr::ungroup()
+        
+        # strong borders between tiles only
+        df_tile_border <- df_strip |>
+          dplyr::distinct(x_num, y_num) |>
+          dplyr::mutate(
+            xmin = x_num - 0.5, xmax = x_num + 0.5,
+            ymin = y_num - 0.5, ymax = y_num + 0.5
+          )
+        
+        p <- ggplot(df_strip) +
+          ggiraph::geom_rect_interactive(
+            aes(
+              xmin = xmin, xmax = xmax,
+              ymin = ymin, ymax = ymax,
+              fill = source,
+              tooltip = paste0(
+                "Position: ", AA_pos_Ecoli,
+                "<br>AA: ", AA_mutation,
+                "<br>Sources: ", all_sources
+              ),
+              data_id = paste(AA_pos_Ecoli, AA_mutation, sep = "|")
+            ),
+            color = "grey85", linewidth = 0.2
+          ) +
+          geom_rect(
+            data = df_tile_border,
+            aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+            inherit.aes = FALSE,
+            fill = NA, color = "grey60", linewidth = 0.3
+          ) +
+          scale_fill_manual(values = source_palette) +
+          scale_x_continuous(
+            breaks = seq_along(all_AAs_sorted),
+            labels = all_AAs_sorted,
+            position = "top",
+            expand = c(0, 0)
+          ) +
+          scale_y_continuous(
+            breaks = seq_along(pos_levels),
+            labels = pos_levels,
+            expand = c(0, 0)
+          ) +
+          labs(x = "Amino acid", y = "Position (E. coli coordinate)") +
+          theme_bw() +
+          theme(legend.position = "none")
+        
+        ggiraph::girafe(
+          ggobj = p,
+          width_svg  = 12,
+          height_svg = heatmap_height_px() / 96,
+          options = list(
+            ggiraph::opts_hover(css = "fill-opacity:1;"),
+            ggiraph::opts_tooltip(css = "
+            background-color: #2C3E50;
+            color: #ECF0F1;
+            padding: 5px;
+            border-radius: 2px;
+            font-family: Helvetica, sans;
+            font-size: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+          "),
+            ggiraph::opts_zoom(max = 3),
+            ggiraph::opts_selection(type = "none")
+          )
+        )
+        
+      }, error = function(e) {
+        notify_reselect("heatmap")
+        ggiraph::girafe(ggobj = ggplot() + theme_void())
+      })
+    })
+    
+    ### ---- Container ----
+    output$heatmap_container <- renderUI({
+      df <- hm_plotting_df()
+      if (is.null(df) || nrow(df) == 0) return(ui_message("No data to show."))
       
-      # RIGHT: legend
       tags$div(
-        class = "hm-legend",
-        uiOutput("heatmap_legend")
+        class = "hm-layout",
+        tags$div(
+          class = "hm-plot",
+          girafeOutput(
+            outputId = "mutationHeatmap",
+            width  = "60vw",
+            height = paste0(heatmap_height_px(), "px")
+          )
+        ),
+        tags$div(
+          class = "hm-legend",
+          uiOutput("heatmap_legend")
+        )
       )
-    )
-  })
-  
+    })
   }
   
   
@@ -1892,7 +1799,6 @@ server <- function(input, output, session) {
         y = "Number of observations"
       ) 
   })
-  
   
   
   output$hist_aa_pos <- renderPlot({

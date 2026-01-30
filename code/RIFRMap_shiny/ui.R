@@ -578,7 +578,7 @@ ui <- dashboardPage(
                   class = "step-intro",
                   tags$p(
                     class = "text-muted",
-                    HTML("Double-click legend items to hide/show source groups. Use Reset to restore the full heatmap view.")
+                    HTML("Double legend items to show/hide sources. Use Reset to restore the full heatmap view.")
                   )
                 ),
                 
