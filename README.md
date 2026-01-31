@@ -21,7 +21,7 @@ To be included, each AMR determinant must meet all of the following:
 
 For *Mycobacterium tuberculosis*, additional curated mutation data were integrated from the **CRyPTIC**, **ReSeqTB**, and **WHO 2023** resistance catalogs.
 
-------------------------------------------------------------------------
+
 
 ### CRyPTIC (Comprehensive Resistance Prediction for Tuberculosis: an International Consortium)
 
@@ -38,7 +38,6 @@ Using multivariable linear mixed models and whole-genome sequencing, they identi
 -   Benjamini–Hochberg adjusted p-value
 -   Homoplasy
 
-------------------------------------------------------------------------
 
 ### DRAGdb (Drug Resistance Associated Genes Database)
 
@@ -50,7 +49,6 @@ Using multivariable linear mixed models and whole-genome sequencing, they identi
 
 The database includes **PROVEAN scores** to estimate the predicted functional effects of mutations [3](https://doi.org/10.1038/s41598-020-65766-8).
 
-------------------------------------------------------------------------
 
 ### Yang-RIF (2023)
 
@@ -59,7 +57,6 @@ Researchers constructed **760** single-residue *rpoB* mutants across positions *
 
 Within **RIFRMap**, users can filter the dataset based on mutation frequency changes under rifampicin selection, using thresholds on log₂(fold-change) to identify enriched variants.
 
-------------------------------------------------------------------------
 
 ### Curated Literature Data
 
