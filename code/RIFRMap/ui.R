@@ -1,60 +1,52 @@
-#shiny::runApp('code/RIFRMap_shiny')
-## ---- load packages ----
-suppressPackageStartupMessages({
-  # Core UI
-  library(shiny)
-  library(bs4Dash)
-  
-  # Data
-  library(dplyr)
-  library(tidyr)
-  library(tidyverse)
-  library(gtsummary)
-  
-  
-  # Plots / widgets
-  library(ggplot2)
-  library(ggiraph)
-  library(plotly)
-  library(ggupset)
-  library(shinyWidgets)
-  library(shinycssloaders)
-  library(gt)
-  library(wesanderson)
-  library(RColorBrewer)
-  
-  # UI helpers
-  library(bslib)
-  library(htmltools)
-  library(fresh)
+# Core UI
+library(shiny)
+library(bs4Dash)
+library(shinydashboard)
 
-  
-  # BioC + GitHub
-  library(Biostrings)
-  library(ALJEbinf)
-  
-})
+# Data
+library(dplyr)
+library(tidyr)
+library(tidyverse)
+library(gtsummary)
 
+# Plots / widgets
+library(ggplot2)
+library(ggiraph)
+library(plotly)
+library(ggupset)
+library(shinyWidgets)
+library(shinycssloaders)
+library(gt)
+library(wesanderson)
+library(RColorBrewer)
 
-# ---------------- UI ----------------
-ui <- dashboardPage(
+# UI helpers
+library(bslib)
+library(htmltools)
+library(fresh)
+library(sass)
 
+# BioC + GitHub
+library(Biostrings)
+library(ALJEbinf)
+
+# shinyapps.io
+library(rsconnect)
+
+bs4DashPage(
   title = "RIFRMap",
-  help  = NULL,
+  help = NULL,
   
-  header = dashboardHeader(
-    title = dashboardBrand(
-      title = "RIFRMap",
-      color = "primary"
-    ),
-    skin           = "light",
-    status         = "white",
-    border         = TRUE,
-    sidebarIcon    = icon("bars"),
-    controlbarIcon = icon("cog")
+  header = bs4DashNavbar(
+    skin = "light",
+    status = "white",
+    border = TRUE,
+    sidebarIcon = icon("bars"),
+    controlbarIcon = icon("cog"),
+    title = bs4DashBrand(title = "RIFRMap", color = "primary")
   ),
   
-  sidebar = dashboardSidebar(
+  sidebar = bs4DashSidebar(
     skin      = "light",
     status    = "primary",
     elevation = 3,
@@ -67,7 +59,7 @@ ui <- dashboardPage(
     )
   ),
   
-  dashboardBody(
+  bs4DashBody(
     
     use_theme(create_theme(
       bs4dash_status(
@@ -282,11 +274,12 @@ ui <- dashboardPage(
           tabPanel(
             title = "Data Filters",
             value = "filters",
-            tags$p(
+            
+            div(
               class = "text-muted",
-              HTML("Select data sources and filtering criteria to define the mutation set used in downstream analyses.")
+              p("Select data sources and filtering criteria to define the mutation set used in downstream analyses.")
             ),
-      
+        
 
             fluidRow(
               # CARD
@@ -438,12 +431,14 @@ ui <- dashboardPage(
             value = "cluster",
             
             div(
-              class = "step-intro",
-              tags$p(
-                class = "text-muted",
-                HTML("Species-centric mutation cluster view. Data sources are not considered; the plot visualises the distribution of resistance mutations within each species across <i>rpoB</i> clusters.")
+              class = "text-muted",
+              p(
+                "Species-centric mutation cluster view. Data sources are not considered; the plot visualises the distribution of resistance mutations within each species across ",
+                tags$i("rpoB"),
+                " clusters."
               )
             ),
+            
             
             fluidRow(
               # Controls
@@ -494,13 +489,11 @@ ui <- dashboardPage(
             value = "frequency",
             
             div(
-              class = "step-intro",
-              tags$p(
-                class = "text-muted",
-                HTML("Heatmap summarises how widely each mutation is distributed across species. Each tile represents an amino-acid position (<i>E. coli</i> coordinates) and substituted residue, coloured by the number of species carrying that mutation. 
+              class = "text-muted",
+              p("Heatmap summarises how widely each mutation is distributed across species. Each tile represents an amino-acid position (<i>E. coli</i> coordinates) and substituted residue, coloured by the number of species carrying that mutation. 
                      Data sources are ignored.")
-              )
             ),
+            
             
             fluidRow(
               # --- Heatmap card ---
@@ -542,12 +535,10 @@ ui <- dashboardPage(
             value = "sources",
             
             div(
-              class = "step-intro",
-              tags$p(
-                class = "text-muted",
-                HTML("Source-centric view of mutation evidence. Plots highlight overlap among databases (CARD, CRyPTIC, DRAGdb, Yang, Curated data), independent of species identity.")
-              )
+              class = "text-muted",
+              p("Source-centric view of mutation evidence. Plots highlight overlap among databases (CARD, CRyPTIC, DRAGdb, Yang, Curated data), independent of species identity.")
             ),
+            
             
             column(
               width = 12,
@@ -601,11 +592,11 @@ ui <- dashboardPage(
           ## ---- Tab 5: Summary ----
           tabPanel(
             title = "Summary",
-            tags$p(
+            div(
               class = "text-muted",
-              HTML("Summary table and histograms update dynamically based on selected filters.")
-            ),
-            
+              p("Summary table and histograms update dynamically based on selected filters.")
+            ), 
+          
             
             fluidRow(
               # left: summary table 

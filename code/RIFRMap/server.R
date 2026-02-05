@@ -1,4 +1,4 @@
-server <- function(input, output, session) {
+function(input, output, session) {
   
   # ---- Global plot style ----
   PLOT_STYLE <- list(
@@ -832,7 +832,7 @@ server <- function(input, output, session) {
       ignoreInit = TRUE
     )
     
-    # 6) Trigger for plot redraw 
+    # Trigger for plot redraw 
     cluster_trigger <- reactive({
       input$apply_filters
       input$clustersToPlot
@@ -1152,7 +1152,7 @@ server <- function(input, output, session) {
       )
 
     
-    # height scaling: prevent insane svg height
+    # height scaling
     h_in <- max(5, min(35, 0.35 * n_pos))
     
     ggiraph::girafe(
@@ -1409,7 +1409,7 @@ server <- function(input, output, session) {
     output$heatmap_legend <- renderUI({
       req(input$apply_filters > 0)
       df <- hm_plotting_df()
-      validate(need(!is.null(df) && nrow(df) > 0, "No data to show."))
+      req(!is.null(df) && nrow(df) > 0)
       
       clickable_levels <- get_clickable_levels(df)
       sel <- sync_selected_sources(clickable_levels)

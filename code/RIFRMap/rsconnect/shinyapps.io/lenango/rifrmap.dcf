@@ -1,0 +1,10 @@
+name: rifrmap
+title:
+username: lenango
+account: lenango
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16601213
+bundleId: 11541273
+url: https://lenango.shinyapps.io/rifrmap/
+version: 1
