@@ -1,0 +1,1141 @@
+gene,ensembl_id,species,drug,Nt_pos,Nt_mutation,AA_pos,codon_mutation,mutation_type,provean,sequencing_method,strain_or_isolates,sample_location,pubmed_id
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1604,CAT - CTT,535,His - Leu,Non - Synonymous,-10.63,NA,3983 /  4137 /  3990 /  4138,NA,22055530
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1631,CCT - CTT,544,Pro - Leu,Non - Synonymous,-9.687,NA,4050 /  4055 /  4060 /  4065 /  4067 /  4073 /  4096 /  4106 /  4112,NA,22055530
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1573,GAC - TAC,525,Asp - Tyr,Non - Synonymous,-8.616,NA,4076,NA,22055530
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1574,GAC - GTC,525,Asp - Val,Non - Synonymous,-8.614,NA,4155 /  4158,NA,22055530
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1605,CAT - CAA,535,His - Gln,Non - Synonymous,-7.737,NA,4445 /  4457 /  4454 /  4455 /  4470,NA,22055530
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampin,1742,ATC - AAC,581,Ile - Asn,Non - Synonymous,-6.808,NA,NA,NA,23688522
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1603,CAT - AAT,535,His - Asn,Non - Synonymous,-6.765,NA,4364,NA,22055530
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1574,GAC - GGC,525,Asp - Gly,Non - Synonymous,-6.568,NA,4235,NA,22055530
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1561,TCT - TTT,521,Ser - Phe,Non - Synonymous,-5.824,NA,4294,NA,22055530
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1619,TCT - TAT,540,Ser - Tyr,Non - Synonymous,-5.811,NA,3942,NA,22055530
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1573,GAC - AAC,525,Asp - Asn,Non - Synonymous,-4.746,NA,4050 /  4055 /  4060 /  4065 /  4067 /  4073 /  4096,NA,22055530
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1624,CTT - TTT,542,Leu - Phe,Non - Synonymous,-3.882,NA,4236 /  4238 /  4217 /  4220,NA,22055530
+rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1743,ATC - ATG,581,Ile - Met,Non - Synonymous,-2.919,NA,4514,NA,22055530
+rpoB,BARBAKC583_0571,Bartonella bacilliformis,Rifampicin,1763,C - A,588,Ser - Tyr,Non - Synonymous,-5.821,NA,NA,NA,27667026
+rpoB,BARBAKC583_0571,Bartonella bacilliformis,Rifampicin,1634,C - T,545,Ser - Phe,Non - Synonymous,-5.802,NA,NA,NA,27667026
+rpoB,BARBAKC583_0571,Bartonella bacilliformis,Rifampicin,1618,C - T,540,His - Tyr,Non - Synonymous,-5.796,NA,NA,NA,27667026
+rpoB,BARBAKC583_0571,Bartonella bacilliformis,Rifampicin,1580,A - G,527,Gln - Arg,Non - Synonymous,-3.873,NA,NA,NA,27667026
+rpoB,BG47_13730,Clostridium difficile,Rifampin,1505,C - A,502,His - Asn,Non - Synonymous,-5.197,NA,NA,NA,20849968
+rpoB,BG47_13730,Clostridium difficile,Rifampin,1514,G - A,505,Arg - Lys,Non - Synonymous,-2.904,NA,NA,NA,20849968
+rpoB,BG47_13730,Clostridium difficile,Rifampin,1642 - 1644,NA,548,Ile - Met,Non - Synonymous,-2.897,NA,NA,NA,20849968
+rpoB,BLIC_e02244,Bifidobacterium infantis,Rifaximin,1538,CAG - CGG,513,Gln - Arg,Non - Synonymous,NA,NA,BI07,NA,17408927
+rpoB,BN418_1157,Listeria monocytogenes,Rifampin,1463,C - T,488,Ser - Leu,Non - Synonymous,NA,NA,CLIP 2009 / 01237,NA,24395221
+rpoB,BN418_1157,Listeria monocytogenes,Rifampicin,1586,G - A,529,Arg - His,Non - Synonymous,NA,NA,NA,NA,27659120
+rpoB,BN418_1157,Listeria monocytogenes,Rifampin,3532,G - A,1178,Ala - Thr,Non - Synonymous,NA,NA,CLIP 2009 / 01237,NA,24395221
+rpoB,BV91_13615,Brucella melitensis,Rifampicin,1607,CAC - CTC,536,His - Leu,Non - Synonymous,-10.609,NA,CT-3 and -18,NA,15583262
+rpoB,BV91_13615,Brucella melitensis,Rifampicin,1721,CCG - CTG,574,Pro - Leu,Non - Synonymous,-9.39,NA,CT-19,NA,15583262
+rpoB,BV91_13615,Brucella melitensis,Rifampicin,1577,GAC - GGC,526,Asp - Gly,Non - Synonymous,-6.646,NA,CT-19,NA,15583262
+rpoB,BV91_13615,Brucella melitensis,Rifampicin,1615,CGC - AGC,539,Arg - Ser,Non - Synonymous,-5.802,NA,CT-15,NA,15583262
+rpoB,BV91_13615,Brucella melitensis,Rifampicin,1622,TCG - TTG,541,Ser - Leu,Non - Synonymous,-5.798,NA,CT-17,NA,15583262
+rpoB,BV91_13615,Brucella melitensis,Rifampicin,1606,CAC - TAC,536,His - Tyr,Non - Synonymous,-5.786,NA,CT-1 /  -4 /  -5 /  -8 /  -12 /  -13 /  and -16,NA,15583262
+rpoB,BV91_13615,Brucella melitensis,Rifampicin,458,GTT - TTT,154,Val - Phe,Non - Synonymous,-4.774,NA,CT-6 /  -7 /  -10 /  -14 /  and -20,NA,15583262
+rpoB,BV91_13615,Brucella melitensis,Rifampicin,1576,GAC - AAC,526,Asp - Asn,Non - Synonymous,-4.724,NA,CT-15,NA,15583262
+rpoB,BV91_13615,Brucella melitensis,Rifampicin,466,GAC - TAC,156,Asp - Tyr,Non - Synonymous,NA,NA,CT-2 and -11,NA,15583262
+rpoB,CAA14608,Rickettsia prowazekii,Rifampin,1597,G - T,533,Asp - Tyr,Non - Synonymous,-8.546,NA,Rifr Madrid E strain,NA,9555894
+rpoB,CAA14608,Rickettsia prowazekii,Rifampin,1637,G - A,546,Arg - Lys,Non - Synonymous,-2.901,NA,Rifr Madrid E strain,NA,9555894
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1280,A - T,427,Asp - Val,Non - Synonymous,-8.984,NA,KO-435,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1318,C - T,440,Arg - Cys,Non - Synonymous,-7.999,NA,KO-405,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1310,A - G,437,His - Arg,Non - Synonymous,-7.487,NA,KO-402,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1311,C - A,437,His - Gln,Non - Synonymous,-7.487,NA,KO-403,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1271,A - T,424,Gln - Leu,Non - Synonymous,-6.999,NA,KO-408,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1318,C - G,440,Arg - Gly,Non - Synonymous,-6.999,NA,KO-404,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1319,G - T,440,Arg - Leu,Non - Synonymous,-6.999,NA,KO-407,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1265,T - C,422,Leu - Pro,Non - Synonymous,-6.996,NA,KO-440,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1280,A - G,427,Asp - Gly,Non - Synonymous,-6.981,NA,KO-401,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1268,C - A,423,Ser -Tyr,Non - Synonymous,-5.999,NA,KO-400,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1319,G - A,440,Arg - His,Non - Synonymous,-4.999,NA,KO-406,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1278,G - A,426,Met - Ile,Non - Synonymous,-3.983,NA,KO-441,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1297,T - C,433,Ser - Pro,Non - Synonymous,-2.758,NA,KO-409,NA,12395192
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,995,T - C,332,Leu - Arg,Non - Synonymous,NA,NA,SR-1,NA,11282646
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1011,C - A,337,Asp - Glu,Non - Synonymous,NA,NA,SR-4,NA,11282646
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1010,A - G,337,Asp - Gly,Non - Synonymous,NA,NA,SR-5,NA,11282646
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1028,C - T,343,Ser - Leu,Non - Synonymous,NA,NA,SR-6,NA,11282646
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1040,A - G,347,His - Arg,Non - Synonymous,NA,NA,R-2,NA,11282646
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1039,C - T,347,His - Tyr,Non - Synonymous,NA,NA,SGR-1,NA,11282646
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1041,C - A,347,His - Gln,Non - Synonymous,NA,NA,SGR-2,NA,11282646
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1049,G - A,350,Arg - His,Non - Synonymous,NA,NA,R-1,NA,11282646
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1049,G - T,350,Arg - Phe,Non - Synonymous,NA,NA,R-3,NA,11282646
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1048,C - T,350,Arg - Cys,Non - Synonymous,NA,NA,SR-7,NA,11282646
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1154,C - T,385,Pro - Leu,Non - Synonymous,NA,NA,SR-2,NA,11282646
+rpoB,CAB77428,Streptomyces coelicolor A3(2),Rifampin,1179,C - G,393,Ile - Met,Non - Synonymous,NA,NA,SR-3,NA,11282646
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1556,C - T,519,Pro - Leu,Non - Synonymous,-9.001,NA,HIP12864,NA,27873679
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1442,CAT - CTT,481,His - Leu,Non - Synonymous,-8.897,NA,methicillin-resistant T-2,NA,26303044
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin /  Methicillin,2900,A - T,967,Asn - Ile,Non - Synonymous,-8.624,NA,homo-MRSA N315-IP-H5,NA,23877693
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1412,A - T,471,Asp - Val,Non - Synonymous,-8.064,NA,VISA HIP10267,NA,27873679
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1441,CAT - GAT,481,His - Asp,Non - Synonymous,-6.833,NA,methicillin-resistant T-19,NA,26303044
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,2375,A - G,792,Glu - Gly,Non - Synonymous,-6.508,NA,VISA P1V44,NA,27873679
+rpoB,CH52_03045,Staphylococcus aureus,Vancomycin,1535,G - C,512,Arg - Pro,Non - Synonymous,-6.292,NA,sVISA Mu3-6R-P,NA,24841271
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1403,CAA - CTA,468,Gln - Leu,Non - Synonymous,-6.273,NA,methicillin-resistant T-13,NA,26303044
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,3223 - 3225,NA,1075,Phe - Leu,Non - Synonymous,-5.546,NA,VISA HIP07920c,NA,27873679
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1420 - 1422,NA,474,Asn - Lys,Non - Synonymous,-5.386,NA,RN4220,NA,21393177
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1446,AAA - AAT,482,Lys - Asp,Non - Synonymous,-5.385,NA,methicillin-resistant T-97,NA,26303044
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1397,TTA - TCA,466,Leu - Ser,Non - Synonymous,-5.378,NA,NA,NA,23082766
+rpoB,CH52_03045,Staphylococcus aureus,Vancomycin,1397,T - C,466,Leu - Ser,Non - Synonymous,-5.378,NA,VISA strain 21648 CICC,NA,28119680
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1456,TCA - TTA,486,Ser - Leu,Non - Synonymous,-5.377,NA,methicillin-resistant T-8,NA,26303044
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1441,CAT - TAT,481,His - Tyr,Non - Synonymous,-4.956,NA,methicillin-resistant T-3,NA,26303044
+rpoB,CH52_03045,Staphylococcus aureus,Rifampin /  Vancomycin,141,C - T,481,His - Tyr,Non - Synonymous,-4.956,NA,vancomycin-resistant S. aureus (VRSA) (equivalent to VISA and GISA) strain Mu50 /  VBV9352 and VB12268,NA,21525224
+rpoB,CH52_03045,Staphylococcus aureus,Rifampin /  Vancomycin,141,C - T,481,His - Tyr,Non - Synonymous,-4.956,NA,vancomycin-resistant S. aureus (VRSA) (equivalent to VISA and GISA) strain Mu50 /  VBV9352 and VB12268,NA,28216019
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1411,G - A,471,Asp - Asn,Non - Synonymous,-4.479,NA,VISA HIP09662,NA,27873679
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1451,CGT - CAT,484,Arg - His,Non - Synonymous,-4.478,NA,methicillin-resistant T-13,NA,26303044
+rpoB,CH52_03045,Staphylococcus aureus,Vancomycin /  Daptomycin,1862,C - A,621,Ala - Glu,Non - Synonymous,-4.05,NA,hyper VISA (hVISA) strain 10*3d1,NA,20837752
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,404,T - C,135,Val - Ala,Non - Synonymous,-3.645,NA,VISA HIP10540,NA,27873679
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1402,CAA - AAA,468,Gln - Lys,Non - Synonymous,-3.582,NA,methicillin-resistant T-49,NA,26303044
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1403,TCA - TTA,468,Gln - Arg,Non - Synonymous,-3.581,NA,methicillin-resistant T-100,NA,26303044
+rpoB,CH52_03045,Staphylococcus aureus,Rifampin,1394,CAA - CGA,465,Gln - Arg,Non - Synonymous,-3.388,NA,MRSA T20,NA,10543773
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1430,GCT - GAT,477,Ala - Asp,Non - Synonymous,-3.146,NA,methicillin-resistant T-5,NA,26303044
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin /  Daptomycin /  Vancomycin /  And Oxacillin,1430,GCT - GAT,477,Ala - Asp,Non - Synonymous,-3.146,NA,methicillin-resistant T-5,NA,26324273
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1430,C - T,477,Ala - Val,Non - Synonymous,-3.131,NA,VISA HIP10540,NA,27873679
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1581,ATT - ATG,527,Ile - Met,Non - Synonymous,-2.711,NA,ST612-MRSA-IV,NA,22448673
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1549,GAA - CAA,517,Glu - Gln,Non - Synonymous,-2.698,NA,methycillin-resistant 308-23,NA,24336696
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1432 - 1434,NA,478,Glu - Asp,Non - Synonymous,-2.491,NA,VISA HIP10267,NA,27873679
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1429,G - T,477,Ala - Ser,Non - Synonymous,-0.465,NA,VISA HIP10267,NA,27873679
+rpoB,CH52_03045,Staphylococcus aureus,Rifampicin,1417,G - T,473,Ala - Ser,Non - Synonymous,0.833,NA,VISA HIP10267,NA,27873679
+rpoB,CH52_03045,Staphylococcus aureus,Rifampin,1576,C - A,526,His - Asn,Non - Synonymous,NA,NA,BM4479,NA,11959602
+rpoB,CH52_03045,Staphylococcus aureus,Rifampin,1721,C - T,574,Ser - Leu,Non - Synonymous,NA,NA,BM4479,NA,11959602
+rpoB,CH86_00694,Mycobacterium africanum,Rifampin,1552 - 1554,AAC - Deletion,518,Asn - Deletion,Non - Synonymous,NA,NA,NA,Sierra Leone and Uganda,10423225
+rpoB,CH86_00694,Mycobacterium africanum,Rifampin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,NA,NA,Sierra Leone and Uganda,10423225
+rpoB,CH86_00694,Mycobacterium africanum,Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,NA,NA,Sierra Leone and Uganda,10423225
+rpoB,CH86_00694,Mycobacterium africanum,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,NA,NA,Sierra Leone and Uganda,10423225
+rpoB,CH86_00694,Mycobacterium africanum,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Sierra Leone,7840574
+rpoB,CK45_02345,Haemophilus influenzae,Rifampicin,1577,A - T,526,His - Leu,Non - Synonymous,-10.63,NA,ATCC 42998  /  83499,NA,14613947
+rpoB,CK45_02345,Haemophilus influenzae,Rifampicin,1546,G - T,516,Asp - Tyr,Non - Synonymous,-8.682,NA,ATCC 51501,NA,14613947
+rpoB,CK45_02345,Haemophilus influenzae,Rifampicin,1547,A - T,516,Asp - Val,Non - Synonymous,-8.679,NA,ATCC 62097  /  85598 /  6294 /  2495,NA,14613947
+rpoB,CK45_02345,Haemophilus influenzae,Rifampicin,1547,A - C,516,Asp - Ala,Non - Synonymous,-7.705,NA,ATCC 11200,NA,14613947
+rpoB,CK45_02345,Haemophilus influenzae,Rifampicin,1538,A - T,513,Gln - Leu,Non - Synonymous,-6.777,NA,ATCC 42400,NA,14613947
+rpoB,CK45_02345,Haemophilus influenzae,Rifampicin,1576,C - A,526,His - Asn,Non - Synonymous,-6.759,NA,NA,NA,14613947
+rpoB,CK45_02345,Haemophilus influenzae,Rifampicin,1576,C - T,526,His - Tyr,Non - Synonymous,-5.801,NA,NA,NA,14613947
+rpoB,CK45_02345,Haemophilus influenzae,Rifampicin,1546,G - A,516,Asp - Asn,Non - Synonymous,-4.809,NA,ATCC 10396,NA,14613947
+rpoB,CK45_02345,Haemophilus influenzae,Rifampicin,1552 - 1554,NA,518,Asn - Asp,Non - Synonymous,-3.815,NA,ATCC 2495,NA,14613947
+rpoB,CK45_02345,Haemophilus influenzae,Rifampicin,1601,T - C,534,Leu - Ser,Non - Synonymous,NA,NA,ATCC 64897,NA,14613947
+rpoB,CpB0081,Chlamydophila pneumoniae,Rifalazil,1381 - 1383,NA,461,Asp - Glu,Non - Synonymous,-3.949,NA,TW-183,NA,15728882
+rpoB,CpB0081,Chlamydophila pneumoniae,Rifampin,1366 - 1368,NA,456,Leu - Ile,Non - Synonymous,-1.976,NA,TW-183,NA,15728882
+rpoB,Cspa_c01810,Clostridium saccharoperbutylacetonicum,Rifampicin,1514,G - A,505,Arg - Lys,Non - Synonymous,-2.879,NA,KO-1257,NA,28566234
+rpoB,Cspa_c01810,Clostridium saccharoperbutylacetonicum,Rifampicin,1310,A - G,437,His - Arg,Non - Synonymous,NA,NA,NA,NA,28566234
+rpoB,Cspa_c01810,Clostridium saccharoperbutylacetonicum,Rifampicin,1309,C - T,437,His - Tyr,Non - Synonymous,NA,NA,NA,NA,28566234
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1504,CGT - TGT,502,Arg - Cys,Non - Synonymous,-7.331,NA,777-II50,NA,12604513
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1505,CGT - CAT,502,Arg - His,Non - Synonymous,-4.582,NA,111.46-II50,NA,12604513
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1444,TCA - CCA,482,Ser - Pro,Non - Synonymous,-2.665,NA,RMJ5,NA,12654655
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1449,CAG - CAC,483,Gln - His,Non - Synonymous,NA,NA,777-II4,NA,12604513
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1456,CAG - AAG,486,Gln - Lys,Non - Synonymous,NA,NA,204.26-II50,NA,12604513
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1457,CAG - CTG,486,Gln - Leu,Non - Synonymous,NA,NA,RMJ1,NA,12654655
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1465,GAC - TAC,489,Asp - Tyr,Non - Synonymous,NA,NA,111.46-II10,NA,12604513
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1466,GAC - GTC,489,Asp - Val,Non - Synonymous,NA,NA,RMJ7,NA,12654655
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1484,TCT - TTT,495,Ser - Phe,Non - Synonymous,NA,NA,111.46-III,NA,12604513
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1495,CAC - GAC,499,His - Asp,Non - Synonymous,NA,NA,104.72-III,NA,12604513
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampicin,1495,C - A,499,His - Asn,Non - Synonymous,NA,NA,NA,NA,14729734
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampicin,1495,C - T,499,His - Tyr,Non - Synonymous,NA,NA,NA,NA,14729734
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1495,CAC - TAC,499,His - Tyr,Non - Synonymous,NA,NA,RMJ3,NA,12654655
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1496,CAC - CTC,499,His - Leu,Non - Synonymous,NA,NA,RMJ4,NA,12654655
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampin,1635,AAC - AAA,545,Asn - Lys,Non - Synonymous,NA,NA,104.72-II10 /  104.72-II4,NA,12604513
+rpoB,DB40_06660,Streptococcus pneumoniae,Rifampicin,1766,A - T,589,Tyr - Phe,Non - Synonymous,NA,NA,NA,NA,14729734
+rpoB,DK54_1403,Brucella abortus,Rifampicin,1576,GAC - TAC,526,Asp - Tyr,Non - Synonymous,-8.53,NA,RB51,NA,15583262
+rpoB,DP15_1166,Streptococcus pyogenes,Rifampin,1565,C - T,522,Ser - Leu,Non - Synonymous,NA,NA,BM4478,NA,11959602
+rpoB,DQ20_13455,Pseudomonas aeruginosa,Rifampicin,455,A - G,152,Gln - Arg,Non - Synonymous,NA,NA,NA,NA,21220359
+rpoB,DQ20_13455,Pseudomonas aeruginosa,Rifampicin,1550,C - T,517,Ser - Leu,Non - Synonymous,NA,NA,NA,NA,21220359
+rpoB,DQ20_13455,Pseudomonas aeruginosa,Rifampicin,1553,A - G,518,Gln - Arg,Non - Synonymous,NA,NA,NA,NA,21220359
+rpoB,DQ20_13455,Pseudomonas aeruginosa,Rifampicin,1553,A - T,518,Gln - Leu,Non - Synonymous,NA,NA,NA,NA,21220359
+rpoB,DQ20_13455,Pseudomonas aeruginosa,Rifampicin,1563,C - A,521,Asp - Glu,Non - Synonymous,NA,NA,NA,NA,21220359
+rpoB,DQ20_13455,Pseudomonas aeruginosa,Rifampicin,1562,A - G,521,Asp - Gly,Non - Synonymous,NA,NA,NA,NA,21220359
+rpoB,DQ20_13455,Pseudomonas aeruginosa,Rifampicin,1562,A - T,521,Asp - Val,Non - Synonymous,NA,NA,NA,NA,21220359
+rpoB,DQ20_13455,Pseudomonas aeruginosa,Rifampicin,1592,A - G,531,His - Arg,Non - Synonymous,NA,NA,NA,NA,21220359
+rpoB,DQ20_13455,Pseudomonas aeruginosa,Rifampicin,1591,C - G,531,His - Asp,Non - Synonymous,NA,NA,NA,NA,21220359
+rpoB,DQ20_13455,Pseudomonas aeruginosa,Rifampicin,1593,C - A,531,His - Gln,Non - Synonymous,NA,NA,NA,NA,21220359
+rpoB,DQ20_13455,Pseudomonas aeruginosa,Rifampicin,1724,G - C,575,Gly - Ala,Non - Synonymous,NA,NA,NA,NA,21220359
+rpoB,DQ20_13455,Pseudomonas aeruginosa,Rifampicin,1736,C - T,579,Ser - Phe,Non - Synonymous,NA,NA,NA,NA,21220359
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1304,A - T,435,His - Leu,Non - Synonymous,-10.407,NA,MK2 /  MT2,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1418,C - T,473,Pro - Leu,Non - Synonymous,-9.897,NA,ME2 /  ME3 /  MT2,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1304,A - C,435,His - Pro,Non - Synonymous,-9.423,NA,MK2 /  ME3,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1274,A - T,425,Asp - Val,Non - Synonymous,-8.859,NA,MA3 /  ME2,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1273,G - T,425,Asp - Tyr,Non - Synonymous,-8.855,NA,MK1 /  MK2 /  MT2,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1327,G - C,443,Gly - Arg,Non - Synonymous,-7.908,NA,MK1,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1303 - 1305,NA,435,His - Gln,Non - Synonymous,-7.446,NA,MK2 /  ME2 /  MT2,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1265,A - T,422,Gln - Leu,Non - Synonymous,-6.911,NA,MK2,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1435,G - A,479,Gly - Ser,Non - Synonymous,-5.946,NA,NA,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1259,T - G,420,Leu - Arg,Non - Synonymous,-5.925,NA,MK1 /  MK2 /  MA3 /  ME2 /  MT2 /  ME3,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1259,T - G,420,Leu - Arg,Non - Synonymous,-5.925,NA,NA,NA,21809039
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1319,C - T,440,Ser - Phe,Non - Synonymous,-5.893,NA,MT2,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1303,C - T,435,His - Tyr,Non - Synonymous,-5.72,NA,MK1 /  MK2 /  MA3 /  ME2 /  ME3,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1313,G - A,438,Arg - His,Non - Synonymous,-4.933,NA,MK1,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1252,T - C,418,Ser - Pro,Non - Synonymous,-4.916,NA,ME2,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1273,G - A,425,Asp - Asn,Non - Synonymous,-4.915,NA,MA3 /  MK2 /  ME2 /  ME3,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1441,A - T,481,Ile - Phe,Non - Synonymous,-3.967,NA,MA3,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1411,G - A,471,Glu - Lys,Non - Synonymous,-3.956,NA,MK2 /  MA3 /  ME2 /  ME3,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,457,AT - TA,153,Ile - Phe,Non - Synonymous,-3.936,NA,MA3,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1443,NA,481,Ile - Met,Non - Synonymous,-2.973,NA,MK1 /  MK2,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1441,A - C,481,Ile - Leu,Non - Synonymous,-1.983,NA,NA,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1325,T - A,439,Leu - Gln,Non - Synonymous,NA,NA,NA,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1287 - 1292,CAACCC - Insertion,NA,NA,Insertion,NA,NA,ME2,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1250 - 1258,NA,NA,NA,Deletion,NA,NA,MK1 /  MK2 /  MA3 /  ME2 /  MT2 /  ME3,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1258 - 1266,NA,NA,NA,Deletion,NA,NA,MK1 /  MK2 /  MA3 /  ME2 /  MT2 /  ME3,NA,22527041
+rpoB,DR_0912,Deinococcus radiodurans,Rifampicin,1274 - 1288,TCTCGCAGT TCAAGG,NA,NA,Insertion,NA,NA,MT2,NA,22527041
+rpoB,DV26_16210,Amycolatopsis mediterranei,Rifampin,1280 - 1281,NA,427,Asp - Gln,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,DV26_16210,Amycolatopsis mediterranei,Rifampin,1294 - 1296,NA,432,Leu - Ile,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,DV26_16210,Amycolatopsis mediterranei,Rifampin,1297 - 1299,NA,433,Ser - Asp,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,DW66_0456,Pseudomonas putida,Rifampin,1562,A - G,521,Asp - Gly,Non - Synonymous,-6.519,NA,KH146-2,NA,12460278
+rpoB,DW66_0456,Pseudomonas putida,Rifampin,1562,A - G,521,Asp - Gly,Non - Synonymous,-6.519,NA,KH146-2,NA,12460278
+rpoB,DW66_0456,Pseudomonas putida,Rifampin,1730,T - C,577,Ile - Thr,Non - Synonymous,-4.833,NA,KH146-2,NA,12460278
+rpoB,DW66_0456,Pseudomonas putida,Rifampin,1549,T - C,517,Ser - Pro,Non - Synonymous,-4.813,NA,KH146-2,NA,12460278
+rpoB,DW66_0456,Pseudomonas putida,Rifampin,1561,G - A,521,Asp - Asn,Non - Synonymous,-4.711,NA,KH146-2,NA,12460278
+rpoB,DW66_0456,Pseudomonas putida,Rifampin,1553,A - G,518,Gln - Arg,Non - Synonymous,-3.84,NA,KH146-2,NA,12460278
+rpoB,DW66_0456,Pseudomonas putida,Rifampin,1553,A - G,518,Gln - Arg,Non - Synonymous,-3.84,NA,KH146-2,NA,12460278
+rpoB,EE55_15170,Enterococcus faecalis,Rifampicin,1466,A - C,489,His - Pro,Non - Synonymous,-8.244,NA,18165 and A15,NA,24070269
+rpoB,EE55_15170,Enterococcus faecalis,Rifampicin,1465,C - G,489,His - Asp,Non - Synonymous,-7.143,NA,18165,NA,24070269
+rpoB,EE55_15170,Enterococcus faecalis,Rifampicin,1466,A - G,489,His - Arg,Non - Synonymous,-6.451,NA,18165 and A15,NA,24070269
+rpoB,EE55_15170,Enterococcus faecalis,Rifampicin,1481,C - T,494,Ser - Leu,Non - Synonymous,-5.375,NA,18165 and A15,NA,24070269
+rpoB,EE55_15170,Enterococcus faecalis,Rifampicin,1465,C - T,489,His - Tyr,Non - Synonymous,-5.058,NA,18165 and A15,NA,24070269
+rpoB,EE55_15170,Enterococcus faecalis,Rifampicin,412,G - T,138,Val - Phe,Non - Synonymous,-4.498,NA,18165 and A15,NA,24070269
+rpoB,EE55_15170,Enterococcus faecalis,Rifampicin,1475,G - A,492,Arg - His,Non - Synonymous,-4.476,NA,18165 and A15,NA,24070269
+rpoB,EE55_15170,Enterococcus faecalis,Rifampicin,1426,C - A,476,Gln - Lys,Non - Synonymous,-3.58,NA,18165 and A15,NA,24070269
+rpoB,EE55_15170,Enterococcus faecalis,Rifampicin,1454,G - A,485,Gly - Asp,Non - Synonymous,-1.996,NA,18165 and A15,NA,24070269
+rpoB,EE55_15170,Enterococcus faecalis,Cephalosporin (Cefuroxime /  Ceftriaxone And Ceftazidime) /  Rifampicin,1456,C - T,486,His - Tyr,Non - Synonymous,NA,NA,CK135,NA,22290974
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1445,CAC - CCC,482,His - Pro,Non - Synonymous,-8.4,NA,172 (DSM 402) endospores,NA,20624059
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1444,CAC - GAC ,482,His - Asp,Non - Synonymous,-7.343,NA,strain 168,NA,26538577
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1520,CAC - CGC,507,His - Arg,Non - Synonymous,-7.177,NA,176 (DSM 402) endospores,NA,20624059
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1445,CAC - CGC,482,His - Arg,Non - Synonymous,-6.606,NA,strain 168,NA,26538577
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1451,CGT - CCT,484,Arg - Pro,Non - Synonymous,-6.279,NA,173 (DSM 402) endospores,NA,20624059
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1400,CTT - CCT,467,Leu - Pro,Non - Synonymous,-6.273,NA,168 (DSM 402) endospores,NA,20624059
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1406,CAA - CTA,469,Gln - Leu,Non - Synonymous,-6.27,NA,169 (DSM 402) endospores,NA,20624059
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1460,TCA - TTA,487,Ser - Leu,Non - Synonymous,-5.375,NA,174 (DSM 402) endospores,NA,20624059
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1460,TCA - TTA,487,Ser - Leu,Non - Synonymous,-5.375,NA,84R5,NA,14612444
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1460,TCA - TTA ,487,Ser - Leu,Non - Synonymous,-5.375,NA,strain 168,NA,26538577
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1444,CAC - TAC,482,His - Tyr,Non - Synonymous,-5.124,NA,171 (DSM 402) endospores,NA,20624059
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1444,CAC - TAC ,482,His - Tyr,Non - Synonymous,-5.124,NA,strain 168,NA,26538577
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1462,GCA - CCA,488,Ala - Pro,Non - Synonymous,-4.452,NA,175 (DSM 402) endospores,NA,20624059
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1406,CAA - CGA,469,Gln - Arg,Non - Synonymous,-3.58,NA,strain 168,NA,26538577
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1405,CAA - AAA ,469,Gln - Lys,Non - Synonymous,-3.58,NA,strain 168,NA,26538577
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1433,GCT - GTT,478,Ala - Val,Non - Synonymous,-3.17,NA,170 (DSM 402) endospores,NA,20624059
+rpoB,EF83_19560,Bacillus subtilis,Rifampicin,1433,GCT - GAT ,478,Ala - Asn,Non - Synonymous,-2.945,NA,strain 168,NA,26538577
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1429,G - T,477,Asp - Tyr,Non - Synonymous,-8.219,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1459,C - G,487,His - Asp,Non - Synonymous,-7.291,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1460,A - G,487,His - Arg,Non - Synonymous,-6.584,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1503,NA,501,Arg - Thr,Non - Synonymous,-5.501,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1475,C - A,492,Ser - Tyr,Non - Synonymous,-5.487,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1475,C - T,492,Ser - Phe,Non - Synonymous,-5.486,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1459,C - T,487,His - Tyr,Non - Synonymous,-5.162,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1459,C - A,487,His - Asn,Non - Synonymous,-5.154,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1469,NA,490,Arg - Asn,Non - Synonymous,-4.571,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1429,G - A,477,Asp - Asn,Non - Synonymous,-4.568,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1448,G - A,483,Gly - Asp,Non - Synonymous,-2.001,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1470,NA,490,Arg - Arg,Synonymous,0,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1830,NA,610,Ile - Ile,Synonymous,0,NA,NA,NA,17993526
+rpoB,EL27_03470,Oenococcus oeni,Rifampicin,1410,T - C,470,Leu - Ser,Non - Synonymous,NA,NA,NA,NA,17993526
+rpoB,EL82_01845,Staphylococcus epidermidis,Rifampicin,1378,G - C,460,Glu - Gln,Non - Synonymous,NA,NA,NA,NA,27446039
+rpoB,EL82_01845,Staphylococcus epidermidis,Rifampicin,1406,A - G,469,Gln - Arg,Non - Synonymous,NA,NA,NA,NA,27446039
+rpoB,EL82_01845,Staphylococcus epidermidis,Rifampicin,1406,A - T,469,Gln - Leu,Non - Synonymous,NA,NA,NA,NA,27446039
+rpoB,EL82_01845,Staphylococcus epidermidis,Rifampicin,1405,C - A,469,Gln - Lys,Non - Synonymous,NA,NA,NA,NA,27446039
+rpoB,EL82_01845,Staphylococcus epidermidis,Rifampicin,1414,G - T,472,Asp - Tyr,Non - Synonymous,NA,NA,NA,NA,27446039
+rpoB,EL82_01845,Staphylococcus epidermidis,Rifampicin,1445,A - G,482,His - Arg,Non - Synonymous,NA,NA,NA,NA,27446039
+rpoB,EL82_01845,Staphylococcus epidermidis,Rifampicin,1444,C - T,482,His - Asp,Non - Synonymous,NA,NA,NA,NA,27446039
+rpoB,EL82_01845,Staphylococcus epidermidis,Rifampicin,1444,C - T,482,His - Tyr,Non - Synonymous,NA,NA,NA,NA,27446039
+rpoB,EL82_01845,Staphylococcus epidermidis,Rifampicin,1454,G - A,485,Arg - His,Non - Synonymous,NA,NA,NA,NA,27446039
+rpoB,EL82_01845,Staphylococcus epidermidis,Rifampicin,1459 - 1461,NA,487,Ser - Cys,Non - Synonymous,NA,NA,NA,NA,27446039
+rpoB,EL82_01845,Staphylococcus epidermidis,Rifampicin,1460,C - T,487,Ser - Phe,Non - Synonymous,NA,NA,NA,NA,27446039
+rpoB,EL82_01845,Staphylococcus epidermidis,Rifampicin,1460,C - A,487,Ser - Tyr,Non - Synonymous,NA,NA,NA,NA,27446039
+rpoB,FB41_0713,Propionibacterium acnes,Rifampicin,1309,C - T,437,His - Tyr ,Non - Synonymous,NA,NA,ATCC 11827,NA,23115111
+rpoB,FB41_0713,Propionibacterium acnes,Rifampicin,1325,C - T,442,Ser - Leu,Non - Synonymous,NA,NA,ATCC 11827,NA,23115111
+rpoB,FB41_0713,Propionibacterium acnes,Rifampicin,1331,T - C,444,Leu - Ser,Non - Synonymous,NA,NA,ATCC 11827,NA,23115111
+rpoB,FB41_0713,Propionibacterium acnes,Rifampicin,1447,A - G,483,Ile - Val,Non - Synonymous,NA,NA,ATCC 11827,NA,23115111
+rpoB,FB41_0713,Propionibacterium acnes,Rifampicin,1454,C - T,485,Ser - Leu,Non - Synonymous,NA,NA,ATCC 11827,NA,23115111
+rpoB,HMPREF0659_A5300,Prevotella melaninogenica,Rifampicin,1421,CAG - CGG,474,Gln - Arg,Non - Synonymous,NA,NA,GAI 5490,NA,18343236
+rpoB,HMPREF0659_A5300,Prevotella melaninogenica,Rifampicin,1421,CAG - CTG,474,Gln - Leu,Non - Synonymous,NA,NA,GAI 5490,NA,18343236
+rpoB,HMPREF0659_A5300,Prevotella melaninogenica,Rifampicin,1429,GAC - TAC,477,Asp - Tyr,Non - Synonymous,NA,NA,GAI 5490,NA,18343236
+rpoB,HMPREF0659_A5300,Prevotella melaninogenica,Rifampicin,1448,GCT - GAT,483,Ala - Asp,Non - Synonymous,NA,NA,GAI 5490,NA,18343236
+rpoB,HMPREF0659_A5300,Prevotella melaninogenica,Rifampicin,1459,CAC - AAC,487,His - Asn,Non - Synonymous,NA,NA,GAI 5490,NA,18343236
+rpoB,HMPREF0659_A5300,Prevotella melaninogenica,Rifampicin,1474,TCC - GCC,492,Ser - Ala,Non - Synonymous,NA,NA,GAI 5490,NA,18343236
+rpoB,HMPREF0659_A5300,Prevotella melaninogenica,Rifampicin,1475,TCC - TTC,492,Ser - Phe,Non - Synonymous,NA,NA,GAI 5490,NA,18343236
+rpoB,HMPREF0659_A5300,Prevotella melaninogenica,Rifampicin,1484,GGT - GAT,495,Gly - Asp,Non - Synonymous,NA,NA,GAI 5490,NA,18343236
+rpoB,HMPREF0724_12829,Rhodococcus equi,Rifampin,1525,T - C,509,Ser - Pro,Non - Synonymous,NA,NA,NA,NA,12791846
+rpoB,HMPREF0724_12829,Rhodococcus equi,Rifampin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,NA,NA,NA,12791846
+rpoB,HMPREF0724_12829,Rhodococcus equi,Rifampin,1592,C - G,531,Ser - Trp,Non - Synonymous,NA,NA,NA,NA,12791846
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampin  /  Rifabutin,1588,G - T,530,Asp - Tyr,Non - Synonymous,-8.67,NA,HP-Rif-8 ,NA,17350989
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1588,G - T,530,Asp - Tyr,Non - Synonymous,-8.67,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1589,A - T,530,Asp - Val,Non - Synonymous,-8.67,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1619,A - G,540,His - Arg,Non - Synonymous,-7.652,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1574,T - C,525,Leu - Pro,Non - Synonymous,-6.799,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampin  /  Rifabutin,1589,A - G,530,Asp - Gly,Non - Synonymous,-6.711,NA,HP-Rif-1,NA,17350989
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1589,A - G,530,Asp - Gly,Non - Synonymous,-6.711,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1757,T - A,586,Ile - Asn,Non - Synonymous,-6.691,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampin  /  Rifabutin,1618,C - A,540,His - Asn,Non - Synonymous,-6.686,NA,HP-Rif-9 /  HP-Rif-18 /  HP-Rif-22  ,NA,17350989
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1618,C - A,540,His - Asn,Non - Synonymous,-6.686,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1756 - 1758,NA,586,Ile - Pro,Non - Synonymous,-6.658,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1577,C - T,526,Ser - Leu,Non - Synonymous,-5.826,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampin  /  Rifabutin,1634,C - T,545,Ser - Leu,Non - Synonymous,-5.76,NA,HP-Rif-13 ,NA,17350989
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1618,C - T,540,His - Tyr,Non - Synonymous,-5.739,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampin  /  Rifabutin,1588,G - A,530,Asp - Asn,Non - Synonymous,-4.802,NA,HP-Rif-4 /  HP-Rif-7 /  HP-Rif-15 /  HP-Rif-17,NA,17350989
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1588,G - A,530,Asp - Asn,Non - Synonymous,-4.802,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifabutin,445,GTC - TTC,149,Val - Phe,Non - Synonymous,-4.79,NA,NA,NA,10722516
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1579,C - A,527,Gln - Lys,Non - Synonymous,-3.877,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1580,A - G,527,Gln - Arg,Non - Synonymous,-3.875,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampin  /  Rifabutin,1590,T - A,530,Asp - Glu,Non - Synonymous,-3.828,NA,HP-Rif-11 /  HP-Rif-14,NA,17350989
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin,1573 - 1575,NA,525,Leu - Ile,Non - Synonymous,-1.943,NA,NA,NA,16996809
+rpoB,HP2RS_03753,Helicobacter pylori,Rifampicin /  Rifabutin,1573 - 1575,NA,525,Leu - Ile,Non - Synonymous,-1.943,NA,NA,NA,27403304
+rpoB,HR52_18225,Aeromonas hydrophila,Rifampicin,1609,GAC - AAC,537,Asp - Asn,Non - Synonymous,NA,NA,AL09-71 N / R,NA,23608477
+rpoB,HR52_18225,Aeromonas hydrophila,Rifampicin,1660,CTG - CCG,554,Leu - Pro,Non - Synonymous,NA,NA,AL09-71 N / R,NA,23608477
+rpoB,HR52_18225,Aeromonas hydrophila,Rifampicin,3820,CTG - CCG,1274,Leu - Pro,Non - Synonymous,NA,NA,AL09-71 N / R,NA,23608477
+rpoB,HUS2011_4752,Escherichia coli,Fluoroquinolone (Ciprofloxacin),1324 - 1335,NA,442 - 445,Val Asp Asp Ile - Deletion,Deletion,-30.61,NA,NA,NA,27621175
+rpoB,HUS2011_4752,Escherichia coli,Rifampicin,1692,C - T,564,Pro - Leu,Non - Synonymous,-9.503,NA,NA,NA,16276894
+rpoB,HUS2011_4752,Escherichia coli,Fluoroquinolone (Ciprofloxacin),1363 - 1365,NA,455,Ser - Duplication,Duplication,-9.42,NA,NA,NA,27621175
+rpoB,HUS2011_4752,Escherichia coli,Streptolydigin,1634,T - C,545,Phe - Ser,Non - Synonymous,-7.606,NA,NA,NA,2985088
+rpoB,HUS2011_4752,Escherichia coli,Bicyclomycin,NA,NA,1244,His - Gln,Non - Synonymous,-7.536,NA,MDS42,NA,21183718
+rpoB,HUS2011_4752,Escherichia coli,Streptolydigin,1631,G - A,544,Gly - Asp,Non - Synonymous,-6.655,NA,NA,NA,2985088
+rpoB,HUS2011_4752,Escherichia coli,Rifampicin,1538,A - T,513,Gln - Leu,Non - Synonymous,-6.621,NA,MG1655-ptetEGFP,NA,21142208
+rpoB,HUS2011_4752,Escherichia coli,Rifampin,1547,A - G,516,Asp - Gly,Non - Synonymous,-6.558,NA,NA,NA,9023362
+rpoB,HUS2011_4752,Escherichia coli,Rifampicin,1576,C - T,526,His - Tyr,Non - Synonymous,-5.684,NA,NA,NA,6385989
+rpoB,HUS2011_4752,Escherichia coli,Rifampin,1565,C - T,522,Ser - Phe,Non - Synonymous,-5.558,NA,ts8,NA,1551568
+rpoB,HUS2011_4752,Escherichia coli,Rifampin,1583,G - A,529,Arg - His,Non - Synonymous,-4.749,NA,NA,NA,9023362
+rpoB,HUS2011_4752,Escherichia coli,Rifampicin,1551,G - C,517,Gln - His,Non - Synonymous,-4.738,NA,NA,NA,16276894
+rpoB,HUS2011_4752,Escherichia coli,Rifampicin,1546,G - A,516,Asp - Asn,Non - Synonymous,-4.697,NA,NA,NA,6385989
+rpoB,HUS2011_4752,Escherichia coli,Rifampicin,436,G - T,146,Val - Phe,Non - Synonymous,-4.405,NA,NA,NA,6384726
+rpoB,HUS2011_4752,Escherichia coli,Fluoroquinolone (Ciprofloxacin),3830,C - T,1277,Ala - Val,Non - Synonymous,-3.752,NA,NA,NA,27621175
+rpoB,IA03_05605,Flavobacterium psychrophilum,Rifampicin,1418,A - G,473,Gln - Arg,Non - Synonymous,-3.892,NA,CSF 259-93B.17,NA,22607560
+rpoB,IA03_05605,Flavobacterium psychrophilum,Rifampicin,1421,A - G,474,Gln - Arg,Non - Synonymous,NA,NA,B17 ,NA,26377311
+rpoB,IA03_05605,Flavobacterium psychrophilum,Rifampicin,1429,G - T,477,Asp - Tyr,Non - Synonymous,NA,NA,TR,NA,26377311
+rpoB,IA03_05605,Flavobacterium psychrophilum,Rifampicin,1475,C - T,492,Ser - Phe,Non - Synonymous,NA,NA,CR,NA,26377311
+rpoB,IA03_05605,Flavobacterium psychrophilum,Rifampicin,1486,C - T,496,Pro - Ser,Non - Synonymous,NA,NA,TR,NA,26377311
+rpoB,IV86_GL000868,Pediococcus pentosaceus,Rifampicin,1429,G - T,477,Asp - Tyr,Non - Synonymous,NA,NA,NA,NA,17993526
+rpoB,IV86_GL000868,Pediococcus pentosaceus,Rifampicin,1459,C - T,487,His - Tyr,Non - Synonymous,NA,NA,NA,NA,17993526
+rpoB,KS18_19915,Photorhabdus luminescens,Rifampin,1691,C - T,564,Pro - Leu,Non - Synonymous,-9.568,NA,LN2-R3,NA,22912803
+rpoB,KS18_19915,Photorhabdus luminescens,Rifampin,1585,C - T,529,Arg - Cys,Non - Synonymous,-7.657,NA,LN2-R12,NA,22912803
+rpoB,KS18_19915,Photorhabdus luminescens,Rifampin,1535,C - T,512,Ser - Phe,Non - Synonymous,-5.724,NA,LN2-R28,NA,22912803
+rpoB,KS18_19915,Photorhabdus luminescens,Rifampin,938,C - A,313,Ala - Asp,Non - Synonymous,-4.682,NA,LN2-R12,NA,22912803
+rpoB,KS18_19915,Photorhabdus luminescens,Rifampin,436,G - T,146,Val - Phe,Non - Synonymous,-4.42,NA,LN2-R2,NA,22912803
+rpoB,KS18_19915,Photorhabdus luminescens,Rifampin,1537,C - A,513,Gln - Lys,Non - Synonymous,-3.808,NA,LN2-R31,NA,22912803
+rpoB,KS18_19915,Photorhabdus luminescens,Rifampin,521,C - T,174,Ala - Val,Non - Synonymous,-3.57,NA,LN2-R5,NA,22912803
+rpoB,KS18_19915,Photorhabdus luminescens,Rifampin,826,C - T,276,Gln - Stop,Frameshift,NA,NA,LN2-R8,NA,22912803
+rpoB,LEUM_1825,Leuconostoc mesenteroides,Rifampicin,1406,G - T,469,Gly - Val,Non - Synonymous,-8.232,NA,NA,NA,17993526
+rpoB,LEUM_1825,Leuconostoc mesenteroides,Rifampicin,1462,C - G,488,His - Asp,Non - Synonymous,-7.303,NA,NA,NA,17993526
+rpoB,LEUM_1825,Leuconostoc mesenteroides,Rifampicin,1424,NA,475,Gln - Gly,Non - Synonymous,-6.397,NA,NA,NA,17993526
+rpoB,LEUM_1825,Leuconostoc mesenteroides,Rifampicin,1478,C - T,493,Ser - Leu,Non - Synonymous,-5.482,NA,NA,NA,17993526
+rpoB,LEUM_1825,Leuconostoc mesenteroides,Rifampicin,1472,G - A,491,Arg - His,Non - Synonymous,-4.565,NA,NA,NA,17993526
+rpoB,LEUM_1825,Leuconostoc mesenteroides,Rifampicin,1381,G - C,461,Val - Leu,Non - Synonymous,-1.736,NA,NA,NA,17993526
+rpoB,LEUM_1825,Leuconostoc mesenteroides,Rifampicin,1470,NA,490,Arg - Arg,Synonymous,0,NA,NA,NA,17993526
+rpoB,LEUM_1825,Leuconostoc mesenteroides,Rifampicin,1503,NA,501,Arg - Thr,Non - Synonymous,NA,NA,NA,NA,17993526
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,412,GTT - ATT,138,Val - Ile,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,412,GTT - TTT,138,Val - Phe,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,1427,CAG - CGG,476,Gln - Arg,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,1426,C - A,476,Gln - Lys,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,1435,G - T,479,Asp - Tyr,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,1436,A - T,479,Asp - Val,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,1454,G - A,485,Gly - Asp,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,1454,G - T,485,Gly - Val,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,LK25_14925,Enterococcus faecium,Ceftriaxone /  Rifampicin,1456,C - T,486,His - Tyr,Non - Synonymous,NA,NA,JL282 / JL277,NA,22290974
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,1466,A - G,489,His - Arg,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,1465,C - G,489,His - Asp,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,1466,A - C,489,His - Pro,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,1475,G - A,492,Arg - His,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,LK25_14925,Enterococcus faecium,Rifampicin,1481,C - T,494,Ser - Leu,Non - Synonymous,NA,NA,B42,NA,24070269
+rpoB,MAV_4503,Mycobacterium avium,Rifampicin,1592,C - G,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Belgium,7840574
+rpoB,MAV_4503,Mycobacterium avium,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Mb0686,Mycobacterium bovis,Rifampin  /  Rifabutin,1592,C - A,531,Ser - Tyr,Non - Synonymous,NA,NA,Bacillus Calmette-Guérin (BCG),NA,18418497
+rpoB,MC58_16645,Salmonella enterica,Rifampicin,1535,A - G,512,Gln - Arg,Non - Synonymous,NA,NA,Antibiotic-Resistant Derivatives of SL 1344,NA,24351930
+rpoB,MexAM1_META1p4405,Methylobacterium extorquens,Rifamycin,1562,CAG - CGG,521,Gln - Arg,Non - Synonymous,NA,NA,Modern AM1 lineage,NA,24384040
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1321,G - T,441,Asp - Tyr,Non - Synonymous,-8.982,NA,NA,NA,22860144
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1351,C - G,451,His - Asp,Non - Synonymous,-8.19,NA,NA,NA,22860144
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1513 - 1515,NA,505,Arg - Trp,Non - Synonymous,-7.562,NA,NA,NA,27706165
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1312 - 1214,NA,438,Gln - Val,Non - Synonymous,-6.999,NA,NA,NA,22860144
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1367,C - T,456,Ser - Phe,Non - Synonymous,-5.899,NA,NA,NA,22860144
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1367,C - T,456,Ser - Leu,Non - Synonymous,-5.896,NA,NA,NA,27706165
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1367,C - T,456,Ser - Leu,Non - Synonymous,-5.896,NA,NA,NA,22860144
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1351,C - T,451,His - Tyr,Non - Synonymous,-5.73,NA,NA,NA,22860144
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1294,G - A,432,Gly - Ser,Non - Synonymous,-5.666,NA,NA,NA,22860144
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1271,T - G,424,Val - Gly,Non - Synonymous,-5.483,NA,NA,NA,27255062
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1366 - 1368,NA,456,Ser - Met,Non - Synonymous,-4.898,NA,NA,NA,22860144
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1298,C - T,433,Thr - Ile,Non - Synonymous,-4.332,NA,NA,NA,22860144
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1276,G - A,426,Ala - Thr,Non - Synonymous,-2.946,NA,NA,NA,27706165
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1372 - 1374,NA,458,Leu - Val,Non - Synonymous,-2.923,NA,NA,NA,22860144
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1274,C - T,425,Ser - Leu,Non - Synonymous,NA,NA,NA,NA,25676141
+rpoB,ML1891c,Mycobacterium leprae,Rifampin,1274,TCG - TTG,425,Ser - Leu,Non - Synonymous,NA,NA,NA,NA,25991507
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1373 - 1374,NA,458,Ser - Met,Non - Synonymous,NA,NA,NA,NA,27706165
+rpoB,ML1891c,Mycobacterium leprae,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,NA,NA,NA,15603834
+rpoB,ML1891c,Mycobacterium leprae,Rifampin,1591 - 1593,TCG - ATG,531,Ser - Met,Non - Synonymous,NA,NA,NA,NA,22495562
+rpoB,ML1891c,Mycobacterium leprae,Rifampin,1591 - 1593,TCG - TTC,531,Ser - Phe,Non - Synonymous,NA,NA,NA,NA,22495562
+rpoB,ML1891c,Mycobacterium leprae,Rifampin,1639,G - A,547,Val - Ile,Non - Synonymous,NA,NA,NA,NA,15603834
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Philippines,7840574
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Thailand,7840574
+rpoB,ML1891c,Mycobacterium leprae,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,MUL_0746,Mycobacterium ulcerans,Rifampicin,1248,TCC - GCC,416,Ser - Ala,Non - Synonymous,NA,NA,NA,NA,21036838
+rpoB,NG74_00131,Bacillus velezensis,Rifampicin,1415,A - G,472,Gln - Arg,Non - Synonymous,NA,NA,CC09-RIF6,NA,28243227
+rpoB,NG74_00131,Bacillus velezensis,Rifampicin,1453,C - T,485,His - Tyr,Non - Synonymous,NA,NA,CC09-RIF1,NA,28243227
+rpoB,NG74_00131,Bacillus velezensis,Rifampicin,1453 - 1454,CA - TG,485,His - Cys,Non - Synonymous,NA,NA,CC09-RIF2,NA,28243227
+rpoB,NG74_00131,Bacillus velezensis,Rifampicin,1454,A - G,485,His - Arg,Non - Synonymous,NA,NA,CC09-RIF3,NA,28243227
+rpoB,NG74_00131,Bacillus velezensis,Rifampicin,1453,C - G,485,His - Asp,Non - Synonymous,NA,NA,CC09-RIF4,NA,28243227
+rpoB,NG74_00131,Bacillus velezensis,Rifampicin,1469,C - T,490,Ser - Leu,Non - Synonymous,NA,NA,CC09-RIF5,NA,28243227
+rpoB,NG74_00131,Bacillus velezensis,Rifampicin,1850,C - T,617,Ser - Phe,Non - Synonymous,NA,NA,CC09-RIF7,NA,28243227
+rpoB,NMA510612_0153,Neisseria meningitidis,Rifampin,103,C - A,35,His - Asn,Non - Synonymous,NA,NA,A11M (C serogroup),NA,8851587
+rpoB,NMA510612_0153,Neisseria meningitidis,Rifampin,103,C - T,35,His - Tyr,Non - Synonymous,NA,NA,G6M (W135 serogroup),NA,8851587
+rpoB,NMA510612_0153,Neisseria meningitidis,Rifampicin,1624,G - A,542,Asp - Asn,Non - Synonymous,NA,NA,NA,NA,20606072
+rpoB,NMA510612_0153,Neisseria meningitidis,Rifampicin,1625,A - T,542,Asp - Val,Non - Synonymous,NA,NA,NA,NA,20606072
+rpoB,NMA510612_0153,Neisseria meningitidis,Rifampicin,1643,C - T,548,Ser - Phe,Non - Synonymous,NA,NA,NA,NA,20606072
+rpoB,NMA510612_0153,Neisseria meningitidis,Rifampicin,1643,C - T,548,Ser - Phe,Non - Synonymous,NA,NA,NA,NA,20606072
+rpoB,NMA510612_0153,Neisseria meningitidis,Rifampicin,1654,C - A,552,His - Asn,Non - Synonymous,NA,NA,NA,NA,20606072
+rpoB,NMA510612_0153,Neisseria meningitidis,Rifampicin,1655,A - T,552,His - Leu,Non - Synonymous,NA,NA,NA,NA,20606072
+rpoB,NMA510612_0153,Neisseria meningitidis,Rifampicin,1654,C - T,552,His - Tyr,Non - Synonymous,NA,NA,NA,NA,20606072
+rpoB,NMA510612_0153,Neisseria meningitidis,Rifampin,1663,C - T,553,His - Tyr,Non - Synonymous,NA,NA,hypervirulent serogroup C strain 93 / 4286 ,NA,26416867
+rpoB,NMA510612_0153,Neisseria meningitidis,Rifampicin,1670,C - T,557,Ser - Phe,Non - Synonymous,NA,NA,serogroup Y,NA,28220707
+rpoB,NMA510612_0153,Neisseria meningitidis,Rifampicin,1678,G - A,560,Gly - Ser,Non - Synonymous,NA,NA,NA,NA,20606072
+rpoB,O169_01700,Chlamydia trachomatis,Rifampin /  Rifalazil,1411,C - T,471,His - Tyr,Non - Synonymous,-5.58,NA,UW-3 / Cx / D,NA,15728882
+rpoB,O169_01700,Chlamydia trachomatis,Rifalazil,406,G - T,136,Val - Phe,Non - Synonymous,-4.748,NA,BU-434 / L2,NA,15728882
+rpoB,OKIT_1774,Oenococcus kitaharae,Rifampicin,77,A - G,26,Asp - Gly,Non - Synonymous,NA,NA,NA,NA,17993526
+rpoB,OKIT_1774,Oenococcus kitaharae,Rifampicin,118 - 120,NA,40,Leu - Cys,Non - Synonymous,NA,NA,NA,NA,17993526
+rpoB,OKIT_1774,Oenococcus kitaharae,Rifampicin,122,C - T,41,Ser - Leu,Non - Synonymous,NA,NA,NA,NA,17993526
+rpoB,OKIT_1774,Oenococcus kitaharae,Rifampicin,129,NA,43,Leu - Phe,Non - Synonymous,NA,NA,NA,NA,17993526
+rpoB,PFL_5589,Pseudomonas protegens,Rifampicin,1591,C - A,531,His - Asn,Non - Synonymous,-6.708,NA,Pf-5,NA,27208659
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,T - C,511,Leu - Pro,Non - Synonymous,NA,Multiplex PCR amplification and DNA sequencing,NA,Myanmar,26206685
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,Multiplex PCR amplification and DNA sequencing,NA,Myanmar,26206685
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,Multiplex PCR amplification and DNA sequencing,NA,Myanmar,26206685
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,Multiplex PCR amplification and DNA sequencing,NA,Myanmar,26206685
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1493,T - C,498,Val - Ala,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1532,T - C,511,Leu - Pro,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1532,CTG - CGG,511,Leu - Arg,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1534,AGC - CGC,512,Ser - Arg,Non - Synonymous,NA,NA,NA,NA,10645439
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1535,AGC - ACC,512,Ser - Thr,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1537 - 1539,NA,513,Gln - Leu,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1538,CAA - CTA,513,Gln - Leu,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1537,CAA - AAA,513,Gln - Lys,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1542,TTC - TTT,514,Phe - Phe,Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1545,ATG - ATA,515,Met - Ile,Non - Synonymous,NA,NA,NA,NA,10645439
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GCC,516,Asp - Ala,Non - Synonymous,NA,NA,NA,NA,10645439
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1546,G - T,516,Asp - Tyr,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1547,A - T,516,Asp - Val,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1552 - 1554,NA,518,Asn - Deletion,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1561,CTG - ATG,521,Leu - Met,Non - Synonymous,NA,NA,NA,NA,10645439
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1565,C - T,522,Ser - Leu,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1577,A - G,526,His - Arg,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1576,C - G,526,His - Asp,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1578,NA,526,His - Gln,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,CAC - GGC,526,His - Gly,Non - Synonymous,NA,NA,NA,NA,10645439
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1577,A - C,526,His - Pro,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,CAC - ACC,526,His - Thr,Non - Synonymous,NA,NA,NA,NA,10645439
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1576,C - T,526,His - Tyr,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1576,CAC - AAC,526,His - Asn,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1582,CGC - CGT,528,Arg - Arg,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592 - 1593,TCG - TGT,531,Ser - Cys,Non - Synonymous,NA,NA,NA,NA,10645439
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1591 - 1592,TCG - CAG,531,Ser - Gln,Non - Synonymous,NA,NA,NA,NA,10645439
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1592,C - G,531,Ser - Trp,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin /  Rifabutin /  Rifapentine,1592,C - A,531,Ser - Tyr,Non - Synonymous,NA,NA,NA,NA,7759399
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1592,TCG  -  TGG,531,Ser - Trp,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1519 - 1524,GGCACC - Deletion,507 - 508,Gly Thr - Deletion,Deletion,NA,NA,NA,NA,10645439
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1537 - 1542,CAATTC - Deletion,513 - 514,Gln Phe - Deletion,Deletion,NA,NA,NA,NA,10645439
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1537 - 1542,CAATTC - Deletion,513 - 514,Gln Phe - Deletion,Deletion,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1537 - 1548,AATTCATGG - Deletion,513 - 516,Gln - His and Phe Met - Deletion,Deletion,NA,NA,NA,NA,10645439
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine,1537 - 1548,AATTCATGG - Deletion,513 - 516,Gln Phe Met Asp His - Deletion,Deletion,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1546 - 1551,GACCAG - Deletion,516 - 517,Asp Gln - Deletion,Deletion,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin /  Rifapentine /  Rifalazil,1549 - 1554,CAGAAC - Deletion,517 - 518,Gln Asn - Deletion,Deletion,NA,NA,NA,New York City in United States,8913484
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1549 - 1557,GAACAA - Deletion,517 - 519,Gln - His and Asn Asn - Deletion,Deletion,NA,NA,NA,NA,10645439
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,No sequencing,NA,Changchun in  China,29788948
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1537,C - G,513,Gln - Glu,Non - Synonymous,NA,No sequencing,Euro-American strain CDC1551 and W-Beijing strain HN878,NA,27226566
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1538,CAA - CCA,513,Gln - Leu,Non - Synonymous,NA,No sequencing,NA,Changchun in  China,29788948
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1537,CAA - AAA,513,Gln - Lys,Non - Synonymous,NA,No sequencing,NA,Changchun in  China,29788948
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1537,CAA - AAA,513,Gln - Lys,Non - Synonymous,NA,No sequencing,NA,Taiwan,28840388
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,No sequencing,NA,Punjab state of India,28756826
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GGC,516,Asp - Gly,Non - Synonymous,NA,No sequencing,NA,Changchun in  China,29788948
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,No sequencing,NA,Changchun in  China,29788948
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,No sequencing,NA,Changchun in  China,29788948
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,No sequencing,NA,Himachal Pradesh in India,26470962
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,No sequencing,NA,Taiwan,28840388
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,No sequencing,NA,Punjab state of India,28756826
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - G,526,His - Asp,Non - Synonymous,NA,No sequencing,NA,Punjab state of India,28756826
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,No sequencing,NA,Changchun in  China,29788948
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,No sequencing,NA,Changchun in  China,29788948
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - G,526,His - Asp,Non - Synonymous,NA,No sequencing,NA,Himachal Pradesh in India,26470962
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,No sequencing,NA,Himachal Pradesh in India,26470962
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,CAC - TGC,526,His - Cys,Non - Synonymous,NA,No sequencing,NA,Taiwan,28840388
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,No sequencing,NA,Punjab state of India,28756826
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,No sequencing,NA,Changchun in  China,29788948
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,No sequencing,NA,Himachal Pradesh in India,26470962
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,No Sequencing,NA,NA,15814606
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,No sequencing,NA,Taiwan,28840388
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,No sequencing,NA,Taiwan,28840388
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,No sequencing,NA,Changchun in  China,29788948
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,No sequencing,NA,Taiwan,28840388
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1333 - 1334,CAC - TGC,445,His - Cys,Non - Synonymous,-10.37,PCR amplification and DNA sequencing,NA,Poland,14729930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1304,GAC - GTC,435,Asp - Val,Non - Synonymous,-8.984,PCR amplification and DNA sequencing,NA,Poland,14729930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1333,CAC - GAC,445,His - Asp,Non - Synonymous,-8.19,PCR amplification and DNA sequencing,NA,Poland,14729930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1355,CTG - CCG,452,Leu - Pro,Non - Synonymous,-6.989,PCR amplification and DNA sequencing,NA,Poland,14729930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1513,TTC - GTC,505,Phe - Val,Non - Synonymous,-6.915,PCR amplification and DNA sequencing,NA,Santa Catarina in southern Brazil,26154743
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1522,ACC - CAC,508,Thr - His,Non - Synonymous,-6.603,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1349,TCG - TTG,450,Ser - Leu,Non - Synonymous,-5.962,PCR amplification and DNA sequencing,NA,Poland,14729930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1513 - 1515,NA,505,Phe - Leu,Non - Synonymous,-5.927,PCR amplification and DNA sequencing,NA,France,7914261
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1514 - 1515,NA,505,Phe - Leu,Non - Synonymous,-5.927,PCR amplification and DNA sequencing,NA,Greece,9431913
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1515 - 1515,NA,505,Phe - Leu,Non - Synonymous,-5.927,PCR amplification and DNA sequencing,NA,Hong Kong,17360809
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1513,C - A,505,Phe - Leu,Non - Synonymous,-5.927,PCR amplification and DNA sequencing,CAS1_DELHI,New Delhi in  India,19234602
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1333,CAC - AAC,445,His - Asn,Non - Synonymous,-5.923,PCR amplification and DNA sequencing,NA,Poland,14729930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1333,CAC - TAC,445,His - Tyr,Non - Synonymous,-5.73,PCR amplification and DNA sequencing,NA,Poland,14729930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1522,ACC - CCC,508,Thr - Pro,Non - Synonymous,-5.632,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1522,ACC - GCC,508,Thr - Ala,Non - Synonymous,-4.503,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,ACA - GCA,526,Thr - Ala,Non - Synonymous,-4.2,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1305,GAC - GAG,435,Asp - Glu,Non - Synonymous,-3.992,PCR amplification and DNA sequencing,NA,Poland,14729930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1471,ATC - TTC,491,Ile - Phe,Non - Synonymous,-3.962,PCR amplification and DNA sequencing,NA,Swaziland,27998822
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1523,ACC - AGC,508,Thr - Ser,Non - Synonymous,-3.689,PCR amplification and DNA sequencing,NA,Tamil Nadu in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1322,TCG - TTG,441,Ser - Leu,Non - Synonymous,-3.016,PCR amplification and DNA sequencing,NA,Poland,14729930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1438,ATC - GTC,480,Ile - Val,Non - Synonymous,-0.791,PCR amplification and DNA sequencing,NA,Poland,14729930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,634 - 636,NA,212,Lys - Lys,Synonymous,0,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,269,GAC - GTC,90,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,USM 01,Malaysia,27540322
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,355,CAC - TAC,119,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,USM 98,Malaysia,27540322
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,403,CGG - TGG,135,Arg - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,USM 31,Malaysia,27540322
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,404,TCG - TTG,135,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,USM 43,Malaysia,27540322
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,436,GTC - TTC,146,Gln - Lys,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,527 - 528,CAG - CTT,176,Gln - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,526,GTC - TTC,176,Val - Phe,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,526,GTC - TTC,176,Val - Phe,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Nagasaki in  Japan,10722516
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,565 - 567,NA,189,Tyr - Tyr,Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,583 - 585,NA,195,Arg - Arg,Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /  Rifampicin,755,T - A,252,Val - Glu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,826 - 828,NA,276,Val - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,826,G - T,276,Val - Phe,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1142,GCG - GTG,381,Ala - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,8870258
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1309 - 1311,NA,437,Ser - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,11136757
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1321,G - T,441,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,11136757
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1339 - 1341,NA,447,Ser - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,11136757
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1351,C - G,451,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,11136757
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1367,C - T,456,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,11136757
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1367,C - G,456,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,11136757
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1438 - 1440,NA,480,Thr - Ile,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Quebec in Canada,27459848
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1470,CAG - CAT,490,Gln - His,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1486,C - G,496,Leu - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,11136757
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1511,GAG - GCG,504,Glu - Ala,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1520,GGC - GAC,507,Gly - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1520 - 1521,GGC - GAT,507,Gly - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1519,GGC - AGC,507,Gly - Ser,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1521,GGC - GGT,507,Gly - Gly,Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1523,G - C,508,Ser - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Greece,9431913
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1525 - 1527,NA,509,Ser - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Ahmedabad in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1526,G - C,509,Ser - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Canada,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1527,AGC - AGG,509,Ser - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1525 - 1527,NA,509,Ser - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1525 - 1527,AGC - CAG,509,Ser - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Veracruz in  Mexico,19547874
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1529 - 1530,NA,510,Gln - His,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Chandigarh in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1530 - 1530,NA,510,Gln - His,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Latvia,12354882
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1529,CAG - CCG,510,Gln - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1528 - 1530,NA,510,Gln - His,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1530,CAG - CAC,510,Gln - His,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1528,CAG - AAG,510,Gln - Lys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Veracruz in  Mexico,19547874
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1531 - 1533,NA,511,Leu - Leu,Synonymous,NA,PCR amplification and DNA sequencing,NA,Ahmedabad in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1532,CTG - CGG,511,Leu - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1531 - 1533,NA,511,Leu - Leu,Synonymous,NA,PCR amplification and DNA sequencing,NA,Chandigarh in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1531 - 1533,NA,511,Leu - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1531 - 1533,NA,511,Leu - Leu,Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,T - C,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,France,7914261
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Italy,10074552
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Kerala in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1533,CTG - CTA,511,Leu - Leu,Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,8027320
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,8027320
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,8027320
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Namibia,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,T - C,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,CAS1_DELHI,New Delhi in  India,19234602
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1531,C - G,511,Leu - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1531 - 1533,NA,511,Leu - Leu,Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Korea,28747960
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1531,CTG - GTG,511,Leu - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1531,CTG - ATG,511,Leu - Met,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Tamil Nadu in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Tamil Nadu in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,CTG - CGG,511,Leu - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,West of Iran,25526063
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,CTG - CCG,511,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1536,AGC - AGG,512,Ser - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1535,AGC - ACC,512,Ser - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Italy,10074552
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1535,AGC - ACC,512,Ser - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,8027320
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1535,AGC - ATC,512,Ser - Ile,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1534,AGC - GGC,512,Ser - Gly,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Santa Catarina in southern Brazil,26154743
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1535,AGC - GGC,512,Ser - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1536,AGC - AGG,512,Ser - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Tamil Nadu in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1535,AGC - ACC,512,Ser - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,West of Iran,25526063
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1539,CAA - CAC,513,Gln - His,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1538,CAA - CCA,513,Gln - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1538,A - C,513,Gln - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Casablanca in  Morocco,12870687
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1537,CAA - AAA,513,Gln - Lys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1538,CAA - CCA,513,Gln - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1537 - 1539,NA,513,Ser - Ser,Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1537,CAA - GAA,513,Gln - Glu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,18422555
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1538,CAA - CCA,513,Gln - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1537 - 1539,NA,513,Phe - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,France,7914261
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1538,CAA - CCA,513,Gln - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1537,CAA - AAA,513,Gln - Lys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Goa in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1538,CAA - CTA,513,Gln - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,8870258
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1538,CAA - CCA,513,Gln - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1538,A - C,513,Gln - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Mexico,27637930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1538,CAA - CCA,513,Gln - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1537,C - A,513,Gln - Lys,Non - Synonymous,NA,PCR amplification and DNA sequencing,CAS1_DELHI,New Delhi in  India,19234602
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1538,A - C,513,Gln - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Philippines,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1538,CAA - CTA,513,Gln - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1538,CAA - CTA,513,Gln - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1537,CAA - AAA,513,Gln - Lys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1538,CAA - CTA,513,Gln - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1537,CAA - AAA,513,Gln - Lys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1537,CAA - TAA,513,Gln - Stop,Frameshift,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1537 - 1539,CAA - AAT,513,Gln - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1537,CAA - GAA,513,Gln - Glu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1538,CAA - CCA,513,Gln - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1538,CAA - CCA,513,Gln - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1540,TTC - GTC,514,Phe - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1540 - 1542,NA,514,Deletion,Deletion,NA,PCR amplification and DNA sequencing,NA,France,7914261
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1542,TTC - TTG,514,Phe - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,8870258
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1542,TTC - TTT,514,Phe - Phe,Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,8027320
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1540 - 1542,TTC - insertion,514,Phe - insertion,Insertion,NA,PCR amplification and DNA sequencing,Beijing,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1540 - 1542,TTC - Insertion,514,Phe - Insertion,Insertion,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1540 - 1542,NA,514,Phe - Insertion,Insertion,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1545,ATG - ATA,515,Met - Ile,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1545,ATG - ATT,515,Met - Ile,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1545,ATG - ATT,515,Met - Ile,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1543 - 1545,TTC - Insertion,515,Phe - Insertion,Insertion,NA,PCR amplification and DNA sequencing,Beijing,Kazakhstan,16229229
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1543,ATG - GTG,515,Met - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1545,ATG - ATT,515,Met - Ile,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1543,ATG - GTG,515,Met - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Korea,28747960
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1543,ATG - CTG,515,Met - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1543 - 1545,CGG - Insertion,515,Arg - Insertion,Insertion,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1545,ATG - ATC,515,Met - Ile,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - G,516,Asp - Gly,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Agra in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Agra in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - G,516,Asp - Gly,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Ahmedabad in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Ahmedabad in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546 - 1548,GAC - AAA,516,Asp - Lys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Andhra Pradesh in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Australia,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Casablanca in  Morocco,12870687
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Chandigarh in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GGC,516,Asp - Gly,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,France,7914261
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Greece,9431913
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,G - T,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hong Kong,17360809
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hong Kong,17360809
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Italy,10074552
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Italy,10074552
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GCC,516,Asp - Ala,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,8870258
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,8870258
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GGC,516,Asp - Gly,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Kazakhstan,16229229
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546 - 1547,GAC - TTC,516,Asp - Phe,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Kazakhstan,16229229
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546,G - T,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Latvia,12354882
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Latvia,12354882
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1548,GAC - GAG,516,Asp - Glu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,8027320
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,8027320
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GGC,516,Asp - Gly,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Namibia,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,CAS1_DELHI,New Delhi in  India,19234602
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - G,516,Asp - Gly,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Peru,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GGC,516,Asp - Gly,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GGC,516,Asp - Gly,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GTG,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546 - 1548,NA,516,Asp - Phe,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Russia,26929267
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546 - 1547,GAC - TTC,516,Asp - Phe,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Santa Catarina in southern Brazil,26154743
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Santa Catarina in southern Brazil,26154743
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Sikkim in  India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546,GAC - AAC,516,Asp - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Korea,28747960
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Korea,28747960
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546,GAC - CAC,516,Asp - His,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Switzerland,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1548,GAC - GAG,516,Asp - Glu,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,A - G,516,Asp - Gly,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Veracruz in  Mexico,19547874
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Veracruz in  Mexico,19547874
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,West of Iran,25526063
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,West of Iran,25526063
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Yemen,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing / LAM / Haarlem / T,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,GAC - TAC,516,Asp - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing / LAM / Haarlem,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1549 - 1551,CAG - Deletion,517,Gln - Deletion,Deletion,NA,PCR amplification and DNA sequencing,NA,Andhra Pradesh in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1551,CAG - CAT,517,Gln - His,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1549 - 1551,Deletion,517,Deletion,Deletion,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1550,CAG - CCG,517,Gln - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1550,CAA - CTA,517,Gln - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1550 - 1551,CAG - CTA,517,Gln - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Veracruz in  Mexico,19547874
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1553,A - C,518,Asn - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Agra in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1553,A - C,518,Asn - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Chandigarh in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1553,AAC - ATC,518,Asn - Ile,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1552,AAC - CAC,518,Asn - His,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1552,AAC - GAC,518,Asn - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1553,A - C,518,Asn - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1552,AAC - CAC,518,Asn - His,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Tamil Nadu in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1552 - 1554,NA,518,Asn - Deletion,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1555 - 1557,NA,519,Asn - Deletion,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,France,7914261
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1555 - 1557,Deletion,519,Deletion,Deletion,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1557,AAC - AAG,519,Asn - Lys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1561 - 1563,NA,521,Leu - Leu,Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1561 - 1563,NA,521,Leu - Met,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1562 - 1563,CTG - CCT,521,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Veracruz in  Mexico,19547874
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1564 - 1566,NA,522,Ser - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Ahmedabad in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1565,TCG - TTG,522,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1564 - 1566,NA,522,Ser - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Casablanca in  Morocco,12870687
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1564 - 1566,NA,522,Ser - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Chandigarh in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1566,TCG - TCT,522,Ser - Ser,Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1564,TCG - CCG,522,Ser - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1564 - 1565,TCG - CAG,522,Ser - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1565,TCG - TTG,522,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1565,TCG - TTG,522,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1565,TCG - TTG,522,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1565,C - T,522,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1565,TCG - TTG,522,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1565,C - T,522,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Mexico,27637930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1564 - 1566,NA,522,Ser - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1565,TCG - TTG,522,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1566,TCG - TCC,522,Ser - Ser,Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1565,TCG - TTG,522,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1564 - 1565,TCG - CAG,522,Ser - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Timor in Indonesia,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1565,TCG - TGG,522,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1565,C - T,522,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1565,TCG - TTG,522,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1565,TCG - CAG,522,Ser - Glu,Non - Synonymous,NA,PCR amplification and DNA sequencing,LAM,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1567,G - T,523,Gly - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Casablanca in  Morocco,12870687
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1567,GGG - TGG,523,Gly - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Italy,10074552
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1568,GGG - GCG,523,Gly - Ala,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1571,TTG - TGG,524,Leu - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1570,TTG - CTG,524,Leu - Leu,Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1571,TTG - TCG,524,Leu - Ser,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Veracruz in  Mexico,19547874
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1573,ACC - CCC,525,Thr - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1574,ACC - ATC,525,Thr - Ile,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Italy,10074552
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,A - G,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Ahmedabad in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Ahmedabad in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Andhra Pradesh in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,CAC - ACC,526,His - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Andhra Pradesh in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Andhra Pradesh in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Australia,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Australia,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - AAC,526,His - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Beijing in  China,27176471
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Beijing in  China,27176471
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576 - 1577,CAC - TGC,526,His - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Beijing in  China,27176471
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Beijing in  China,27176471
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576 - 1577,CAC - ACC,526,His - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Beijing in  China,27176471
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Beijing in  China,27176471
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576 - 1577,CAC - GTC,526,His - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Beijing in  China,27176471
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,CAC - TGC,526,His - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,CAC - TGC,526,His - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1578,CAC - CAG,526,His - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CTG,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - G,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Canada,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,A - G,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Casablanca in  Morocco,12870687
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - G,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Casablanca in  Morocco,12870687
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,A - T,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Casablanca in  Morocco,12870687
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,A - T,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Chandigarh in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Chandigarh in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,A - G,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Chennai in  India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - AAC,526,His - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - AAC,526,His - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576 - 1577,CAC - TGC,526,His - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1578,CAC - CAA,526,His - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - AAC,526,His - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,18422555
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CTT,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,18422555
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Egypt,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Ethiopia,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,France,7914261
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - AAC,526,His - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576 - 1577,CAC - TGC,526,His - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,TCG - TGG,526,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,A - G,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Greece,9431913
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - G,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Greece,9431913
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hebei Province in  China,18600483
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hebei Province in  China,18600483
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CCC,526,His - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hebei Province in  China,18600483
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hebei Province in  China,18600483
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - GAC,526,His - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hebei Province in  China,18600483
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hong Kong,17360809
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Italy,10074552
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Italy,10074552
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Italy,10074552
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,A - G,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Jaipur in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,8870258
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,A - C,526,His - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CCC,526,His - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,8870258
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,8870258
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,A - G,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Karnataka in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Kerala in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,CAC - TGC,526,His - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Latvia,12354882
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Latvia,12354882
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,A - G,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Mexico,27637930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - G,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,EAI,Mexico,27637930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Mexico,27637930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576 - 1577,CAC - TGC,526,His - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Morocco,28784099
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Morocco,28784099
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Morocco,28784099
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1578,CAC - CAA,526,His - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,8027320
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,7946393
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,7946393
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,7946393
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - A,526,His - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,CAS1_DELHI,New Delhi in  India,19234602
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - G,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,CAS1_DELHI,New Delhi in  India,19234602
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,A - T,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,A - C,526,His - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Peru,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Peru,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Philippines,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - AAC,526,His - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,CAC - TGC,526,His - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576 - 1577,CAC - ACC,526,His - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,CAC - ACC,526,His - Thr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,A - G,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Rwanda,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,A - T,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Rwanda,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - AAC,526,His - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Santa Catarina in southern Brazil,26154743
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Santa Catarina in southern Brazil,26154743
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Santa Catarina in southern Brazil,26154743
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Sikkim in  India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /  Rifampicin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,CAC - TGC,526,His - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CCC,526,His - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /  Rifampicin,1576,CAG - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - AAC,526,His - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Korea,28747960
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Korea,28747960
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Korea,28747960
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Korea,28747960
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1578,CAC - CAA,526,His - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,CAC - TTC,526,His - Phe,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - G,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Switzerland,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Tamil Nadu in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Tamil Nadu in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576 - 1577,CAC - AGC,526,His - Ser,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Timor in Indonesia,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576 - 1577,CAC - TGC,526,His - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - G,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,A - T,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,A - C,526,His - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Veracruz in  Mexico,19547874
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,CAC - TGC,526,His - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Veracruz in  Mexico,19547874
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Vietnam,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,West of Iran,25526063
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,West of Iran,25526063
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,West of Iran,25526063
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Yemen,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - A,526,His - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Yunnan in  China,28623123
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Yunnan in  China,28623123
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CGC,526,His - Arg,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - TAC,526,His - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing / LAM / Haarlem / T,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,CAC - CTC,526,His - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing / LAM,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,CAC - GAC,526,His - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing / LAM / Haarlem / T,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1579 - 1581,AAG - Deletion,527,Lys - Deletion,Deletion,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1579 - 1581,NA,527,Lys - Asn,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1579,A - C,527,Lys - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1584,G - C,528,Arg - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Ahmedabad in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1582,CGA - CGT,528,Arg - Arg,Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,8027320
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1582 - 1584,NA,528,Arg - His,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1584,G - C,528,Arg - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1584,G - C,528,Arg - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1583 - 1584,CGC - CCT,528,Arg - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Veracruz in  Mexico,19547874
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1586,CGA - CAA,529,Arg - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Agra in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Ahmedabad in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Andhra Pradesh in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Bangalore in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - G,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Bangalore in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1591 - 1592,TCG - CAG,531,Ser - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Beijing in  China,27176471
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Beijing in  China,27176471
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592 - 1593,TCG - TTC,531,Ser - Phe,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Beijing in  China,27176471
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Beijing in  China,27176471
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Canada,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Casablanca in  Morocco,12870687
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - G,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Casablanca in  Morocco,12870687
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Chandigarh in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1591 - 1592,TCG - TAG,531,Ser - Stop,Frameshift,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,18422555
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,eastern China,17970586
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Former Yugoslavia,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1591 - 1593,NA,531,Ser - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,France,7914261
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,France,7914261
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592 - 1593,TCG - TTT,531,Ser - Phe,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Goa in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Greece,9431913
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hebei Province in  China,18600483
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hebei Province in  China,18600483
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TAC,531,Ser - Tyr,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hebei Province in  China,18600483
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hong Kong,17360809
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Hong Kong,17360809
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Italy,10074552
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Jaipur in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,8870258
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Karnataka in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Kerala in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,9003625
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Korea,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Laos,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Latvia,12354882
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,Cameroon / EAI / LAM / Ghana / Beijing / Haarlem,Mexico,27637930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - G,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Mexico,27637930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1591 - 1593,NA,531,Ser - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Mexico,27637930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Morocco,28784099
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Morocco,28784099
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592 - 1593,TCG - TTT,531,Ser - Phe,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592 - 1593,TCG - TGT,531,Ser - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,8027320
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,7946393
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,8027320
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,8027320
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1593,TCG - TCT,531,Ser - Ser,Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,7946393
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,CAS1_DELHI,New Delhi in  India,19234602
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - G,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,New Delhi in India,11796356
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Papua New Guinea,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Peru,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Philippines,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Philippines,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,17108078
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Poland,15184414
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Santa Catarina in southern Brazil,26154743
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Santa Catarina in southern Brazil,26154743
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Sierra Leone and Uganda,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Sikkim in  India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Sikkim in  India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1591 - 1592,TCG - CAG,531,Ser - Gln,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /  Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG ,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Korea,28747960
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592 - 1593,TCG - TTC,531,Ser - Phe,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,southern region (Afghanistan border) of Iran,19721079
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Tamil Nadu in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Tamil Nadu in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Timor in Indonesia,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,United States,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Veracruz in  Mexico,19547874
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Veracruz in  Mexico,19547874
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Vietnam,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Vietnam,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,West of Iran,25526063
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,West of Iran,25526063
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Yemen,7840574
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Yunnan in  China,28623123
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing / LAM / Haarlem,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1596,GCG - GCA,532,Ala - Ala,Synonymous,NA,PCR amplification and DNA sequencing,NA,Tamil Nadu in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1598 -1599,CTG - CCT,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Japan,8870258
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1598,T - C,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Latvia,12354882
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Myanmar,26806152
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,NA,7946393
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,T - C,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,CAS1_DELHI,New Delhi in  India,19234602
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,CTG - CCC,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,27994580
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Africa,10423225
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,South Korea,28747960
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1599,CTG - CTT,533,Leu - Leu,Synonymous,NA,PCR amplification and DNA sequencing,NA,Tamil Nadu in India,11474030
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Turkey,12454132
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,CTG - CCG,533,Leu - Pro,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing / Haarlem,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1603,CCG - TCG,535,Pro - Ser,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1603,C - T,535,Pro - Ser,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Latvia,12354882
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1604,CCC - CAC,535,Pro - His,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1611,GGT - GGA,537,Gly - Gly,Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1612,CTG - ATG,538,Leu - Met,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1622,GAG - GAT,541,Glu - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Italy,10074552
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1622,GAG - GGG,541,Glu - Gly,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1624,GTG - TTG,542,Val - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1658,TCG - TTG,553,Ser - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1657,TCG - GCG,553,Ser - Ala,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Italy,10074552
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1668,GGC - GGT,556,Gly - Gly,Synonymous,NA,PCR amplification and DNA sequencing,NA,Delhi in  India,28709491
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1672,C - T,558,Arg - Cys,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,11136757
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1685,GAA - GGA,562,Glu - Gly,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1691,CCT - CTT,564,Pro - Leu,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1714,ATC - GTC,572,Ile - Val,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Santa Catarina in southern Brazil,26154743
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifabutin /   Rifampin,1714,ATC - TTC,572,Ile - Phe,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Vietnam,10565894
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1792 - 1794,NA,598,Glu - Asp,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Germany,11136757
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1843,G - A,615,Val - Met,Non - Synonymous,NA,PCR amplification and DNA sequencing,NA,Yunnan in  China,28623123
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1864,TCG - GCG,622,Ser - Ala,Non - Synonymous,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1537 - 1542,ATTCATGGA - Deletion,513 - 514,Ile His Gly - Deletion,Deletion,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1537 - 1548,AATTCATGG deletion,513 - 516,NA,Deletion,NA,PCR amplification and DNA sequencing,NA,Clamart in  France,19520715
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1540 - 1545,CAT - Deletion,514 - 515,NA,Deletion,NA,PCR amplification and DNA sequencing,NA,Russia,17403134
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1540 - 1548,TTCATGGAC - Deletion,514 - 516,Phe Met Asp - Deletion,Deletion,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1540 - 1548,Deletion,514 - 516,NA,Deletion,NA,PCR amplification and DNA sequencing,NA,Germany,15728936
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1543 - 1554,ATGGACCAGAAC - Deletion,515 - 518,Met Asp Gln Asn - Deletion,Deletion,NA,PCR amplification and DNA sequencing,NA,Brazil,10921994
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1552 - 1557,CAA - Deletion,518 - 519,NA,Deletion,NA,PCR amplification and DNA sequencing,Beijing,Thailand,18294243
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,279 - 321,ACCAGCCAGCTGAGC - Deletion,93 - 107 ,NA,Deletion,NA,PCR amplification and DNA sequencing,Cameroon,Mexico,27637930
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,GAC - GTC,516,Asp - Val,Non - Synonymous,NA,PCR amplification and Silver sequence DNA sequencing,NA,southern Turkey,18653964
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1572,TTG - TTA,524,Leu - Leu,Synonymous,NA,PCR amplification and Silver sequence DNA sequencing,NA,southern Turkey,18653964
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1591,TCG - GCG,531,Ser - Ala,Non - Synonymous,NA,PCR amplification and Silver sequence DNA sequencing,NA,southern Turkey,18653964
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TTG,531,Ser - Leu,Non - Synonymous,NA,PCR amplification and Silver sequence DNA sequencing,NA,southern Turkey,18653964
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,TCG - TGG,531,Ser - Trp,Non - Synonymous,NA,PCR amplification and Silver sequence DNA sequencing,NA,southern Turkey,18653964
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1633,CTG - ATG,545,Leu - Met,Non - Synonymous,NA,PCR amplification and Silver sequence DNA sequencing,NA,southern Turkey,18653964
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,G - T,516,Asp - Tyr,Non - Synonymous,NA,Sanger rpoBsequencing,NA,Germany,29593055
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,Sanger rpoBsequencing,NA,Germany,29593055
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,A - G,526,His - Arg,Non - Synonymous,NA,Sanger rpoBsequencing,NA,Germany,29593055
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - A,526,His - Asn,Non - Synonymous,NA,Sanger rpoBsequencing,NA,Germany,29593055
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - G,526,His - Asp,Non - Synonymous,NA,Sanger rpoBsequencing,NA,Germany,29593055
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,A - C,526,His - Pro,Non - Synonymous,NA,Sanger rpoBsequencing,NA,Germany,29593055
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,Sanger rpoBsequencing,NA,Germany,29593055
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,Sanger rpoBsequencing,NA,Germany,29593055
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,T - C,533,Leu - Pro,Non - Synonymous,NA,Sanger rpoBsequencing,NA,Germany,29593055
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - T,526,His - Tyr,Non - Synonymous,NA,Whole genome sequencing,NA,Nigeria,28716462
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - G,526,His - Asp,Non - Synonymous,NA,Whole genome sequencing using Illumina HiSeq 2500,NA,NA,29616007
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1334,A - T,445,His - Leu,Non - Synonymous,-10.37,Whole genome sequencing using MiSeq sequencer ,NA,Brazil,29779775
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1349,TCG - TTG,450,Ser - Leu,Non - Synonymous,-5.962,Whole genome sequencing using MiSeq sequencer ,NA,Brazil,29779775
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1349,TCG - TTG,450,Ser - Leu,Non - Synonymous,-5.962,Whole genome sequencing using MiSeq sequencer ,NA,Mozambique,29779775
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1333,CAC - TAC,445,His - Tyr,Non - Synonymous,-5.73,Whole genome sequencing using MiSeq sequencer ,NA,Mozambique,29779775
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1292,G - C,431,Ser - Thr,Non - Synonymous,-3,Whole genome sequencing using MiSeq sequencer ,NA,Brazil,29779775
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,508,G - T,170,Val - Phe,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Mozambique,29779775
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1532,T - C,511,Leu - Pro,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,NA,29779779
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1532,T - C,511,Leu - Pro,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Ukraine,29563202
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1537,C - A,513,Gln - Lys,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,NA,29779779
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1546,G - T,516,Asp - Tyr,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,NA,29779779
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - C,516,Asp - Ala,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Ukraine,29563202
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1546,G - T,516,Asp - Tyr,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Ukraine,29563202
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1547,A - T,516,Asp - Val,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Ukraine,29563202
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576,C - G,526,His - Asp,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,NA,29779779
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1576 - 1578,NA,526,His - Cys,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,NA,29779779
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1578,NA,526,His - Gln,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,NA,29779779
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1577,A - T,526,His - Leu,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,NA,29779779
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1577,A - G,526,His - Arg,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Ukraine,29563202
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576,C - G,526,His - Asp,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Ukraine,29563202
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1577,NA,526,His - Ser,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Ukraine,29563202
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1576 - 1578,NA,526,His - His,Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Ukraine,29563202
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1591 - 1593,NA,531,Ser - Gln,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,NA,29779779
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,NA,29779779
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1592,C - T,531,Ser - Leu,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Ukraine,29563202
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1591 - 1593,NA,531,Ser - Phe,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Ukraine,29563202
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1591 - 1593,NA,531,Ser - Ser,Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Ukraine,29563202
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1598,T - C,533,Leu - Pro,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,NA,29779779
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampin,1598,T - C,533,Leu - Pro,Non - Synonymous,NA,Whole genome sequencing using MiSeq sequencer ,NA,Ukraine,29563202
+rpoB,Rv0667,Mycobacterium tuberculosis,Rifampicin,1349,TCG - TTG,450,Ser - Leu,Non - Synonymous,-5.962,Whole genome sequencing using SOLID 3,C22-RIFr,NA,27156618
+rpoB,SLI_4926,Streptomyces lividans,Rifampicin,1318,C - T,440,Arg - Cys,Non - Synonymous,-7.999,NA,KO-417,NA,12427928
+rpoB,SLI_4926,Streptomyces lividans,Rifampicin,1318,C - T,440,Arg - Cys,Non - Synonymous,-7.999,NA,KO-418,NA,12427928
+rpoB,SLI_4926,Streptomyces lividans,Rifampicin,1280,A - C,427,Asp - Ala,Non - Synonymous,-7.984,NA,KO-418,NA,12427928
+rpoB,SLI_4926,Streptomyces lividans,Rifampicin,1310,A - G,437,His - Arg,Non - Synonymous,-7.487,NA,KO-423,NA,12427928
+rpoB,SLI_4926,Streptomyces lividans,Rifampicin,1309,C - T,437,His - Tyr,Non - Synonymous,-5.78,NA,KO-422,NA,12427928
+rpoB,SLI_4926,Streptomyces lividans,Rifampicin,1279,G - A,427,Asp - Asn,Non - Synonymous,-4.989,NA,KO-419,NA,12427928
+rpoB,SLNWT_4565,Streptomyces albus,Rifampicin,1325,C - T,442,Ser - Phe,Non - Synonymous,-5.9,NA,KO-603,NA,14602594
+rpoB,SLNWT_4565,Streptomyces albus,Rifampicin,1325,C - A,442,Ser - Tyr,Non - Synonymous,-5.853,NA,KO-604,NA,14602594
+rpoB,NA,Kribbella aluminosa,Rifampin,1237 - 1239,NA,413,Ile - Leu,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nonomuraea helvata,Rifampin,1239,NA,413,Ile - Met,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nonomuraea terrinata,Rifampin,1239,NA,413,Ile - Met,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nocardia asiatica,Rifampin,1264,NA,422,Leu - Met,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nocardia asiatica,Rifampin,1270 - 1272,NA,424,Gln - Val,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nocardia asiatica,Rifampin,1276,NA,426,Met - Leu,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Amycolatopsis kentuckyensis,Rifampin,1279 - 1281,NA,427,Asp - Gln,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nonomuraea rubescens,Rifampin,1284,NA,428,Gln - His,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nocardia asiatica,Rifampin,1285 - 1287,NA,429,Asn - Arg,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nocardia niigatensis,Rifampin,1286,A - T,429,Asn - Ile,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Sphaerisporangium viridialbum,Rifampin,1286,A - T,429,Asn - Ile,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Mycobacterium tuberculosis complex,Rifampicin,1294,C - A,432,Gln - Lys,Non - Synonymous,NA,NA,NA,Ghana,27450017
+rpoB,NA,Mycobacterium tuberculosis complex,Rifampicin,1295,A - C,432,Gln - Pro,Non - Synonymous,NA,NA,NA,Ghana,27450017
+rpoB,NA,Kribbella aluminosa,Rifampin,1294 - 1296,NA,432,Leu - Val,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Amycolatopsis kentuckyensis,Rifampin,1294 - 1296,NA,432,Leu - Ile,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nocardia niigatensis,Rifampin,1297,T - G,433,Ser - Ala,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nonomuraea helvata,Rifampin,1297,T - G,433,Ser - Ala,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nonomuraea terrinata,Rifampin,1297,T - G,433,Ser - Ala,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Amycolatopsis kentuckyensis,Rifampin,1297 - 1299,NA,433,Ser - Asp,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Mycobacterium tuberculosis complex,Rifampicin,1303,G - T,435,Asp - Tyr,Non - Synonymous,NA,NA,NA,Ghana,27450017
+rpoB,NA,Mycobacterium tuberculosis complex,Rifampicin,1304,A - T,435,Asp - Val,Non - Synonymous,NA,NA,NA,Ghana,27450017
+rpoB,NA,Nocardia asiatica,Rifampin,1311,C - A,437,His - Gln,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Sphaerisporangium viridialbum,Rifampin,1311,C - A,437,His - Gln,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Streptomyces vinaceus,Rifampin,1309,C - T,437,His - Tyr,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Actinomadura maheshkhaliensis,Rifampin,1318 - 1320,C - A,440,Arg - Ser,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Mycobacterium tuberculosis complex,Rifampicin,1322,C - T,441,Ser - Leu,Non - Synonymous,NA,NA,NA,Ghana,27450017
+rpoB,NA,Actinomadura maheshkhaliensis,Rifampin,1325,A - G,442,Asn - Ser,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nonomuraea helvata,Rifampin,1325,A - G,442,Asn - Ser,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Nonomuraea terrinata,Rifampin,1325,A - G,442,Asn - Ser,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Sphaerisporangium viridialbum,Rifampin,1325,A - G,442,Asn - Ser,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Streptomyces albogriseolus,Rifampin,1324,A - T,442,Asn - Tyr,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Streptomyces spectabilis,Rifampin,1327,G - T,443,Ala - Ser,Non - Synonymous,NA,NA,NA,NA,19047343
+rpoB,NA,Mycobacterium tuberculosis complex,Rifampicin,1334,A - G,445,His - Arg,Non - Synonymous,NA,NA,NA,Ghana,27450017
+rpoB,NA,Mycobacterium tuberculosis complex,Rifampicin,1333,C - G,445,His - Asp,Non - Synonymous,NA,NA,NA,Ghana,27450017
+rpoB,NA,Mycobacterium tuberculosis complex,Rifampicin,1333 - 1334,CA - TG,445,His - Cys,Non - Synonymous,NA,NA,NA,Ghana,27450017
+rpoB,NA,Mycobacterium tuberculosis complex,Rifampicin,1333,C - T,445,His - Tyr,Non - Synonymous,NA,NA,NA,Ghana,27450017
+rpoB,NA,Mycobacterium tuberculosis complex,Rifampicin,1349,C - T,450,Ser - Leu,Non - Synonymous,NA,NA,NA,Ghana,27450017
+rpoB,NA,Mycobacterium tuberculosis complex,Rifampicin,1472,T - G,491,Ile - Ser,Non - Synonymous,NA,NA,NA,Ghana,27450017

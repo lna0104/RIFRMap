@@ -105,7 +105,7 @@ card_mapped_ecoli <- card_processed_data |>
   select(!species_sq) |>
   mutate(source = "CARD")
 
-write.csv(card_mapped_ecoli, "data/processed_data/CARD_rpoB_processed.csv", row.names = FALSE)
+write.csv(card_mapped_ecoli, "data/processed_data/CARD_processed.csv", row.names = FALSE)
 saveRDS(card_mapped_ecoli, file = "code/RIFRMap_shiny/data/card.rds")
 
 ## 3. DRAGdb
@@ -166,7 +166,7 @@ dragdb_mapped_ecoli <- dragdb_processed_data |>
   select(!species_sq) |>
   mutate(source = "DRAGdb")
 
-write.csv(dragdb_mapped_ecoli, "data/processed_data/DRAGdb_rpoB_processed.csv", row.names = FALSE)
+write.csv(dragdb_mapped_ecoli, "data/processed_data/DRAGdb_processed.csv", row.names = FALSE)
 saveRDS(dragdb_mapped_ecoli, file = "code/RIFRMap_shiny/data/dragdb.rds")
 
 
