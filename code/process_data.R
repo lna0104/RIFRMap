@@ -3,6 +3,8 @@ library(tidyr)
 library(dplyr)
 library(ALJEbinf)
 library(Biostrings)
+library(rentrez)
+library(xml2)
 
 source("code/translate_coordinates.R")
 
@@ -17,7 +19,6 @@ globsets <- list(
   Yang_min_log2_fc = 0 # minimum log2(foldchange) in frequencies to include a mutation as "selected for"
  )
 
-# Load database 
 # ----- Load database -----
 cryptic_data <- read_csv("./data/raw_data/CRyPTIC_mutations_data.csv", show_col_types = FALSE)
 card_data <- read_csv("./data/raw_data/CARD_mutations_data.csv", show_col_types = FALSE)
