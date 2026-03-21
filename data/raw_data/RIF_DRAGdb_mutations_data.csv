@@ -1,4 +1,4 @@
-gene,ensembl_id,species,drug,Nt_pos,Nt_mutation,AA_pos,codon_mutation,mutation_type,provean,sequencing_method,strain_or_isolates,sample_location,pubmed_id
+gene,ensembl_id,species,drug,Nt_pos,Nt_mutation,AA_pos,codon_mutation,mutation_type,provean,sequencing_method,strain_or_isolates,sample_location,PMID
 rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1604,CAT - CTT,535,His - Leu,Non - Synonymous,-10.63,NA,3983 /  4137 /  3990 /  4138,NA,22055530
 rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1631,CCT - CTT,544,Pro - Leu,Non - Synonymous,-9.687,NA,4050 /  4055 /  4060 /  4065 /  4067 /  4073 /  4096 /  4106 /  4112,NA,22055530
 rpoB,AO727_11265,Acinetobacter baumannii,Rifampicin,1573,GAC - TAC,525,Asp - Tyr,Non - Synonymous,-8.616,NA,4076,NA,22055530

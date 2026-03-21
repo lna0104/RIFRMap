@@ -1,37 +1,51 @@
-map_to_ecoli <- function(data, rpoB_target, rpoB_Ecoli) { 
+map_to_ecoli <- function(data, rpoB_target, rpoB_ecoli) { 
   
   # get target coordinates relative to E. coli in nucleotide positions:
-  target_coords <- getCoordinates(rpoB_target, rpoB_Ecoli, aligOutput = FALSE)
+  target_coords <- getCoordinates(rpoB_target, rpoB_ecoli, aligOutput = FALSE)
   
-  # get target coordinates relative to E. coli in AA positions:
-  target_coords_AA <- data.frame(
-    AA_pos = sapply(target_coords$posFocal, function(pos) {
-      translateCoordinate(pos, target_coords, direction = "FocalToRef", AAinput = FALSE, AAoutput = TRUE)
-    }),
-    AA_pos_Ecoli = sapply(target_coords$posRef, function(pos) {
-      translateCoordinate(pos, target_coords, direction = "FocalToRef", AAinput = FALSE, AAoutput = TRUE)
-    })
+  aa_map <- data.frame(
+    AA_pos = sort(unique(data$AA_pos)),
+    AA_pos_Ecoli = vapply(
+      sort(unique(data$AA_pos)),
+      function(pos) {
+        translateCoordinate(
+          pos = pos,
+          coordinates = target_coords,
+          direction = "FocalToRef",
+          AAinput = TRUE,
+          AAoutput = TRUE
+        )
+      },
+      integer(1)
+    )
   ) |>
-    distinct() |>
-    filter(!is.na(AA_pos))
+    dplyr::filter(!is.na(AA_pos_Ecoli))
   
   mapped_muts <- data |>
-    left_join(target_coords_AA, by = join_by(AA_pos)) |>
-    filter(!is.na(AA_pos_Ecoli))
+    dplyr::left_join(aa_map, by = "AA_pos") |>
+    filter(!is.na(AA_pos_Ecoli))|>
+    distinct() 
   
   return(mapped_muts)
 }
 
 get_rpoB_for_species <- function(species, seqs) {
-  # flexible match: species string anywhere in the name
-  hit <- which(grepl(species, names(seqs), ignore.case = TRUE))
+  nm <- names(seqs)
+  
+  hit <- grep(species, nm, ignore.case = TRUE)
+  
   if (length(hit) == 0) {
     message("No rpoB sequence found for species: ", species)
     return(NULL)
   }
+  
   if (length(hit) > 1) {
-    message("Multiple rpoB sequences for ", species, ", using first match")
+    message(
+      "Multiple rpoB sequences found for ", species,
+      "; using first match: ", nm[hit[1]]
+    )
   }
+  
   seqs[[hit[1]]]
 }
 

@@ -1,21 +1,20 @@
+#library(usethis)
+#create_github_token()
+#gitcreds_set()
 library(tidyverse)
 library(fs)
 library(httr2)
 library(rvest)
 library(gitcreds)
 
-# -------------------------------------------------------------------
-# Setup
-# -------------------------------------------------------------------
+# ----- Setup -----
 
 token <- gitcreds_get()$password
 
 dir_create("data/raw_data")
 dir_create("data/raw_data/card_data")
 
-# -------------------------------------------------------------------
-# Helper functions
-# -------------------------------------------------------------------
+# ----- Helper functions -----
 
 download_github_csv <- function(repo, path, output_path, token,
                                 filter_species = FALSE,
@@ -53,6 +52,34 @@ download_github_csv <- function(repo, path, output_path, token,
   
   message("Saved: ", output_path)
   invisible(dat)
+}
+
+get_pmid_from_doi <- function(doi) {
+  
+  doi <- stringr::str_extract(doi, "10\\..*")
+  
+  if (is.na(doi) || doi == "") {
+    message("No valid DOI: ", raw_doi)
+    return(NA_character_)
+  }
+  
+  query <- paste0(doi, "[doi]")
+  
+  res <- tryCatch(
+    rentrez::entrez_search(
+      db = "pubmed",
+      term = paste0(doi, "[doi]")
+    ),
+    error = function(e) NULL
+  )
+
+  
+  if (is.null(res) || length(res$ids) == 0) {
+    message("PMID not found for DOI: ", doi)
+    return(NA_character_)
+  }
+  
+  as.character(res$ids[1])
 }
 
 download_and_extract_card <- function(
@@ -122,7 +149,7 @@ rename_drag_columns <- function(dat) {
     "sequencing_method",
     "strain_or_isolates",
     "sample_location",
-    "pubmed_id"
+    "PMID"
   )
   
   if (ncol(dat) != length(cols)) {
@@ -139,9 +166,7 @@ rename_drag_columns <- function(dat) {
   dat
 }
 
-# -------------------------------------------------------------------
-# Curated data
-# -------------------------------------------------------------------
+# ----- Curated data -----
 
 curated_mutations <- download_github_csv(
   repo = "JanEngelstaedter/ResistanceSurveys",
@@ -158,14 +183,21 @@ curated_references <- download_github_csv(
   token = token,
   modify_fun = function(dat) {
     dat |>
-      rename(DOI = Link) |>
-      select(-Comments)
+      mutate(DOI = Link) |>
+      mutate(
+        DOI = stringr::str_trim(DOI),
+        DOI = stringr::str_remove(DOI, "\\.$"),
+        PMID = vapply(
+          DOI,
+          get_pmid_from_doi,
+          FUN.VALUE = character(1)
+        )
+      ) |>
+      select(-c(Comments, Link))
   }
 )
 
-# -------------------------------------------------------------------
-# CARD
-# -------------------------------------------------------------------
+# ----- CARD -----
 
 download_and_extract_card()
 snps <- read_tsv("data/raw_data/card_data/snps.txt", show_col_types = FALSE)
@@ -175,9 +207,7 @@ snps_clean <- snps |>
 
 write_csv(snps_clean, "data/raw_data/CARD_mutations_data.csv")
 
-# -------------------------------------------------------------------
-# DRAGdb
-# -------------------------------------------------------------------
+# ----- DRAGdb -----
 
 dragdb_raw_data <- get_drag_csv(
   gene = "rpoB",
