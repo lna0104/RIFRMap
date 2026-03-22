@@ -651,14 +651,25 @@ bs4DashPage(
               column(
                 width = 12,
                 bs4Card(
-                  title = "Data table",
+                  title = "Mutation Data",
                   status = "primary",
                   width = 12,
                   div(
                     style = "display:flex; gap:10px; justify-content:flex-end; margin-bottom:8px;",
-                    downloadButton("download_table", "Download CSV", class = "btn btn-outline-primary btn-sm")
+                    downloadButton("download_mutations", "Download mutations (CSV)", class = "btn btn-outline-primary btn-sm"),
                   ),
-                  DT::DTOutput("table_data")
+                  DT::DTOutput("mutation_table")
+                ),
+                
+                bs4Card(
+                  title = "Reference Data",
+                  status = "primary",
+                  width = 12,
+                  div(
+                    style = "display:flex; gap:10px; justify-content:flex-end; margin-bottom:8px;",
+                    downloadButton("download_refs", "Download references (CSV)", class = "btn btn-outline-secondary btn-sm")
+                  ),
+                  DT::DTOutput("ref_table")
                 )
               )
               
