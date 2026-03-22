@@ -241,7 +241,7 @@ saveRDS(yang_mut_list, file = "code/RIFRMap/data/yang.rds")
 ## 5. Curated data (Negin's data) -----
 
 mutation_raw <- curated_data |>
-  filter(!is.na(AA_pos_Ecoli), !is.na(AA_original), !is.na(AA_mutation)) |>
+  filter(!is.na(AA_pos_Ecoli), !is.na(AA_original), !is.na(AA_mutation), !is.na(Ref_code)) |>
   dplyr::mutate(AA_original = toupper(AA_original),
                 AA_mutation = toupper(AA_mutation),
                 AA_pos = as.integer(AA_pos),
@@ -439,21 +439,24 @@ parse_one_pubmed_ref <- function(pmid) {
   
   lines <- unlist(strsplit(txt, "\n"))
   
-  pmid_val   <- extract_medline_field("PMID- ", lines)
   dp         <- extract_medline_field("DP  - ", lines)
   year       <- stringr::str_extract(dp, "\\b\\d{4}\\b")
   doi        <- extract_doi_medline(lines)
   author_key <- extract_author_key_medline(lines)
   ref_code   <- make_ref_code(author_key, year)
   
-  full_ref <- build_full_ref_medline(lines, pmid_val)
+  if (is.na(doi) || !nzchar(trimws(doi))) {
+    doi <- paste0("https://pubmed.ncbi.nlm.nih.gov/", pmid, "/")
+  }
+  
+  full_ref <- build_full_ref_medline(lines, pmid)
   
   tibble::tibble(
     Ref_code = ref_code,
     Year = year,
     Full_ref = full_ref,
     DOI = doi,
-    PMID = pmid_val
+    PMID = pmid
   )
 }
 

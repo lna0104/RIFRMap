@@ -7,12 +7,10 @@ library(httr2)
 library(rvest)
 library(gitcreds)
 
+
 # ----- Setup -----
 
 token <- gitcreds_get()$password
-
-dir_create("data/raw_data")
-dir_create("data/raw_data/card_data")
 
 # ----- Helper functions -----
 
@@ -43,15 +41,7 @@ download_github_csv <- function(repo, path, output_path, token,
   
   dat <- dat |> select(where(~ !all(is.na(.))))
   
-  if (!is.null(modify_fun)) {
-    dat <- modify_fun(dat)
-  }
-  
-  dir_create(path_dir(output_path))
-  write_csv(dat, output_path)
-  
-  message("Saved: ", output_path)
-  invisible(dat)
+  dat
 }
 
 get_pmid_from_doi <- function(doi) {
@@ -166,36 +156,45 @@ rename_drag_columns <- function(dat) {
   dat
 }
 
+
 # ----- Curated data -----
+
+refs <- read_csv("./data/rpoB_references.csv", show_col_types = FALSE)
+seqs <- readDNAStringSet("./data/rpoB_references.fasta")
+load("data/coordinates.RData")
 
 curated_mutations <- download_github_csv(
   repo = "JanEngelstaedter/ResistanceSurveys",
   path = "RIF/RIF_mutations_data.csv",
-  output_path = "data/raw_data/RIF_curated_mutations_data.csv",
   token = token,
   filter_species = TRUE
 )
 
+curated_mutations_clean <- curated_mutations |>
+  fillMutationsTable(refs, seqs, coordinates) |>
+  filter(!is.na(AA_mut_name_Ecoli))
+
+write_csv(curated_mutations_clean, "data/raw_data/RIF_curated_mutations_data.csv")
+
 curated_references <- download_github_csv(
   repo = "JanEngelstaedter/ResistanceSurveys",
   path = "RIF/RIF_mutations_references.csv",
-  output_path = "data/raw_data/RIF_curated_mutations_references.csv",
-  token = token,
-  modify_fun = function(dat) {
-    dat |>
-      mutate(DOI = Link) |>
-      mutate(
-        DOI = stringr::str_trim(DOI),
-        DOI = stringr::str_remove(DOI, "\\.$"),
-        PMID = vapply(
-          DOI,
-          get_pmid_from_doi,
-          FUN.VALUE = character(1)
-        )
-      ) |>
-      select(-c(Comments, Link))
-  }
+  token = token
 )
+
+curated_references_clean <- curated_references |>
+  dplyr::mutate(
+    DOI = stringr::str_trim(as.character(Link)),
+    DOI = stringr::str_remove(DOI, "\\.$"),
+    DOI = dplyr::na_if(DOI, ""),
+    PMID = vapply(DOI, get_pmid_from_doi, FUN.VALUE = character(1)),
+    PMID = dplyr::na_if(trimws(PMID), "")
+  ) |>
+  dplyr::select(-dplyr::any_of(c("Comments", "Link")))
+
+
+write_csv(curated_references_clean, "data/raw_data/RIF_curated_mutations_references.csv")
+
 
 # ----- CARD -----
 
