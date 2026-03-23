@@ -279,7 +279,7 @@ function(input, output, session) {
     cluster_dims_r <- reactiveVal(NULL)
 
     observeEvent(
-      list(input$apply_filters, input$clustersToPlot),
+      list(input$apply_filters, input$clustersToPlot, input$colour_by),
       {
         df <- cluster_plotting_df()
         sp <- cluster_species_to_plot()
@@ -300,7 +300,7 @@ function(input, output, session) {
             gene            = "rpoB",
             clustersToPlot  = cl,
             speciesToPlot   = sp,
-            colouring       = "ubiuni",
+            colour_by       = input$colour_by,
             mergeDuplicates = TRUE,
             return_dims     = TRUE
           )
@@ -313,6 +313,7 @@ function(input, output, session) {
     cluster_trigger <- reactive({
       input$apply_filters
       input$clustersToPlot
+      input$colour_by
       TRUE
     })
 
@@ -341,7 +342,7 @@ function(input, output, session) {
       cluster_trigger()
 
       df <- cluster_plotting_df()
-      cl <- input$clustersToPlot
+      cl <- clusters_to_plot_r()
       sp <- cluster_species_to_plot()
 
       if (is.null(df) || nrow(df) == 0) {
@@ -373,7 +374,7 @@ function(input, output, session) {
         }
 
         df <- cluster_plotting_df()
-        cl <- input$clustersToPlot
+        cl <- clusters_to_plot_r()
         sp <- cluster_species_to_plot()
 
         out <- plotMutations(
@@ -385,7 +386,7 @@ function(input, output, session) {
           gene             = "rpoB",
           clustersToPlot   = cl,
           speciesToPlot    = sp,
-          colouring        = "ubiuni",
+          colour_by        = input$colour_by,
           mergeDuplicates  = TRUE,
           return_hover_map = TRUE
         )
@@ -426,61 +427,107 @@ function(input, output, session) {
       },
       ignoreInit = TRUE
     )
+  }
 
+  output$legend_panel <- renderUI({
+    mode <- input$colour_by
 
-    ## ---- Legend panel ----
+    if (is.null(mode)) {
+      return(NULL)
+    }
 
+    pal <- COLOURING_PALETTES[[mode]]
 
-    output$legend_panel <- renderUI({
-      tags$div(
-        class = "cluster-legend",
-
-        # Reference section
+    # none
+    if (mode == "none") {
+      return(
         tags$div(
-          class = "cluster-legend-section",
-          tags$div(
-            class = "cluster-legend-title",
-            "Reference sequence"
-          ),
-          lapply(names(legend_reference), function(name) {
-            tags$div(
-              class = "cluster-legend-item",
-              tags$span(
-                class = "cluster-legend-swatch",
-                style = sprintf("background-color:%s;", legend_reference[[name]])
-              ),
-              tags$span(
-                class = "cluster-legend-label",
-                "Reference"
-              )
-            )
-          })
-        ),
+          class = "cluster-legend",
+          tags$div(class = "cluster-legend-title", "Legend"),
+          legend_item("All mutations", pal["none"])
+        )
+      )
+    }
 
-        # Distribution section
+    # distribution
+    if (mode == "distribution") {
+      return(
         tags$div(
-          class = "cluster-legend-section",
-          tags$div(
-            class = "cluster-legend-title",
-            "Mutation distribution across species"
-          ),
-          lapply(names(legend_distribution), function(name) {
-            tags$div(
-              class = "cluster-legend-item",
-              tags$span(
-                class = "cluster-legend-swatch",
-                style = sprintf("background-color:%s;", legend_distribution[[name]])
-              ),
-              tags$span(
-                class = "cluster-legend-label",
-                name
-              )
-            )
+          class = "cluster-legend",
+          tags$div(class = "cluster-legend-title", "Distribution across species"),
+          legend_item("Ubiquitous", pal["ubiquitous"]),
+          legend_item("Polymorphic", pal["polymorphic"]),
+          legend_item("Unique", pal["unique"])
+        )
+      )
+    }
+
+    # aa_type
+    if (mode == "aa_type") {
+      labels <- c(
+        hydrophobic_aliphatic = "Hydrophobic: Aliphatic",
+        hydrophobic_aromatic  = "Hydrophobic: Aromatic",
+        polar_uncharged       = "Hydrophilic: Polar Uncharged",
+        acidic                = "Hydrophilic: Acidic",
+        basic                 = "Hydrophilic: Basic",
+        unknown               = "Unknown"
+      )
+
+      return(
+        tags$div(
+          class = "cluster-legend",
+          tags$div(class = "cluster-legend-title", "Amino acid type"),
+          lapply(names(labels), function(nm) {
+            legend_item(labels[[nm]], pal[[nm]])
           })
         )
       )
-    })
-  }
+    }
+
+
+    # aa_distance
+    if (mode == "aa_distance") {
+      cols <- COLOURING_PALETTES$aa_distance
+      gradient_css <- paste(cols, collapse = ", ")
+      return(
+        tags$div(
+          class = "cluster-legend",
+          tags$div(class = "cluster-legend-title", "Amino acid distance"),
+          tags$div(
+            style = sprintf(
+              "height:14px; border-radius:6px; margin-bottom:6px;
+     background: linear-gradient(to right, %s);",
+              gradient_css
+            )
+          ),
+          tags$div(
+            style = "display:flex; justify-content:space-between; font-size:0.8em;",
+            tags$span("Low"),
+            tags$span("High")
+          )
+        )
+      )
+    }
+
+    NULL
+  })
+
+  # plot note
+
+  output$clusterPlotNote <- renderUI({
+    mode_note <- switch(input$colour_by,
+      none = "",
+      distribution = "Colours indicate how broadly each mutation is distributed across species.",
+      aa_type = "Colours indicate the biochemical class of the mutated amino acid.",
+      aa_distance = "Colours indicate Grantham distance, which measures the evolutionary distance between the original and mutated amino acids."
+    )
+
+    tags$div(
+      class = "text-muted",
+      style = "font-size: 0.85em; margin-bottom: 6px;",
+      mode_note
+    )
+  })
 
   # ---- Mutation Frequency Tab ----
 

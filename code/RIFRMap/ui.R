@@ -33,10 +33,12 @@ library(ALJEbinf)
 # shinyapps.io
 library(rsconnect)
 
+# Bioinformatics
+library(grantham)
+
 bs4DashPage(
   title = "RIFRMap",
   help = NULL,
-  
   header = bs4DashNavbar(
     skin = "light",
     status = "white",
@@ -45,10 +47,9 @@ bs4DashPage(
     controlbarIcon = icon("cog"),
     title = bs4DashBrand(title = "RIFRMap", color = "primary")
   ),
-  
   sidebar = bs4DashSidebar(
-    skin      = "light",
-    status    = "primary",
+    skin = "light",
+    status = "primary",
     elevation = 3,
     fixed = TRUE,
     bs4SidebarMenu(
@@ -58,9 +59,7 @@ bs4DashPage(
       bs4SidebarMenuItem("Explorer", tabName = "explorer", icon = icon("compass"))
     )
   ),
-  
   bs4DashBody(
-    
     use_theme(create_theme(
       bs4dash_status(
         primary = "#0A9F9D",
@@ -73,102 +72,79 @@ bs4DashPage(
         dark = "#343a40"
       )
     )),
-   
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
       tags$script(src = "script.js")
     ),
-    
-    
     bs4TabItems(
       ## ---------------- Home ----------------
       bs4TabItem(
         tabName = "home",
         div(
           class = "text-center my-5",
-          
           h1(
             class = "display-3 font-weight-bold",
             "Welcome to RIFRMap"
           ),
-          
           p(
             class = "lead text-muted mt-3",
             "An interactive platform for exploring rifampicin resistance mutations across bacterial species and curated datasets."
           )
         ),
-        
         br(), div(
           class = "container",
-          
           h3("About Rifampicin Resistance"),
-          
           p(
-            "Rifampicin (RIF) is a frontline antibiotic widely used in the treatment of tuberculosis and other bacterial infections. 
+            "Rifampicin (RIF) is a frontline antibiotic widely used in the treatment of tuberculosis and other bacterial infections.
        Resistance most commonly arises through mutations in the ",
             tags$i("rpoB"),
-            " gene, which encodes the beta subunit of RNA polymerase. 
-       These mutations alter the drug-binding site, reducing antibiotic effectiveness and contributing to the global burden 
+            " gene, which encodes the beta subunit of RNA polymerase.
+       These mutations alter the drug-binding site, reducing antibiotic effectiveness and contributing to the global burden
        of antimicrobial resistance."
           ),
-          
           p(
-            "Notably, almost all RIF resistance-associated mutations are concentrated within four relatively small regions 
-       of", tags$i("rpoB")," commonly referred to as clusters I, II, III, and N. These clusters represent mutational hotspots where 
+            "Notably, almost all RIF resistance-associated mutations are concentrated within four relatively small regions
+       of", tags$i("rpoB"), " commonly referred to as clusters I, II, III, and N. These clusters represent mutational hotspots where
        resistance repeatedly evolves across diverse bacterial taxa."
           ),
-          
           p(
-            tags$b("RIFRMap"), " enables systematic exploration of these resistance-associated mutations across diverse species and multiple curated data sources, including CARD, CRyPTIC, DRAGdb, Yang, and additional curated datasets. 
+            tags$b("RIFRMap"), " enables systematic exploration of these resistance-associated mutations across diverse species and multiple curated data sources, including CARD, CRyPTIC, DRAGdb, Yang, and additional curated datasets.
           By integrating these resources into a unified interface, RIFRMap enables comparative exploration, dynamic filtering, and deeper insights into the rifampicin resistant patterns."
           )
         ),
-        
         br(),
-        
         div(
           class = "text-center my-4",
-          
           actionButton(
             "go_docs",
             "View Documentation",
             class = "btn btn-outline-secondary btn-lg mr-3"
           ),
-          
           actionButton(
             "go_explorer",
             "Launch Explorer",
             class = "btn btn-primary btn-lg"
           )
         )
-        
-        
       ),
-      
+
       ## ---------------- Documentation ----------------
       bs4TabItem(
         tabName = "doc",
         h2("Data Sources and Curation"),
-        
         br(),
-        
         h4("Comprehensive Antibiotic Resistance Database (CARD)"),
-        
         p(
           "The Comprehensive Antibiotic Resistance Database (CARD) is a hand-curated resource developed to cover the full spectrum of antimicrobial resistance genes (ARGs). ",
           "To be included, an AMR determinant must meet three criteria: it must be reported in a peer-reviewed publication, have a corresponding sequence deposited in GenBank, ",
           "and demonstrate clear experimental evidence of increased minimum inhibitory concentration (MIC) compared with control strains ", tags$a("[1]", href = "#ref1", class = "ref-link"), "."
         ),
-        
         p(
-          "For ", tags$i("Mycobacterium tuberculosis"), 
+          "For ", tags$i("Mycobacterium tuberculosis"),
           ", additional curated mutation data were integrated from several major resistance catalogs, including CRyPTIC, ReSeqTB, and the WHO 2023 mutation catalog."
         ),
-        
         br(),
-        
         h4("Comprehensive Resistance Prediction for Tuberculosis: an International Consortium (CRyPTIC)"),
-        
         p(
           "The CRyPTIC Consortium generated a large-scale dataset by measuring quantitative MICs for 13 anti-tuberculosis drugs—including rifampicin—in over 15,000 globally collected ",
           tags$i("M. tuberculosis"), " isolates. Using multivariable linear mixed models alongside whole-genome sequencing, the study identified 492 variants associated with increased MICs ",
@@ -177,29 +153,20 @@ bs4DashPage(
           "RIFRMap enables interactive exploration of this dataset with filters for effect size, variant count,
           Benjamini–Hochberg adjusted p-value and homoplasy, allowing users to prioritize high-confidence and convergently evolved mutations."
         ),
-        
         br(),
-        
         h4("Drug Resistance Associated Genes Database (DRAGdb)"),
-        
-        p("DRAGdb is a manually curated repository of mutational data for drug resistance–associated genes (DRAGs) across ESKAPE pathogens (i.e. ", tags$i("Enterococcus faecium"), ", ", tags$i("Staphylococcus aureus"), ", ", tags$i("Klebsiella pneumoniae"), ", ", tags$i("Acinetobacter baumannii"), ", ", tags$i("Pseudomonas aeruginosa"), ", and ", tags$i("Enterobacter"), " spp.), as well as other bacteria, with a particular focus on ", tags$i("Mycobacterium tuberculosis"), " (MTB). 
+        p("DRAGdb is a manually curated repository of mutational data for drug resistance–associated genes (DRAGs) across ESKAPE pathogens (i.e. ", tags$i("Enterococcus faecium"), ", ", tags$i("Staphylococcus aureus"), ", ", tags$i("Klebsiella pneumoniae"), ", ", tags$i("Acinetobacter baumannii"), ", ", tags$i("Pseudomonas aeruginosa"), ", and ", tags$i("Enterobacter"), " spp.), as well as other bacteria, with a particular focus on ", tags$i("Mycobacterium tuberculosis"), " (MTB).
           The database integrates PROVEAN scores to predict the functional impact of gene mutations ", tags$a("[3]", href = "#ref3", class = "ref-link"), ". "),
-        
         br(),
-        
         h4("Yang-RIF (2023)"),
-        
         p(
           "The \"Yang-RIF\" dataset is based on a study by Yang and colleagues, who performed saturation mutagenesis of the rifampicin-binding site in ",
           tags$i("E. coli"), " RNA polymerase. They constructed 760 single-residue ", tags$i("rpoB"), " mutants spanning positions 510–537 and 563–572 ",
           "to systematically assess resistance phenotypes ", tags$a("[4]", href = "#ref4", class = "ref-link"), ". ", "Within RIFRMap, users can explore this dataset by filtering mutations based on their enrichment after rifampicin exposure. ",
           "A customizable threshold on log₂(fold-change) allows identification of variants associated with increased resistance."
         ),
-        
         br(),
-        
         h4("Curated Data"),
-        
         p(
           "This curated dataset was developed by our lab's members through a comprehensive literature review of rifampicin resistance mutations in ",
           tags$i("rpoB"),
@@ -211,9 +178,7 @@ bs4DashPage(
           "From these studies, they manually extracted single amino acid substitutions reported to confer rifampicin resistance ", tags$a("[5]", href = "#ref5", class = "ref-link"), ". ",
           "Within RIFRMap, users can filter this dataset based on the number of supporting studies and the diversity of bacterial species reporting each mutation, allowing tailored exploration of high-confidence variants."
         ),
-        
         h4("References"),
-        
         tags$ol(
           tags$li(
             id = "ref1",
@@ -255,32 +220,23 @@ bs4DashPage(
               target = "_blank"
             )
           )
-          
         )
-        
-        
-        
-        
       ),
-      
+
       ## ---------------- Explorer ----------------
       bs4TabItem(
         tabName = "explorer",
-        
         tabsetPanel(
           id = "explore_steps",
-          
+
           ## ---- Tab 1: Data Filters ----
           tabPanel(
             title = "Data Filters",
             value = "filters",
-            
             div(
               class = "text-muted",
               p("Select data sources and filtering criteria to define the mutation set used in downstream analyses.")
             ),
-        
-
             fluidRow(
               # CARD
               column(
@@ -298,7 +254,7 @@ bs4DashPage(
                   )
                 )
               ),
-              
+
               # CRyPTIC
               column(
                 width = 12, lg = 3, xl = 2,
@@ -311,7 +267,7 @@ bs4DashPage(
                   checkboxInput("cryptic_enabled", "Include data", FALSE),
                   selectInput(
                     "cryptic_species", "Species",
-                    choices  = "Mycobacterium tuberculosis",
+                    choices = "Mycobacterium tuberculosis",
                     selected = "Mycobacterium tuberculosis",
                     multiple = FALSE
                   ),
@@ -342,7 +298,7 @@ bs4DashPage(
                   )
                 )
               ),
-              
+
               # DRAGdb
               column(
                 width = 12, lg = 3, xl = 2,
@@ -363,7 +319,7 @@ bs4DashPage(
                   )
                 )
               ),
-              
+
               # Yang
               column(
                 width = 12, lg = 3, xl = 2,
@@ -376,7 +332,7 @@ bs4DashPage(
                   checkboxInput("yang_enabled", "Include data", FALSE),
                   selectInput(
                     "yang_species", "Species",
-                    choices  = "Escherichia coli",
+                    choices = "Escherichia coli",
                     selected = "Escherichia coli",
                     multiple = FALSE
                   ),
@@ -387,7 +343,7 @@ bs4DashPage(
                   )
                 )
               ),
-              
+
               # Curated data
               column(
                 width = 12, lg = 3, xl = 2,
@@ -413,9 +369,7 @@ bs4DashPage(
                 )
               )
             ),
-            
             br(),
-            
             fluidRow(
               column(
                 width = 12,
@@ -424,44 +378,55 @@ bs4DashPage(
               )
             )
           ),
-          
+
           ## ---- Tab 2: Mutation Map ----
           tabPanel(
             title = "Mutation Map",
             value = "cluster",
-            
             div(
               class = "text-muted",
               p(
                 "Species-centric mutation cluster view. Data sources are not considered; the plot visualises the distribution of resistance mutations within each species across ",
                 tags$i("rpoB"),
-                " clusters."
+                " clusters. Mutations outside the defined clusters are not shown."
               )
             ),
-            
-            
             fluidRow(
               # Controls
               column(
                 width = 2,
-                card(
-                  card_body(
-                    div(
-                      class = "clusters-buttons",
-                      shinyWidgets::checkboxGroupButtons(
-                        inputId   = "clustersToPlot",
-                        label     = "Clusters",
-                        choices   = c("N", "I", "II", "III"),
-                        selected  = c("N", "I", "II", "III"),
-                        direction = "horizontal",
-                        justified = TRUE
-                      )
+                bs4Card(
+                  title = "Controls",
+                  width = 12,
+                  solidHeader = FALSE,
+                  collapsible = FALSE,
+                  selectInput(
+                    inputId = "colour_by",
+                    label = "Colour by",
+                    choices = c(
+                      "None" = "none",
+                      "Distribution across species" = "distribution",
+                      "Amino acid type" = "aa_type",
+                      "Amino acid distance" = "aa_distance"
                     ),
-                    uiOutput("legend_panel")
+                    selected = "none"
+                  ),
+                  uiOutput("legend_panel"),
+                  div(
+                    id = "cluster-buttons-wrap",
+                    class = "clusters-buttons",
+                    shinyWidgets::checkboxGroupButtons(
+                      inputId   = "clustersToPlot",
+                      label     = "Clusters",
+                      choices   = c("N", "I", "II", "III"),
+                      selected  = c("N", "I", "II", "III"),
+                      direction = "horizontal",
+                      justified = TRUE
+                    )
                   )
                 )
               ),
-              
+
               # Plot
               column(
                 width = 10,
@@ -472,29 +437,22 @@ bs4DashPage(
                   collapsible = FALSE,
                   solidHeader = TRUE,
                   style = "height: 90vh;",
-                  tags$div(
-                    class = "text-muted",
-                    style = "font-size: 0.85em; margin-bottom: 6px;",
-                    "Note: Mutations outside the defined clusters are not shown."
-                  ),
+                  uiOutput("clusterPlotNote"),
                   uiOutput("clusterPlotUI")
                 )
               )
             )
           ),
-          
+
           ## ---- Tab 3: Mutation Frequency ----
           tabPanel(
             title = "Mutation Frequency",
             value = "frequency",
-            
             div(
               class = "text-muted",
-              p("Heatmap summarises how widely each mutation is distributed across species. Each tile represents an amino-acid position (<i>E. coli</i> coordinates) and substituted residue, coloured by the number of species carrying that mutation. 
+              p("Heatmap summarises how widely each mutation is distributed across species. Each tile represents an amino-acid position (<i>E. coli</i> coordinates) and substituted residue, coloured by the number of species carrying that mutation.
                      Data sources are ignored.")
             ),
-            
-            
             fluidRow(
               # --- Heatmap card ---
               column(
@@ -510,7 +468,7 @@ bs4DashPage(
                   )
                 )
               ),
-              
+
               # --- Species list card ---
               column(
                 width = 4,
@@ -519,27 +477,22 @@ bs4DashPage(
                   title = "Species in selected tile",
                   status = "primary",
                   solidHeader = TRUE,
-                  
                   uiOutput("selected_tile_info"),
-                  
                   DT::DTOutput("selected_tile_species_table")
                 )
               )
             )
           ),
-          
-          
+
+
           ## ---- Tab 4: Source Overlap ----
           tabPanel(
             title = "Source Overlap",
             value = "sources",
-            
             div(
               class = "text-muted",
               p("Source-centric view of mutation evidence. Plots highlight overlap among databases (CARD, CRyPTIC, DRAGdb, Yang, Curated data), independent of species identity.")
             ),
-            
-            
             column(
               width = 12,
               bs4Card(
@@ -553,7 +506,6 @@ bs4DashPage(
                 div(class = "plot-center", uiOutput("upset_container"))
               )
             ),
-            
             column(
               width = 12,
               bs4Card(
@@ -563,7 +515,7 @@ bs4DashPage(
                 solidHeader = TRUE,
                 collapsible = TRUE,
                 maximizable = TRUE,
-                class = "heatmap-card",  
+                class = "heatmap-card",
                 style = "height: 90vh; overflow-y: auto;",
                 div(
                   class = "step-intro",
@@ -572,7 +524,6 @@ bs4DashPage(
                     HTML("Click legend items to show/hide sources. Use Reset to restore the full heatmap view.")
                   )
                 ),
-                
                 div(
                   class = "heatmap-topbar",
                   actionButton(
@@ -582,24 +533,21 @@ bs4DashPage(
                     class = "btn-outline-secondary btn-sm"
                   )
                 ),
-                
                 div(class = "plot-center", uiOutput("heatmap_container"))
               )
             )
           ),
-          
-          
+
+
           ## ---- Tab 5: Summary ----
           tabPanel(
             title = "Summary",
             div(
               class = "text-muted",
               p("Summary table and histograms update dynamically based on selected filters.")
-            ), 
-          
-            
+            ),
             fluidRow(
-              # left: summary table 
+              # left: summary table
               column(
                 width = 4,
                 bs4Card(
@@ -610,11 +558,10 @@ bs4DashPage(
                   gt_output("summary_table")
                 )
               ),
-              
-              # right: two histograms stacked 
+
+              # right: two histograms stacked
               column(
                 width = 8,
-                
                 bs4Card(
                   width = 12,
                   title = "Top AA mutations across species",
@@ -622,8 +569,6 @@ bs4DashPage(
                   solidHeader = TRUE,
                   plotOutput("bar_aa_mut_name", height = "320px")
                 ),
-          
-                
                 bs4Card(
                   width = 12,
                   title = "AA_Pos histogram",
@@ -631,7 +576,6 @@ bs4DashPage(
                   solidHeader = TRUE,
                   plotOutput("hist_aa_pos", height = "280px")
                 ),
-                
                 bs4Card(
                   width = 12,
                   title = "AA_Pos_Ecoli histogram",
@@ -642,11 +586,10 @@ bs4DashPage(
               )
             )
           ),
-          
+
           ## ---- Tab 6: Download ----
           tabPanel(
             title = "Download",
-            
             fluidRow(
               column(
                 width = 12,
@@ -660,7 +603,6 @@ bs4DashPage(
                   ),
                   DT::DTOutput("mutation_table")
                 ),
-                
                 bs4Card(
                   title = "Reference Data",
                   status = "primary",
@@ -672,7 +614,6 @@ bs4DashPage(
                   DT::DTOutput("ref_table")
                 )
               )
-              
             )
           )
         )

@@ -41,50 +41,79 @@ html, body,
   font-weight: 400 !important;
 }
 
-/* Cluster button */
-.clusters-buttons {
-  .btn {
-    box-sizing: border-box;
-    padding: 0.45rem 0.75rem;
-    min-height: 38px;
-    line-height: 1.2;
-
-    background: #e6e6e6;
-    border: 1px solid #d0d0d0;
-    color: #333;
-
-    transition:
-      background-color .15s ease-in-out,
-      border-color .15s ease-in-out,
-      color .15s ease-in-out,
-      box-shadow .15s ease-in-out;
-
-    // shared state styles
-    &:hover,
-    &.active {
-      box-shadow: 0 2px 4px rgba(0,0,0,.10);
-    }
-
-    // hover state
-    &:hover {
-      background: #f5f5f5;
-    }
-
-    // selected / active state
-    &.active {
-      background: #fff;
-      border-color: #9e9e9e;
-      color: #111;
-      box-shadow: 0 2px 3px rgba(0,0,0,.18);
-    }
-
-    // remove Bootstrap focus ring
-    &:focus {
-      box-shadow: none !important;
-    }
-  }
+/* Cluster buttons */
+.clusters-buttons .btn {
+  box-sizing: border-box;
+  padding: 0.45rem 0.75rem;
+  min-height: 38px;
+  line-height: 1.2;
+  background: #e6e6e6;
+  border: 1px solid #d0d0d0;
+  color: #333;
+  transition:
+    background-color .15s ease-in-out,
+    border-color .15s ease-in-out,
+    color .15s ease-in-out,
+    box-shadow .15s ease-in-out;
 }
 
+.clusters-buttons .btn:hover,
+.clusters-buttons .btn.active {
+  box-shadow: 0 2px 4px rgba(0,0,0,.10);
+}
+
+.clusters-buttons .btn:hover {
+  background: #f5f5f5;
+}
+
+.clusters-buttons .btn.active {
+  background: #fff;
+  border-color: #9e9e9e;
+  color: #111;
+  box-shadow: 0 2px 3px rgba(0,0,0,.18);
+}
+
+.clusters-buttons .btn:focus {
+  box-shadow: none !important;
+}
+
+/* Legend colour_by */
+
+.cluster-legend {
+  margin-top: 10px;
+}
+
+.cluster-legend-section {
+  margin-top: 12px;
+}
+
+.cluster-legend-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #2f2f2f;
+}
+
+.cluster-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.cluster-legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  display: inline-block;
+  border: 1px solid rgba(0,0,0,0.2);
+  flex: 0 0 14px;
+}
+
+.cluster-legend-label {
+  font-size: 0.9rem;
+  color: #333;
+}
 
 #hoverCanvas {
   position: absolute;
@@ -92,42 +121,6 @@ html, body,
   left: 0;
   pointer-events: none;
   z-index: 10;
-}
-
-
-/* Cluster plot legend */
-
-.cluster-legend {
-  font-size: 15px;
-  line-height: 1.4;
-}
-
-.cluster-legend-title {
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-/* legend items */
-.cluster-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 6px 0;
-}
-
-/* Colour square */
-.cluster-legend-swatch {
-  width: 14px;
-  height: 14px;
-  border-radius: 3px;
-  display: inline-block;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  flex-shrink: 0;
-}
-
-/* Text label */
-.cluster-legend-label {
-  font-size: 14px;
 }
 
 /* Cluster plot */

@@ -170,18 +170,87 @@ filter_in_if <- function(df, col, selected) {
 
 ## ---- Legend panel ----
 
-legend_reference <- c(
-  Reference = "#000000"
+COLOURING_PALETTES <- list(
+  none = c(
+    none = "#888888"
+  ),
+  distribution = c(
+    default = "#000000",
+    ubiquitous = "#3e3bff",
+    polymorphic = "#12947F",
+    unique = "#FF0000"
+  ),
+  aa_type = c(
+    hydrophobic_aliphatic = "#F2BB05",
+    hydrophobic_aromatic  = "#7B2CBF",
+    polar_uncharged       = "#00A8B5",
+    acidic                = "#3939FF",
+    basic                 = "#e63636",
+    unknown               = "#888888"
+  ),
+  aa_distance = viridisLite::viridis(100)
 )
 
-legend_distribution <- c(
-  Ubiquitous  = "#3e3bff",
-  Polymorphic = "#12947F",
-  Unique      = "#FF0000"
-)
+get_aa_type <- function(aa) {
+  aa <- toupper(as.character(aa))
+
+  dplyr::case_when(
+    aa %in% c("A", "V", "L", "I", "M", "P", "G") ~ "hydrophobic_aliphatic",
+    aa %in% c("F", "W", "Y") ~ "hydrophobic_aromatic",
+    aa %in% c("S", "T", "C", "N", "Q") ~ "polar_uncharged",
+    aa %in% c("D", "E") ~ "acidic",
+    aa %in% c("K", "R", "H") ~ "basic",
+    TRUE ~ "unknown"
+  )
+}
+
+
+get_aa_distance <- function(original, mutation) {
+  # clean inputs
+  original <- trimws(as.character(original))
+  mutation <- trimws(as.character(mutation))
+
+  # handle invalid cases
+  if (is.na(original) || is.na(mutation) ||
+    original == "" || mutation == "") {
+    return(NA_real_)
+  }
+
+  # compute distance safely
+  tryCatch(
+    {
+      res <- grantham_distance(
+        as_three_letter(original),
+        as_three_letter(mutation),
+        method = "exact"
+      )
+
+      res$d[[1]]
+    },
+    error = function(e) NA_real_
+  )
+}
+
+## ----- Helper functions for legend "colouring by" ----
+
+
+legend_item <- function(label, color) {
+  tags$div(
+    class = "cluster-legend-item",
+    tags$span(
+      class = "cluster-legend-swatch",
+      style = sprintf("background-color:%s;", color)
+    ),
+    tags$span(
+      class = "cluster-legend-label",
+      label
+    )
+  )
+}
 
 
 ## ----- Helper functions for cluster plot ----
+
 
 getBlockData <- function(muts,
                          clusters,
@@ -201,9 +270,15 @@ getBlockData <- function(muts,
     AAinput = TRUE,
     AAoutput = TRUE
   ) - clusterStart
+
   block <- muts |>
     filter(Species == species) |>
-    mutate(AA_mut_name_Ecoli = paste0("rpoB", "_", AA_original, AA_pos_Ecoli, AA_mutation))
+    mutate(
+      AA_mut_name_Ecoli = paste0("rpoB", "_", AA_original, AA_pos_Ecoli, AA_mutation),
+      aa_type = get_aa_type(AA_mutation),
+      aa_distance = mapply(get_aa_distance, AA_original, AA_mutation)
+    )
+
   block <- block |>
     filter(
       !is.na(AA_pos),
@@ -257,7 +332,11 @@ getBlockData <- function(muts,
   addInfo <- as_tibble(addInfo)
 
   block <- rbind(addInfo, block)
-  block <- select(block, AA_pos, AA_pos_Ecoli, AA_original, AA_mutation, AA_mut_name_Ecoli, RelX, RelY)
+  block <- select(
+    block,
+    AA_pos, AA_pos_Ecoli, AA_original, AA_mutation, AA_mut_name_Ecoli,
+    aa_type, aa_distance, RelX, RelY
+  )
   return(block)
 }
 
@@ -280,7 +359,7 @@ renderBlock <- function(block, x0, y0, dx, dy, colcat = NULL, pars) {
       1 - y0 - dy * (pars$dyPos + pars$dyRef) - (block$RelY[block$RelY > 0L] - 1L) * dy,
       block$AA_mutation[block$RelY > 0L],
       col = block$Colour[block$RelY > 0L],
-      cex = pars$cexMut, adj = c(0.5, 0.5), family = pars$familyMuts
+      cex = pars$cexMut, adj = c(0.5, 0.5), family = pars$familyMuts, font = 2
     )
   }
 }
@@ -298,13 +377,6 @@ getPars <- function() {
   pars$cexRef <- 0.9 # relative font size of reference sequence
   pars$cexMut <- 0.9
   pars$cexSpecies <- 1 # relative font size of species labels
-
-  pars$col <- c(
-    default = "#000000",
-    ubiquitous = "#3e3bff",
-    unique = "#ff3e3b",
-    polymorphic = "#12947F"
-  )
 
   pars$mar <- c(1, 1, 1, 1) + 0.1
   pars$familyPos <- PLOT_STYLE$family
@@ -325,7 +397,7 @@ plotMutations <- function(muts,
                           gene = "rpoB",
                           clustersToPlot = NULL,
                           speciesToPlot = NULL,
-                          colouring = "none",
+                          colour_by = "none",
                           mergeDuplicates = TRUE,
                           return_dims = FALSE,
                           return_hover_map = FALSE,
@@ -334,10 +406,6 @@ plotMutations <- function(muts,
   # initial checks
   if (is.null(speciesToPlot) || length(speciesToPlot) == 0) {
     stop("No species to be plotted need to be provided.")
-  }
-
-  if (!colouring %in% c("none", "ubi", "uni", "ubiuni")) {
-    stop("Selected option for colouring argument not supported.")
   }
 
   # determine clusters to plot
@@ -423,10 +491,13 @@ plotMutations <- function(muts,
 
   # determine mutation categories for colouring
   mutCounts <- NULL
-  if (colouring %in% c("ubi", "uni", "ubiuni")) {
+
+  if (colour_by == "distribution") {
     filteredMuts <- muts |>
       dplyr::filter(.data$Species %in% speciesToPlot) |>
-      dplyr::mutate(AA_mut_name_Ecoli = paste0(gene, "_", AA_original, AA_pos_Ecoli, AA_mutation)) |>
+      dplyr::mutate(
+        AA_mut_name_Ecoli = paste0(gene, "_", AA_original, AA_pos_Ecoli, AA_mutation)
+      ) |>
       dplyr::distinct(Species, AA_mut_name_Ecoli, .keep_all = TRUE)
 
     nSpecies <- filteredMuts |>
@@ -444,6 +515,7 @@ plotMutations <- function(muts,
         )
       )
   }
+
 
   # plotting parameters
   pars <- getPars()
@@ -505,23 +577,73 @@ plotMutations <- function(muts,
 
 
   # assign colours
+  pal_distribution <- COLOURING_PALETTES$distribution
+  pal_aa_type <- COLOURING_PALETTES$aa_type
+  pal_aa_distance <- COLOURING_PALETTES$aa_distance
+
+  # calculate max_dist for aa_distance colouring
+  max_dist <- NULL
+
+  if (colour_by == "aa_distance") {
+    all_dist <- unlist(
+      lapply(allBlocks, function(sp_blocks) {
+        unlist(lapply(sp_blocks, function(blk) blk$aa_distance), use.names = FALSE)
+      }),
+      use.names = FALSE
+    )
+
+    all_dist <- all_dist[is.finite(all_dist)]
+
+    max_dist <- suppressWarnings(max(all_dist, na.rm = TRUE))
+    if (!length(all_dist) || is.na(max_dist) || is.infinite(max_dist) || max_dist <= 0) {
+      max_dist <- 1
+    }
+
+    distance_cols <- COLOURING_PALETTES$aa_distance
+  }
+
+
   for (i in seq_along(speciesToPlot)) {
     for (j in seq_along(clustersToPlot)) {
       blk <- allBlocks[[i]][[j]]
-      blk$Colour <- pars$col[["default"]]
 
-      if (!is.null(mutCounts) && "AA_mut_name_Ecoli" %in% names(blk)) {
-        # join category onto block by mutation name
-        idx <- match(blk$AA_mut_name_Ecoli, mutCounts$AA_mut_name_Ecoli)
-        cat <- mutCounts$category[idx]
+      blk$Colour <- "#000000"
 
-        if (colouring == "ubi") cat[cat == "unique"] <- "default"
-        if (colouring == "uni") cat[cat == "ubiquitous"] <- "default"
-        if (colouring == "none") cat[] <- "default"
+      if (colour_by == "none") {
+        blk$Colour[] <- COLOURING_PALETTES$none[["none"]]
+      }
 
-        # only update where category is not NA
-        ok <- !is.na(cat)
-        blk$Colour[ok] <- pars$col[cat[ok]]
+      if (colour_by == "distribution") {
+        blk$Colour[] <- pal_distribution[["default"]]
+
+        if (!is.null(mutCounts) && "AA_mut_name_Ecoli" %in% names(blk)) {
+          idx <- match(blk$AA_mut_name_Ecoli, mutCounts$AA_mut_name_Ecoli)
+          cat <- mutCounts$category[idx]
+
+          ok <- !is.na(cat)
+          blk$Colour[ok] <- unname(pal_distribution[cat[ok]])
+          blk$Colour[is.na(blk$Colour)] <- pal_distribution[["default"]]
+        }
+      }
+
+      if (colour_by == "aa_type") {
+        if ("aa_type" %in% names(blk)) {
+          blk$Colour <- unname(pal_aa_type[blk$aa_type])
+          blk$Colour[is.na(blk$Colour)] <- pal_aa_type[["unknown"]]
+        } else {
+          blk$Colour[] <- pal_aa_type[["unknown"]]
+        }
+      }
+
+      if (colour_by == "aa_distance") {
+        if ("aa_distance" %in% names(blk)) {
+          scaled <- round((blk$aa_distance / max_dist) * 99) + 1
+          scaled[is.na(scaled)] <- 1
+          scaled <- pmax(1, pmin(100, scaled))
+          blk$Colour <- distance_cols[scaled]
+        } else {
+          blk$Colour[] <- distance_cols[1]
+        }
       }
 
       allBlocks[[i]][[j]] <- blk
