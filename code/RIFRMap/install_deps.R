@@ -20,7 +20,8 @@ cran_pkgs <- c(
   "RColorBrewer",
   "fresh", 
   "sass",
-  "shinydashboard"
+  "shinydashboard",
+  "grantham"
 )
 
 install.packages(

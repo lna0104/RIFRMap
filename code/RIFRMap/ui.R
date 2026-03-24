@@ -1,41 +1,3 @@
-# Core UI
-library(shiny)
-library(bs4Dash)
-library(shinydashboard)
-
-# Data
-library(dplyr)
-library(tidyr)
-library(tidyverse)
-library(gtsummary)
-
-# Plots / widgets
-library(ggplot2)
-library(ggiraph)
-library(plotly)
-library(ggupset)
-library(shinyWidgets)
-library(shinycssloaders)
-library(gt)
-library(wesanderson)
-library(RColorBrewer)
-
-# UI helpers
-library(bslib)
-library(htmltools)
-library(fresh)
-library(sass)
-
-# BioC + GitHub
-library(Biostrings)
-library(ALJEbinf)
-
-# shinyapps.io
-library(rsconnect)
-
-# Bioinformatics
-library(grantham)
-
 bs4DashPage(
   title = "RIFRMap",
   help = NULL,
@@ -544,7 +506,7 @@ bs4DashPage(
             title = "Summary",
             div(
               class = "text-muted",
-              p("Summary table and histograms update dynamically based on selected filters.")
+              p("Summary table and histograms are generated from all rows in the filtered dataset; mutations reported by multiple sources may appear more than once.")
             ),
             fluidRow(
               # left: summary table
@@ -564,17 +526,10 @@ bs4DashPage(
                 width = 8,
                 bs4Card(
                   width = 12,
-                  title = "Top AA mutations across species",
+                  title = "Top amino acid mutations",
                   status = "primary",
                   solidHeader = TRUE,
                   plotOutput("bar_aa_mut_name", height = "320px")
-                ),
-                bs4Card(
-                  width = 12,
-                  title = "AA_Pos histogram",
-                  status = "primary",
-                  solidHeader = TRUE,
-                  plotOutput("hist_aa_pos", height = "280px")
                 ),
                 bs4Card(
                   width = 12,

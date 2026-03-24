@@ -80,7 +80,7 @@ function(input, output, session) {
       d <- filter_range_if(d, "coef", input$cryptic_coef)
       d <- filter_range_if(d, "counts", input$cryptic_counts)
       d <- d |>
-        dplyr::filter(bh_corrected_p <= as.numeric(input$cryptic_bhp))
+        filter(bh_corrected_p <= as.numeric(input$cryptic_bhp))
 
       # categorical filter
       d <- filter_in_if(d, "homoplasy", input$cryptic_homoplasy)
@@ -123,7 +123,7 @@ function(input, output, session) {
       return(NULL)
     }
 
-    dplyr::bind_rows(dfs, .id = "source")
+    bind_rows(dfs, .id = "source")
   })
 
 
@@ -177,20 +177,20 @@ function(input, output, session) {
       }
 
       df <- df0 |>
-        dplyr::transmute(
-          Species      = dplyr::na_if(trimws(as.character(species)), ""),
-          AA_original  = dplyr::na_if(trimws(as.character(AA_original)), ""),
-          AA_mutation  = dplyr::na_if(trimws(as.character(AA_mutation)), ""),
+        transmute(
+          Species      = na_if(trimws(as.character(species)), ""),
+          AA_original  = na_if(trimws(as.character(AA_original)), ""),
+          AA_mutation  = na_if(trimws(as.character(AA_mutation)), ""),
           AA_pos       = suppressWarnings(as.integer(AA_pos)),
           AA_pos_Ecoli = suppressWarnings(as.integer(AA_pos_Ecoli))
         ) |>
-        dplyr::filter(
+        filter(
           !is.na(Species),
           !is.na(AA_pos_Ecoli),
           !is.na(AA_original),
           !is.na(AA_mutation)
         ) |>
-        dplyr::distinct(Species, AA_original, AA_mutation, AA_pos, AA_pos_Ecoli)
+        distinct(Species, AA_original, AA_mutation, AA_pos, AA_pos_Ecoli)
 
       if (!nrow(df)) {
         return(NULL)
@@ -210,12 +210,12 @@ function(input, output, session) {
 
         # only keep rows with a valid FASTA_name
         rr <- refs |>
-          dplyr::transmute(
+          transmute(
             Species = as.character(.data$Species),
-            FASTA   = dplyr::na_if(trimws(as.character(.data$FASTA_name)), "")
+            FASTA   = na_if(trimws(as.character(.data$FASTA_name)), "")
           ) |>
-          dplyr::filter(!is.na(.data$Species), !is.na(.data$FASTA)) |>
-          dplyr::distinct(.data$Species, .keep_all = TRUE)
+          filter(!is.na(.data$Species), !is.na(.data$FASTA)) |>
+          distinct(.data$Species, .keep_all = TRUE)
 
         ok <- setNames(rep(FALSE, nrow(rr)), rr$Species)
 
@@ -269,9 +269,9 @@ function(input, output, session) {
       }
 
       clusters |>
-        dplyr::filter(.data$Gene == "rpoB", .data$Cluster %in% input$clustersToPlot) |>
-        dplyr::arrange(.data$AAstart_Ecoli) |>
-        dplyr::pull(.data$Cluster) |>
+        filter(.data$Gene == "rpoB", .data$Cluster %in% input$clustersToPlot) |>
+        arrange(.data$AAstart_Ecoli) |>
+        pull(.data$Cluster) |>
         unique()
     })
 
@@ -451,13 +451,25 @@ function(input, output, session) {
 
     # distribution
     if (mode == "distribution") {
+      cols <- COLOURING_PALETTES$distribution
+      gradient_css <- paste(cols, collapse = ", ")
+
       return(
         tags$div(
           class = "cluster-legend",
           tags$div(class = "cluster-legend-title", "Distribution across species"),
-          legend_item("Ubiquitous", pal["ubiquitous"]),
-          legend_item("Polymorphic", pal["polymorphic"]),
-          legend_item("Unique", pal["unique"])
+          tags$div(
+            style = sprintf(
+              "height:14px; border-radius:6px; margin-bottom:6px;
+           background: linear-gradient(to right, %s);",
+              gradient_css
+            )
+          ),
+          tags$div(
+            style = "display:flex; justify-content:space-between; font-size:0.8em;",
+            tags$span("Low"),
+            tags$span("High")
+          )
         )
       )
     }
@@ -536,25 +548,25 @@ function(input, output, session) {
     req(df0, nrow(df0) > 0)
 
     df <- df0 |>
-      dplyr::transmute(
+      transmute(
         AA_pos_Ecoli = as.character(AA_pos_Ecoli),
         AA_mutation = as.character(AA_mutation),
         Species = as.character(species)
       ) |>
-      dplyr::filter(
+      filter(
         !is.na(AA_pos_Ecoli),
         !is.na(AA_mutation),
         !is.na(Species)
       ) |>
-      dplyr::distinct()
+      distinct()
 
     all_AAs_sorted <- sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]])
 
     heat_df <- df |>
-      dplyr::filter(!is.na(AA_pos_Ecoli), !is.na(AA_mutation), !is.na(Species)) |>
-      dplyr::group_by(AA_pos_Ecoli, AA_mutation) |>
-      dplyr::summarise(
-        n_species = dplyr::n_distinct(Species),
+      filter(!is.na(AA_pos_Ecoli), !is.na(AA_mutation), !is.na(Species)) |>
+      group_by(AA_pos_Ecoli, AA_mutation) |>
+      summarise(
+        n_species = n_distinct(Species),
         .groups = "drop"
       ) |>
       tidyr::complete(
@@ -573,7 +585,7 @@ function(input, output, session) {
     bar_h_cm <- max(4, min(10, 0.15 * n_pos))
 
     heat_df <- heat_df |>
-      dplyr::mutate(
+      mutate(
         AA_mutation = factor(AA_mutation, levels = all_AAs_sorted),
         AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels),
         tooltip_txt = paste0(
@@ -593,7 +605,7 @@ function(input, output, session) {
     # choose fill mapping
     if (max_n < 4) {
       levs <- 0:max_n
-      heat_df <- heat_df |> dplyr::mutate(fill_val = factor(n_species, levels = levs))
+      heat_df <- heat_df |> mutate(fill_val = factor(n_species, levels = levs))
 
       box_cols <- c("white", cols[seq(10, 90, length.out = max(1, max_n))])
       names(box_cols) <- as.character(levs)
@@ -625,7 +637,7 @@ function(input, output, session) {
         )
     } else {
       if (max_n <= 0) max_n <- 1
-      heat_df <- heat_df |> dplyr::mutate(fill_val = n_species)
+      heat_df <- heat_df |> mutate(fill_val = n_species)
 
       vals <- c(0, seq(1, max_n, length.out = length(cols)))
       vals_scaled <- vals / max_n
@@ -711,9 +723,9 @@ function(input, output, session) {
     req(!is.na(pos), nzchar(aa))
 
     spp <- df |>
-      dplyr::filter(AA_pos_Ecoli == pos, AA_mutation == aa) |>
-      dplyr::distinct(Species) |>
-      dplyr::arrange(Species)
+      filter(AA_pos_Ecoli == pos, AA_mutation == aa) |>
+      distinct(Species) |>
+      arrange(Species)
 
     list(pos = pos, aa = aa, species = spp)
   })
@@ -769,26 +781,26 @@ function(input, output, session) {
         }
 
         df <- df0 |>
-          dplyr::transmute(
+          transmute(
             AA_pos_Ecoli = as.character(AA_pos_Ecoli),
             AA_mutation  = as.character(AA_mutation),
             source       = as.character(source)
           ) |>
-          dplyr::filter(
+          filter(
             !is.na(AA_pos_Ecoli),
             !is.na(AA_mutation),
             !is.na(source)
           ) |>
-          dplyr::distinct()
+          distinct()
 
         if (is.null(df) || nrow(df) == 0) {
           return(ui_message("No data to show."))
         }
 
         upset_df <- df |>
-          dplyr::distinct(AA_mutation, AA_pos_Ecoli, source) |>
-          dplyr::group_by(AA_mutation, AA_pos_Ecoli) |>
-          dplyr::summarise(
+          distinct(AA_mutation, AA_pos_Ecoli, source) |>
+          group_by(AA_mutation, AA_pos_Ecoli) |>
+          summarise(
             sources = list(sort(unique(source))),
             .groups = "drop"
           )
@@ -891,13 +903,13 @@ function(input, output, session) {
       }
 
       df <- df0 |>
-        dplyr::transmute(
+        transmute(
           AA_pos_Ecoli = as.character(AA_pos_Ecoli),
           AA_mutation  = as.character(AA_mutation),
           source       = as.character(source)
         ) |>
-        dplyr::filter(!is.na(AA_pos_Ecoli), !is.na(AA_mutation), !is.na(source)) |>
-        dplyr::distinct()
+        filter(!is.na(AA_pos_Ecoli), !is.na(AA_mutation), !is.na(source)) |>
+        distinct()
 
       df
     })
@@ -1040,12 +1052,12 @@ function(input, output, session) {
           )
 
           df_fill <- base_grid |>
-            dplyr::left_join(df, by = c("AA_pos_Ecoli", "AA_mutation")) |>
-            dplyr::group_by(AA_pos_Ecoli, AA_mutation) |>
-            dplyr::mutate(source = if (all(is.na(source))) "None" else source) |>
-            dplyr::ungroup() |>
-            dplyr::filter(!is.na(source)) |>
-            dplyr::mutate(
+            left_join(df, by = c("AA_pos_Ecoli", "AA_mutation")) |>
+            group_by(AA_pos_Ecoli, AA_mutation) |>
+            mutate(source = if (all(is.na(source))) "None" else source) |>
+            ungroup() |>
+            filter(!is.na(source)) |>
+            mutate(
               AA_mutation  = factor(AA_mutation, levels = all_AAs_sorted),
               AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels),
               source       = factor(source, levels = source_levels)
@@ -1053,29 +1065,29 @@ function(input, output, session) {
 
           # vertical stripes inside each tile
           df_strip <- df_fill |>
-            dplyr::mutate(
+            mutate(
               x_fac = factor(as.character(AA_mutation), levels = all_AAs_sorted),
               y_fac = factor(as.character(AA_pos_Ecoli), levels = pos_levels),
               x_num = as.numeric(x_fac),
               y_num = as.numeric(y_fac)
             ) |>
-            dplyr::group_by(x_fac, y_fac) |>
-            dplyr::arrange(source, .by_group = TRUE) |>
-            dplyr::mutate(
+            group_by(x_fac, y_fac) |>
+            arrange(source, .by_group = TRUE) |>
+            mutate(
               all_sources = paste(sort(unique(as.character(source))), collapse = ", "),
-              k = dplyr::n(),
-              i = dplyr::row_number(),
+              k = n(),
+              i = row_number(),
               ymin = y_num - 0.5,
               ymax = y_num + 0.5,
               xmin = (x_num - 0.5) + (i - 1) / k,
               xmax = (x_num - 0.5) + i / k
             ) |>
-            dplyr::ungroup()
+            ungroup()
 
           # strong borders between tiles only
           df_tile_border <- df_strip |>
-            dplyr::distinct(x_num, y_num) |>
-            dplyr::mutate(
+            distinct(x_num, y_num) |>
+            mutate(
               xmin = x_num - 0.5, xmax = x_num + 0.5,
               ymin = y_num - 0.5, ymax = y_num + 0.5
             )
@@ -1180,21 +1192,43 @@ function(input, output, session) {
     if (!"PMID" %in% names(df)) df$PMID <- NA_character_
 
     pmid_lookup <- refs_paper |>
-      dplyr::transmute(
+      transmute(
         PMID = as.character(PMID),
         Ref_code_from_pmid = as.character(Ref_code)
       ) |>
-      dplyr::filter(!is.na(PMID), PMID != "") |>
-      dplyr::distinct(PMID, .keep_all = TRUE)
+      filter(!is.na(PMID), PMID != "") |>
+      distinct(PMID, .keep_all = TRUE)
 
-    df |>
-      dplyr::mutate(
-        Ref_codes = dplyr::na_if(trimws(as.character(Ref_codes)), ""),
-        PMID      = dplyr::na_if(trimws(as.character(PMID)), "")
+    df_clean <- df |>
+      mutate(
+        Ref_codes = na_if(trimws(as.character(Ref_codes)), ""),
+        PMID      = na_if(trimws(as.character(PMID)), "")
+      )
+
+    df_joined <- df_clean |>
+      mutate(.row_id = dplyr::row_number()) |>
+      tidyr::separate_rows(PMID, sep = "\\s*;\\s*") |>
+      mutate(PMID = dplyr::na_if(trimws(PMID), "")) |>
+      left_join(pmid_lookup, by = "PMID")
+
+    pmid_refcodes <- df_joined |>
+      dplyr::group_by(.row_id) |>
+      dplyr::summarise(
+        Ref_code_from_pmid = paste(unique(stats::na.omit(Ref_code_from_pmid)), collapse = "; "),
+        PMID = paste(unique(stats::na.omit(PMID)), collapse = "; "),
+        .groups = "drop"
       ) |>
-      dplyr::left_join(pmid_lookup, by = "PMID") |>
-      dplyr::mutate(
+      mutate(
+        Ref_code_from_pmid = na_if(Ref_code_from_pmid, ""),
+        PMID = na_if(PMID, "")
+      )
+
+    df_clean |>
+      mutate(.row_id = dplyr::row_number()) |>
+      left_join(pmid_refcodes, by = ".row_id", suffix = c("", "_collapsed")) |>
+      mutate(
         Ref_codes = dplyr::coalesce(Ref_codes, Ref_code_from_pmid),
+        PMID = dplyr::coalesce(PMID_collapsed, PMID),
         Gene = "rpoB",
         AA_mut_name = paste0(AA_original, AA_pos, AA_mutation),
         AA_mut_name_Ecoli = paste0(AA_original, AA_pos_Ecoli, AA_mutation)
@@ -1207,7 +1241,7 @@ function(input, output, session) {
         Mutation     = AA_mutation,
         Source       = source
       ) |>
-      dplyr::select(
+      select(
         Species,
         Gene,
         AA_Pos_Ecoli,
@@ -1277,7 +1311,7 @@ function(input, output, session) {
     data <- mutation_data()
 
     data <- data |>
-      dplyr::mutate(Ref_codes = refcode_links_tooltip(
+      mutate(Ref_codes = refcode_links_tooltip(
         Ref_codes,
         refs_paper,
         code_col  = "Ref_code",
@@ -1317,7 +1351,7 @@ function(input, output, session) {
     ref_codes <- unique(ref_codes)
 
     refs_paper |>
-      dplyr::filter(Ref_code %in% ref_codes)
+      filter(Ref_code %in% ref_codes)
   })
 
   output$ref_table <- DT::renderDataTable({
@@ -1354,15 +1388,15 @@ function(input, output, session) {
     req(df, nrow(df) > 0, all(c("AA_mut_name_Ecoli") %in% names(df)))
 
     top_muts <- df |>
-      dplyr::mutate(AA_mut_name_Ecoli = as.character(AA_mut_name_Ecoli)) |>
-      dplyr::count(AA_mut_name_Ecoli, sort = TRUE) |>
-      dplyr::slice_head(n = 15) |>
-      dplyr::pull(AA_mut_name_Ecoli)
+      mutate(AA_mut_name_Ecoli = as.character(AA_mut_name_Ecoli)) |>
+      count(AA_mut_name_Ecoli, sort = TRUE) |>
+      slice_head(n = 15) |>
+      pull(AA_mut_name_Ecoli)
 
     plot_df <- df |>
-      dplyr::mutate(AA_mut_name_Ecoli = as.character(AA_mut_name_Ecoli)) |>
-      dplyr::filter(AA_mut_name_Ecoli %in% top_muts) |>
-      dplyr::count(AA_mut_name_Ecoli)
+      mutate(AA_mut_name_Ecoli = as.character(AA_mut_name_Ecoli)) |>
+      filter(AA_mut_name_Ecoli %in% top_muts) |>
+      count(AA_mut_name_Ecoli)
 
     ggplot(plot_df, aes(x = reorder(AA_mut_name_Ecoli, n, FUN = sum), y = n)) +
       geom_col() +
@@ -1382,24 +1416,6 @@ function(input, output, session) {
       ) +
       labs(
         x = "AA mutation (E. coli coordinate)",
-        y = "Number of observations"
-      )
-  })
-
-
-  output$hist_aa_pos <- renderPlot({
-    df <- mutation_data()
-    req(df, nrow(df) > 0, "AA_Pos" %in% names(df))
-
-    ggplot(df, aes(x = AA_Pos)) +
-      geom_histogram(bins = 30) +
-      plotting_theme() +
-      theme(
-        axis.title.x = element_text(size = 13),
-        axis.title.y = element_text(size = 13)
-      ) +
-      labs(
-        x = "Amino acid position",
         y = "Number of observations"
       )
   })

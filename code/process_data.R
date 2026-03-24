@@ -83,7 +83,7 @@ cryptic_mapped_ecoli <- map_to_ecoli(
   rpoB_ecoli = rpoB_Ecoli
 )
 
-readr::write_csv(
+write_csv(
   cryptic_mapped_ecoli,
   "data/processed_data/CRyPTIC_processed.csv"
 )
@@ -138,7 +138,22 @@ card_processed_data <- card_data |>
   ) |>
   dplyr::distinct()
 
-card_mapped_ecoli <- card_processed_data |>
+card_group_pmid <- card_processed_data |> 
+  group_by(
+    species,
+    AA_pos,
+    AA_original,
+    AA_mutation
+  ) |>
+  summarise(
+    PMID = paste(
+      unique(na.omit(str_trim(PMID))),
+      collapse = "; "
+    ),
+    .groups = "drop"
+  )
+
+card_mapped_ecoli <- card_group_pmid |>
   dplyr::filter(species %in% refs$Species) |>
   dplyr::mutate(
     species_sq = stringr::str_replace_all(species, " ", "_")
@@ -158,7 +173,7 @@ card_mapped_ecoli <- card_processed_data |>
   dplyr::select(-species_sq) |>
   dplyr::mutate(source = "CARD")
 
-readr::write_csv(
+write_csv(
   card_mapped_ecoli,
   "data/processed_data/CARD_processed.csv"
 )
@@ -197,7 +212,23 @@ dragdb_processed_data <- dragdb_data |>
   select(species, AA_original, AA_pos, AA_mutation, provean, PMID) |>
   distinct()
 
-dragdb_mapped_ecoli <- dragdb_processed_data |>
+dragdb_group_pmid <- dragdb_processed_data |> 
+  group_by(
+    species,
+    AA_pos,
+    AA_original,
+    AA_mutation,
+    provean
+  ) |>
+  summarise(
+    PMID = paste(
+      unique(na.omit(str_trim(PMID))),
+      collapse = "; "
+    ),
+    .groups = "drop"
+  )
+
+dragdb_mapped_ecoli <- dragdb_group_pmid |>
   filter(species %in% refs$Species) |>
   mutate(species_sq = str_replace(species, " ", "_")) |>
   group_by(species_sq) |>
@@ -463,13 +494,16 @@ parse_one_pubmed_ref <- function(pmid) {
 get_pubmed_ref_table <- function(pmids) {
   pmids |>
     as.character() |>
+    stringr::str_split(";") |>
+    unlist() |>
+    stringr::str_trim() |>
+    discard(~ .x == "" | is.na(.x)) |>
     unique() |>
     purrr::map_dfr(parse_one_pubmed_ref)
 }
 
 ref_table <- all_data |>
   dplyr::distinct(PMID) |>
-  dplyr::filter(!is.na(PMID), PMID != "") |>
   dplyr::pull(PMID) |>
   get_pubmed_ref_table()
 
@@ -498,7 +532,12 @@ combined_refs <- dplyr::bind_rows(
   ref_table_clean
 )
 
-readr::write_csv(
+write_csv(
   combined_refs,
   "data/processed_data/all_references.csv"
+)
+
+write_csv(
+  combined_refs,
+  "code/RIFRMap/data/all_references.csv"
 )

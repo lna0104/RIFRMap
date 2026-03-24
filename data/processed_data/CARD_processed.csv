@@ -1,309 +1,214 @@
-species,AA_original,AA_mutation,AA_pos,PMID,AA_pos_Ecoli,source
-Bacillus subtilis,A,N,478,12169622,522,CARD
-Bacillus subtilis,Q,K,469,11101662,513,CARD
-Bacillus subtilis,S,L,487,12169622,531,CARD
-Bacillus subtilis,Q,R,469,11101662,513,CARD
-Bacillus subtilis,H,Y,482,11101662,526,CARD
-Clostridioides difficile,H,Y,502,22361457,526,CARD
-Clostridioides difficile,H,L,502,22361457,526,CARD
-Clostridioides difficile,Q,R,1073,23887866,1255,CARD
-Clostridioides difficile,S,T,498,21998414,522,CARD
-Clostridioides difficile,S,P,488,21998414,512,CARD
-Clostridioides difficile,S,T,488,18559647,512,CARD
-Clostridioides difficile,S,Y,550,22361457,574,CARD
-Clostridioides difficile,S,F,550,22361457,574,CARD
-Clostridioides difficile,R,K,505,19140738,529,CARD
-Clostridioides difficile,D,V,492,22361457,516,CARD
-Clostridioides difficile,H,N,502,19140738,526,CARD
-Clostridioides difficile,D,N,492,22361457,516,CARD
-Clostridioides difficile,P,S,496,22908175,520,CARD
-Escherichia coli,R,H,687,3050121,687,CARD
-Escherichia coli,P,L,564,3050121,564,CARD
-Escherichia coli,T,P,563,3050121,563,CARD
-Escherichia coli,L,P,533,3050121,533,CARD
-Escherichia coli,S,F,531,3050121,531,CARD
-Escherichia coli,R,S,529,3050121,529,CARD
-Escherichia coli,R,C,529,3050121,529,CARD
-Escherichia coli,H,Y,526,3050121,526,CARD
-Escherichia coli,Q,P,513,3050121,513,CARD
-Escherichia coli,Q,L,513,3050121,513,CARD
-Escherichia coli,V,F,146,3050121,146,CARD
-Helicobacter pylori,V,E,149,10817737,146,CARD
-Helicobacter pylori,D,Y,530,17350989,516,CARD
-Helicobacter pylori,D,I,530,17350989,516,CARD
-Helicobacter pylori,D,G,530,17350989,516,CARD
-Helicobacter pylori,I,L,586,10348780,572,CARD
-Helicobacter pylori,I,N,586,10348780,572,CARD
-Helicobacter pylori,S,L,545,10348780,531,CARD
-Helicobacter pylori,D,V,530,10348780,516,CARD
-Helicobacter pylori,Q,R,527,10348780,513,CARD
-Helicobacter pylori,Q,K,527,10348780,513,CARD
-Helicobacter pylori,L,P,525,10348780,511,CARD
-Helicobacter pylori,D,L,530,17350989,516,CARD
-Helicobacter pylori,D,F,530,17350989,516,CARD
-Helicobacter pylori,H,Y,540,17350989,526,CARD
-Helicobacter pylori,H,N,540,17350989,526,CARD
-Helicobacter pylori,L,I,525,17350989,511,CARD
-Helicobacter pylori,D,N,530,17350989,516,CARD
-Helicobacter pylori,D,E,530,17350989,516,CARD
-Helicobacter pylori,R,H,701,10817737,687,CARD
-Helicobacter pylori,V,W,149,10817737,146,CARD
-Helicobacter pylori,V,D,149,10817737,146,CARD
-Helicobacter pylori,V,K,149,10817737,146,CARD
-Helicobacter pylori,V,Q,149,10817737,146,CARD
-Helicobacter pylori,V,F,149,10817737,146,CARD
-Helicobacter pylori,I,V,837,30774400,827,CARD
-Mycobacterium leprae,V,I,472,15603834,547,CARD
-Mycobacterium leprae,S,L,456,15603834,531,CARD
-Mycobacterium tuberculosis,A,G,451,978-92-4-008241-0,532,CARD
-Mycobacterium tuberculosis,Q,L,432,10423225,513,CARD
-Mycobacterium tuberculosis,L,P,430,22708343,511,CARD
-Mycobacterium tuberculosis,E,A,423,10423225,504,CARD
-Mycobacterium tuberculosis,Q,H,409,12454132,490,CARD
-Mycobacterium tuberculosis,Q,P,432,12454132,513,CARD
-Mycobacterium tuberculosis,S,W,441,12454132,522,CARD
-Mycobacterium tuberculosis,D,H,435,978-92-4-008241-0,516,CARD
-Mycobacterium tuberculosis,D,L,435,978-92-4-008241-0,516,CARD
-Mycobacterium tuberculosis,D,V,435,978-92-4-008241-0,516,CARD
-Mycobacterium tuberculosis,L,P,440,8870258,521,CARD
-Mycobacterium tuberculosis,A,V,286,8870258,381,CARD
-Mycobacterium tuberculosis,V,F,170,10722516,146,CARD
-Mycobacterium tuberculosis,D,E,435,978-92-4-008241-0,516,CARD
-Mycobacterium tuberculosis,Q,R,436,978-92-4-008241-0,517,CARD
-Mycobacterium tuberculosis,Q,P,436,978-92-4-008241-0,517,CARD
-Mycobacterium tuberculosis,N,H,437,978-92-4-008241-0,518,CARD
-Mycobacterium tuberculosis,N,D,437,978-92-4-008241-0,518,CARD
-Mycobacterium tuberculosis,N,S,437,978-92-4-008241-0,518,CARD
-Mycobacterium tuberculosis,N,I,437,978-92-4-008241-0,518,CARD
-Mycobacterium tuberculosis,N,H,438,978-92-4-008241-0,519,CARD
-Mycobacterium tuberculosis,P,S,439,978-92-4-008241-0,520,CARD
-Mycobacterium tuberculosis,P,L,439,978-92-4-008241-0,520,CARD
-Mycobacterium tuberculosis,P,A,439,978-92-4-008241-0,520,CARD
-Mycobacterium tuberculosis,S,A,441,978-92-4-008241-0,522,CARD
-Mycobacterium tuberculosis,S,L,441,978-92-4-008241-0,522,CARD
-Mycobacterium tuberculosis,S,V,441,978-92-4-008241-0,522,CARD
-Mycobacterium tuberculosis,S,Q,441,978-92-4-008241-0,522,CARD
-Mycobacterium tuberculosis,S,M,441,978-92-4-008241-0,522,CARD
-Mycobacterium tuberculosis,S,K,441,978-92-4-008241-0,522,CARD
-Mycobacterium tuberculosis,G,E,442,978-92-4-008241-0,523,CARD
-Mycobacterium tuberculosis,S,W,441,978-92-4-008241-0,522,CARD
-Mycobacterium tuberculosis,D,A,435,35944069,516,CARD
-Mycobacterium tuberculosis,D,F,435,35944069,516,CARD
-Mycobacterium tuberculosis,D,N,435,35944069,516,CARD
-Mycobacterium tuberculosis,L,S,443,978-92-4-008241-0,524,CARD
-Mycobacterium tuberculosis,T,P,444,978-92-4-008241-0,525,CARD
-Mycobacterium tuberculosis,D,E,545,35944069,626,CARD
-Mycobacterium tuberculosis,L,W,443,978-92-4-008241-0,524,CARD
-Mycobacterium tuberculosis,L,F,443,978-92-4-008241-0,524,CARD
-Mycobacterium tuberculosis,T,S,444,978-92-4-008241-0,525,CARD
-Mycobacterium tuberculosis,T,I,444,978-92-4-008241-0,525,CARD
-Mycobacterium tuberculosis,H,Y,445,978-92-4-008241-0,526,CARD
-Mycobacterium tuberculosis,H,S,445,978-92-4-008241-0,526,CARD
-Mycobacterium tuberculosis,K,Q,446,978-92-4-008241-0,527,CARD
-Mycobacterium tuberculosis,H,P,445,978-92-4-008241-0,526,CARD
-Mycobacterium tuberculosis,H,N,445,978-92-4-008241-0,526,CARD
-Mycobacterium tuberculosis,H,F,445,978-92-4-008241-0,526,CARD
-Mycobacterium tuberculosis,H,L,445,978-92-4-008241-0,526,CARD
-Mycobacterium tuberculosis,H,C,445,35944069,526,CARD
-Mycobacterium tuberculosis,H,F,445,35944069,526,CARD
-Mycobacterium tuberculosis,H,G,445,35944069,526,CARD
-Mycobacterium tuberculosis,H,N,445,35944069,526,CARD
-Mycobacterium tuberculosis,H,P,445,35944069,526,CARD
-Mycobacterium tuberculosis,H,R,445,978-92-4-008241-0,526,CARD
-Mycobacterium tuberculosis,I,F,491,35944069,572,CARD
-Mycobacterium tuberculosis,H,C,445,978-92-4-008241-0,526,CARD
-Mycobacterium tuberculosis,H,G,445,978-92-4-008241-0,526,CARD
-Mycobacterium tuberculosis,G,D,981,35944069,1197,CARD
-Mycobacterium tuberculosis,T,P,676,35944069,763,CARD
-Mycobacterium tuberculosis,V,F,170,35944069,146,CARD
-Mycobacterium tuberculosis,H,T,445,978-92-4-008241-0,526,CARD
-Mycobacterium tuberculosis,H,D,445,978-92-4-008241-0,526,CARD
-Mycobacterium tuberculosis,H,Q,445,978-92-4-008241-0,526,CARD
-Mycobacterium tuberculosis,K,R,446,978-92-4-008241-0,527,CARD
-Mycobacterium tuberculosis,K,E,446,978-92-4-008241-0,527,CARD
-Mycobacterium tuberculosis,K,T,446,978-92-4-008241-0,527,CARD
-Mycobacterium tuberculosis,R,L,448,978-92-4-008241-0,529,CARD
-Mycobacterium tuberculosis,R,K,448,978-92-4-008241-0,529,CARD
-Mycobacterium tuberculosis,R,Q,448,978-92-4-008241-0,529,CARD
-Mycobacterium tuberculosis,L,M,449,978-92-4-008241-0,530,CARD
-Mycobacterium tuberculosis,Q,K,432,35944069,513,CARD
-Mycobacterium tuberculosis,Q,L,432,35944069,513,CARD
-Mycobacterium tuberculosis,S,F,450,978-92-4-008241-0,531,CARD
-Mycobacterium tuberculosis,S,A,450,978-92-4-008241-0,531,CARD
-Mycobacterium tuberculosis,S,L,450,978-92-4-008241-0,531,CARD
-Mycobacterium tuberculosis,S,G,450,978-92-4-008241-0,531,CARD
-Mycobacterium tuberculosis,S,Q,450,978-92-4-008241-0,531,CARD
-Mycobacterium tuberculosis,S,T,431,35944069,512,CARD
-Mycobacterium tuberculosis,S,L,441,35944069,522,CARD
-Mycobacterium tuberculosis,S,Q,441,35944069,522,CARD
-Mycobacterium tuberculosis,S,F,450,35944069,531,CARD
-Mycobacterium tuberculosis,S,Q,450,35944069,531,CARD
-Mycobacterium tuberculosis,S,Y,450,35944069,531,CARD
-Mycobacterium tuberculosis,S,V,450,978-92-4-008241-0,531,CARD
-Mycobacterium tuberculosis,S,M,450,978-92-4-008241-0,531,CARD
-Mycobacterium tuberculosis,S,C,450,978-92-4-008241-0,531,CARD
-Mycobacterium tuberculosis,S,Y,450,978-92-4-008241-0,531,CARD
-Mycobacterium tuberculosis,S,W,450,978-92-4-008241-0,531,CARD
-Mycobacterium tuberculosis,A,V,451,978-92-4-008241-0,532,CARD
-Mycobacterium tuberculosis,L,V,452,978-92-4-008241-0,533,CARD
-Mycobacterium tuberculosis,L,M,452,978-92-4-008241-0,533,CARD
-Mycobacterium tuberculosis,L,P,452,978-92-4-008241-0,533,CARD
-Mycobacterium tuberculosis,I,F,491,978-92-4-008241-0,572,CARD
-Mycobacterium tuberculosis,D,G,435,35944069,516,CARD
-Mycobacterium tuberculosis,D,V,435,35944069,516,CARD
-Mycobacterium tuberculosis,D,Y,435,35944069,516,CARD
-Mycobacterium tuberculosis,H,D,445,35944069,526,CARD
-Mycobacterium tuberculosis,H,L,445,35944069,526,CARD
-Mycobacterium tuberculosis,H,R,445,35944069,526,CARD
-Mycobacterium tuberculosis,H,Y,445,35944069,526,CARD
-Mycobacterium tuberculosis,T,N,427,28904673,508,CARD
-Mycobacterium tuberculosis,S,N,431,28904673,512,CARD
-Mycobacterium tuberculosis,L,P,430,35944069,511,CARD
-Mycobacterium tuberculosis,L,P,452,35944069,533,CARD
-Mycobacterium tuberculosis,P,T,439,28904673,520,CARD
-Mycobacterium tuberculosis,M,I,434,35944069,515,CARD
-Mycobacterium tuberculosis,Q,P,432,35944069,513,CARD
-Mycobacterium tuberculosis,S,L,450,35944069,531,CARD
-Mycobacterium tuberculosis,S,W,450,35944069,531,CARD
-Mycobacterium tuberculosis,V,F,170,978-92-4-008241-0,146,CARD
-Mycobacterium tuberculosis,G,S,426,978-92-4-008241-0,507,CARD
-Mycobacterium tuberculosis,T,P,427,978-92-4-008241-0,508,CARD
-Mycobacterium tuberculosis,T,S,427,978-92-4-008241-0,508,CARD
-Mycobacterium tuberculosis,T,A,427,978-92-4-008241-0,508,CARD
-Mycobacterium tuberculosis,T,G,427,978-92-4-008241-0,508,CARD
-Mycobacterium tuberculosis,D,G,435,30337678,516,CARD
-Mycobacterium tuberculosis,D,V,435,30337678,516,CARD
-Mycobacterium tuberculosis,D,Y,435,30337678,516,CARD
-Mycobacterium tuberculosis,F,S,503,30337678,584,CARD
-Mycobacterium tuberculosis,G,S,836,30337678,923,CARD
-Mycobacterium tuberculosis,H,D,445,30337678,526,CARD
-Mycobacterium tuberculosis,H,L,445,30337678,526,CARD
-Mycobacterium tuberculosis,H,R,445,30337678,526,CARD
-Mycobacterium tuberculosis,H,Y,445,30337678,526,CARD
-Mycobacterium tuberculosis,H,R,835,30337678,922,CARD
-Mycobacterium tuberculosis,I,T,1106,30337678,1314,CARD
-Mycobacterium tuberculosis,I,V,480,30337678,561,CARD
-Mycobacterium tuberculosis,L,P,430,30337678,511,CARD
-Mycobacterium tuberculosis,L,P,452,30337678,533,CARD
-Mycobacterium tuberculosis,L,P,731,30337678,818,CARD
-Mycobacterium tuberculosis,M,I,434,30337678,515,CARD
-Mycobacterium tuberculosis,P,L,45,30337678,25,CARD
-Mycobacterium tuberculosis,P,S,45,30337678,25,CARD
-Mycobacterium tuberculosis,Q,P,432,30337678,513,CARD
-Mycobacterium tuberculosis,Q,H,975,30337678,1191,CARD
-Mycobacterium tuberculosis,R,H,827,30337678,914,CARD
-Mycobacterium tuberculosis,S,L,450,30337678,531,CARD
-Mycobacterium tuberculosis,S,W,450,30337678,531,CARD
-Mycobacterium tuberculosis,T,N,427,978-92-4-008241-0,508,CARD
-Mycobacterium tuberculosis,T,I,427,978-92-4-008241-0,508,CARD
-Mycobacterium tuberculosis,S,G,428,978-92-4-008241-0,509,CARD
-Mycobacterium tuberculosis,S,R,428,978-92-4-008241-0,509,CARD
-Mycobacterium tuberculosis,S,W,450,11136757,531,CARD
-Mycobacterium tuberculosis,H,R,445,11136757,526,CARD
-Mycobacterium tuberculosis,H,D,445,11136757,526,CARD
-Mycobacterium tuberculosis,H,C,445,11136757,526,CARD
-Mycobacterium tuberculosis,H,Y,445,11136757,526,CARD
-Mycobacterium tuberculosis,S,Q,441,11136757,522,CARD
-Mycobacterium tuberculosis,S,L,441,18294243,522,CARD
-Mycobacterium tuberculosis,I,F,491,15814606,572,CARD
-Mycobacterium tuberculosis,M,V,434,22708343,515,CARD
-Mycobacterium tuberculosis,M,I,434,22708343,515,CARD
-Mycobacterium tuberculosis,D,Y,435,22708343,516,CARD
-Mycobacterium tuberculosis,D,T,435,22708343,516,CARD
-Mycobacterium tuberculosis,D,V,435,21300839,516,CARD
-Mycobacterium tuberculosis,K,Q,446,22708343,527,CARD
-Mycobacterium tuberculosis,H,S,445,22708343,526,CARD
-Mycobacterium tuberculosis,S,G,450,22708343,531,CARD
-Mycobacterium tuberculosis,L,P,452,22708343,533,CARD
-Mycobacterium tuberculosis,L,R,457,25427352,538,CARD
-Mycobacterium tuberculosis,L,R,452,25427352,533,CARD
-Mycobacterium tuberculosis,S,T,428,978-92-4-008241-0,509,CARD
-Mycobacterium tuberculosis,S,I,428,978-92-4-008241-0,509,CARD
-Mycobacterium tuberculosis,Q,L,429,978-92-4-008241-0,510,CARD
-Mycobacterium tuberculosis,Q,P,429,978-92-4-008241-0,510,CARD
-Mycobacterium tuberculosis,E,D,592,11136757,672,CARD
-Mycobacterium tuberculosis,R,C,552,11136757,633,CARD
-Mycobacterium tuberculosis,L,V,490,11136757,571,CARD
-Mycobacterium tuberculosis,L,M,464,18653964,545,CARD
-Mycobacterium tuberculosis,L,P,457,17970586,538,CARD
-Mycobacterium tuberculosis,N,I,437,15728936,518,CARD
-Mycobacterium tuberculosis,N,H,437,11474030,518,CARD
-Mycobacterium tuberculosis,D,K,435,11474030,516,CARD
-Mycobacterium tuberculosis,L,M,430,11474030,511,CARD
-Mycobacterium tuberculosis,T,S,427,11474030,508,CARD
-Mycobacterium tuberculosis,Q,H,436,18600483,517,CARD
-Mycobacterium tuberculosis,H,P,445,15814606,526,CARD
-Mycobacterium tuberculosis,Q,R,432,15814606,513,CARD
-Mycobacterium tuberculosis,Q,H,429,978-92-4-008241-0,510,CARD
-Mycobacterium tuberculosis,S,F,450,19721079,531,CARD
-Mycobacterium tuberculosis,H,Q,445,19721079,526,CARD
-Mycobacterium tuberculosis,H,F,445,19721079,526,CARD
-Mycobacterium tuberculosis,G,A,442,19721079,523,CARD
-Mycobacterium tuberculosis,N,K,438,19721079,519,CARD
-Mycobacterium tuberculosis,D,H,435,19721079,516,CARD
-Mycobacterium tuberculosis,Q,E,432,19721079,513,CARD
-Mycobacterium tuberculosis,Q,D,432,19721079,513,CARD
-Mycobacterium tuberculosis,T,H,427,19721079,508,CARD
-Mycobacterium tuberculosis,T,A,427,19721079,508,CARD
-Mycobacterium tuberculosis,T,P,427,19721079,508,CARD
-Mycobacterium tuberculosis,G,D,426,19721079,507,CARD
-Mycobacterium tuberculosis,L,R,430,978-92-4-008241-0,511,CARD
-Mycobacterium tuberculosis,L,P,430,978-92-4-008241-0,511,CARD
-Mycobacterium tuberculosis,S,G,431,978-92-4-008241-0,512,CARD
-Mycobacterium tuberculosis,S,T,431,978-92-4-008241-0,512,CARD
-Mycobacterium tuberculosis,G,S,426,19721079,507,CARD
-Mycobacterium tuberculosis,S,R,431,978-92-4-008241-0,512,CARD
-Mycobacterium tuberculosis,S,L,493,17360809,574,CARD
-Mycobacterium tuberculosis,F,L,505,17360809,586,CARD
-Mycobacterium tuberculosis,H,G,445,10645439,526,CARD
-Mycobacterium tuberculosis,L,M,440,10645439,521,CARD
-Mycobacterium tuberculosis,S,R,431,10645439,512,CARD
-Mycobacterium tuberculosis,R,H,447,11796356,528,CARD
-Mycobacterium tuberculosis,K,N,446,11796356,527,CARD
-Mycobacterium tuberculosis,S,Q,441,11796356,522,CARD
-Mycobacterium tuberculosis,N,T,437,11796356,518,CARD
-Mycobacterium tuberculosis,L,V,430,11796356,511,CARD
-Mycobacterium tuberculosis,H,E,445,8027320,526,CARD
-Mycobacterium tuberculosis,S,C,450,8027320,531,CARD
-Mycobacterium tuberculosis,S,T,431,8027320,512,CARD
-Mycobacterium tuberculosis,L,R,430,8027320,511,CARD
-Mycobacterium tuberculosis,S,I,431,15184414,512,CARD
-Mycobacterium tuberculosis,H,N,445,15184414,526,CARD
-Mycobacterium tuberculosis,R,Q,448,15184414,529,CARD
-Mycobacterium tuberculosis,H,T,445,15184414,526,CARD
-Mycobacterium tuberculosis,R,P,447,19547874,528,CARD
-Mycobacterium tuberculosis,L,S,443,19547874,524,CARD
-Mycobacterium tuberculosis,Q,L,436,19547874,517,CARD
-Mycobacterium tuberculosis,S,N,431,978-92-4-008241-0,512,CARD
-Mycobacterium tuberculosis,Q,L,432,978-92-4-008241-0,513,CARD
-Mycobacterium tuberculosis,Q,E,432,978-92-4-008241-0,513,CARD
-Mycobacterium tuberculosis,Q,N,432,978-92-4-008241-0,513,CARD
-Mycobacterium tuberculosis,S,Q,428,19547874,509,CARD
-Mycobacterium tuberculosis,Q,K,432,978-92-4-008241-0,513,CARD
-Mycobacterium tuberculosis,Q,P,432,978-92-4-008241-0,513,CARD
-Mycobacterium tuberculosis,Q,H,432,978-92-4-008241-0,513,CARD
-Mycobacterium tuberculosis,M,L,434,978-92-4-008241-0,515,CARD
-Mycobacterium tuberculosis,M,R,434,978-92-4-008241-0,515,CARD
-Mycobacterium tuberculosis,M,V,434,978-92-4-008241-0,515,CARD
-Mycobacterium tuberculosis,M,T,434,978-92-4-008241-0,515,CARD
-Mycobacterium tuberculosis,D,G,435,978-92-4-008241-0,516,CARD
-Mycobacterium tuberculosis,D,Y,435,978-92-4-008241-0,516,CARD
-Mycobacterium tuberculosis,M,I,434,978-92-4-008241-0,515,CARD
-Mycobacterium tuberculosis,Q,N,436,978-92-4-008241-0,517,CARD
-Mycobacterium tuberculosis,N,Y,437,978-92-4-008241-0,518,CARD
-Mycobacterium tuberculosis,D,A,435,978-92-4-008241-0,516,CARD
-Mycobacterium tuberculosis,D,N,435,978-92-4-008241-0,516,CARD
-Mycobacterium tuberculosis,D,F,435,978-92-4-008241-0,516,CARD
-Mycobacterium tuberculosis,S,R,428,17108078,509,CARD
-Mycobacterium tuberculosis,S,L,450,17108078,531,CARD
-Mycobacterium tuberculosis,H,L,445,10423225,526,CARD
-Mycobacterium tuberculosis,D,G,435,10423225,516,CARD
-Mycobacterium tuberculosis,D,N,435,10423225,516,CARD
-Mycobacterium tuberculosis,Q,K,432,10423225,513,CARD
-Staphylococcus aureus,Q,R,465,10543773,510,CARD
-Staphylococcus aureus,L,S,466,10543773,511,CARD
-Staphylococcus aureus,Q,K,468,10543773,513,CARD
-Staphylococcus aureus,H,N,481,10543773,526,CARD
-Staphylococcus aureus,A,T,477,10543773,522,CARD
-Staphylococcus aureus,A,T,473,10543773,518,CARD
-Vibrio vulnificus,S,L,522,37877661,522,CARD
+species,AA_pos,AA_original,AA_mutation,PMID,AA_pos_Ecoli,source
+Bacillus subtilis,469,Q,K,11101662,513,CARD
+Bacillus subtilis,469,Q,R,11101662,513,CARD
+Bacillus subtilis,478,A,N,12169622,522,CARD
+Bacillus subtilis,482,H,Y,11101662,526,CARD
+Bacillus subtilis,487,S,L,12169622,531,CARD
+Clostridioides difficile,488,S,P,21998414,512,CARD
+Clostridioides difficile,488,S,T,18559647,512,CARD
+Clostridioides difficile,492,D,N,22361457,516,CARD
+Clostridioides difficile,492,D,V,22361457,516,CARD
+Clostridioides difficile,496,P,S,22908175,520,CARD
+Clostridioides difficile,498,S,T,21998414,522,CARD
+Clostridioides difficile,502,H,L,22361457,526,CARD
+Clostridioides difficile,502,H,N,19140738,526,CARD
+Clostridioides difficile,502,H,Y,22361457,526,CARD
+Clostridioides difficile,505,R,K,19140738,529,CARD
+Clostridioides difficile,550,S,F,22361457,574,CARD
+Clostridioides difficile,550,S,Y,22361457,574,CARD
+Clostridioides difficile,1073,Q,R,23887866,1255,CARD
+Escherichia coli,146,V,F,3050121,146,CARD
+Escherichia coli,513,Q,L,3050121,513,CARD
+Escherichia coli,513,Q,P,3050121,513,CARD
+Escherichia coli,526,H,Y,3050121,526,CARD
+Escherichia coli,529,R,C,3050121,529,CARD
+Escherichia coli,529,R,S,3050121,529,CARD
+Escherichia coli,531,S,F,3050121,531,CARD
+Escherichia coli,533,L,P,3050121,533,CARD
+Escherichia coli,563,T,P,3050121,563,CARD
+Escherichia coli,564,P,L,3050121,564,CARD
+Escherichia coli,687,R,H,3050121,687,CARD
+Helicobacter pylori,149,V,D,10817737,146,CARD
+Helicobacter pylori,149,V,E,10817737,146,CARD
+Helicobacter pylori,149,V,F,10817737,146,CARD
+Helicobacter pylori,149,V,K,10817737,146,CARD
+Helicobacter pylori,149,V,Q,10817737,146,CARD
+Helicobacter pylori,149,V,W,10817737,146,CARD
+Helicobacter pylori,525,L,I,17350989,511,CARD
+Helicobacter pylori,525,L,P,10348780,511,CARD
+Helicobacter pylori,527,Q,K,10348780,513,CARD
+Helicobacter pylori,527,Q,R,10348780,513,CARD
+Helicobacter pylori,530,D,E,17350989,516,CARD
+Helicobacter pylori,530,D,F,17350989,516,CARD
+Helicobacter pylori,530,D,G,17350989,516,CARD
+Helicobacter pylori,530,D,I,17350989,516,CARD
+Helicobacter pylori,530,D,L,17350989,516,CARD
+Helicobacter pylori,530,D,N,17350989,516,CARD
+Helicobacter pylori,530,D,V,10348780,516,CARD
+Helicobacter pylori,530,D,Y,17350989,516,CARD
+Helicobacter pylori,540,H,N,17350989,526,CARD
+Helicobacter pylori,540,H,Y,17350989,526,CARD
+Helicobacter pylori,545,S,L,10348780,531,CARD
+Helicobacter pylori,586,I,L,10348780,572,CARD
+Helicobacter pylori,586,I,N,10348780,572,CARD
+Helicobacter pylori,701,R,H,10817737,687,CARD
+Helicobacter pylori,837,I,V,30774400,827,CARD
+Mycobacterium leprae,456,S,L,15603834,531,CARD
+Mycobacterium leprae,472,V,I,15603834,547,CARD
+Mycobacterium tuberculosis,45,P,L,30337678,25,CARD
+Mycobacterium tuberculosis,45,P,S,30337678,25,CARD
+Mycobacterium tuberculosis,170,V,F,10722516; 35944069; 978-92-4-008241-0,146,CARD
+Mycobacterium tuberculosis,286,A,V,8870258,381,CARD
+Mycobacterium tuberculosis,409,Q,H,12454132,490,CARD
+Mycobacterium tuberculosis,423,E,A,10423225,504,CARD
+Mycobacterium tuberculosis,426,G,D,19721079,507,CARD
+Mycobacterium tuberculosis,426,G,S,978-92-4-008241-0; 19721079,507,CARD
+Mycobacterium tuberculosis,427,T,A,978-92-4-008241-0; 19721079,508,CARD
+Mycobacterium tuberculosis,427,T,G,978-92-4-008241-0,508,CARD
+Mycobacterium tuberculosis,427,T,H,19721079,508,CARD
+Mycobacterium tuberculosis,427,T,I,978-92-4-008241-0,508,CARD
+Mycobacterium tuberculosis,427,T,N,28904673; 978-92-4-008241-0,508,CARD
+Mycobacterium tuberculosis,427,T,P,978-92-4-008241-0; 19721079,508,CARD
+Mycobacterium tuberculosis,427,T,S,978-92-4-008241-0; 11474030,508,CARD
+Mycobacterium tuberculosis,428,S,G,978-92-4-008241-0,509,CARD
+Mycobacterium tuberculosis,428,S,I,978-92-4-008241-0,509,CARD
+Mycobacterium tuberculosis,428,S,Q,19547874,509,CARD
+Mycobacterium tuberculosis,428,S,R,978-92-4-008241-0; 17108078,509,CARD
+Mycobacterium tuberculosis,428,S,T,978-92-4-008241-0,509,CARD
+Mycobacterium tuberculosis,429,Q,H,978-92-4-008241-0,510,CARD
+Mycobacterium tuberculosis,429,Q,L,978-92-4-008241-0,510,CARD
+Mycobacterium tuberculosis,429,Q,P,978-92-4-008241-0,510,CARD
+Mycobacterium tuberculosis,430,L,M,11474030,511,CARD
+Mycobacterium tuberculosis,430,L,P,22708343; 35944069; 30337678; 978-92-4-008241-0,511,CARD
+Mycobacterium tuberculosis,430,L,R,978-92-4-008241-0; 8027320,511,CARD
+Mycobacterium tuberculosis,430,L,V,11796356,511,CARD
+Mycobacterium tuberculosis,431,S,G,978-92-4-008241-0,512,CARD
+Mycobacterium tuberculosis,431,S,I,15184414,512,CARD
+Mycobacterium tuberculosis,431,S,N,28904673; 978-92-4-008241-0,512,CARD
+Mycobacterium tuberculosis,431,S,R,978-92-4-008241-0; 10645439,512,CARD
+Mycobacterium tuberculosis,431,S,T,35944069; 978-92-4-008241-0; 8027320,512,CARD
+Mycobacterium tuberculosis,432,Q,D,19721079,513,CARD
+Mycobacterium tuberculosis,432,Q,E,19721079; 978-92-4-008241-0,513,CARD
+Mycobacterium tuberculosis,432,Q,H,978-92-4-008241-0,513,CARD
+Mycobacterium tuberculosis,432,Q,K,35944069; 978-92-4-008241-0; 10423225,513,CARD
+Mycobacterium tuberculosis,432,Q,L,10423225; 35944069; 978-92-4-008241-0,513,CARD
+Mycobacterium tuberculosis,432,Q,N,978-92-4-008241-0,513,CARD
+Mycobacterium tuberculosis,432,Q,P,12454132; 35944069; 30337678; 978-92-4-008241-0,513,CARD
+Mycobacterium tuberculosis,432,Q,R,15814606,513,CARD
+Mycobacterium tuberculosis,434,M,I,35944069; 30337678; 22708343; 978-92-4-008241-0,515,CARD
+Mycobacterium tuberculosis,434,M,L,978-92-4-008241-0,515,CARD
+Mycobacterium tuberculosis,434,M,R,978-92-4-008241-0,515,CARD
+Mycobacterium tuberculosis,434,M,T,978-92-4-008241-0,515,CARD
+Mycobacterium tuberculosis,434,M,V,22708343; 978-92-4-008241-0,515,CARD
+Mycobacterium tuberculosis,435,D,A,35944069; 978-92-4-008241-0,516,CARD
+Mycobacterium tuberculosis,435,D,E,978-92-4-008241-0,516,CARD
+Mycobacterium tuberculosis,435,D,F,35944069; 978-92-4-008241-0,516,CARD
+Mycobacterium tuberculosis,435,D,G,35944069; 30337678; 978-92-4-008241-0; 10423225,516,CARD
+Mycobacterium tuberculosis,435,D,H,978-92-4-008241-0; 19721079,516,CARD
+Mycobacterium tuberculosis,435,D,K,11474030,516,CARD
+Mycobacterium tuberculosis,435,D,L,978-92-4-008241-0,516,CARD
+Mycobacterium tuberculosis,435,D,N,35944069; 978-92-4-008241-0; 10423225,516,CARD
+Mycobacterium tuberculosis,435,D,T,22708343,516,CARD
+Mycobacterium tuberculosis,435,D,V,978-92-4-008241-0; 35944069; 30337678; 21300839,516,CARD
+Mycobacterium tuberculosis,435,D,Y,35944069; 30337678; 22708343; 978-92-4-008241-0,516,CARD
+Mycobacterium tuberculosis,436,Q,H,18600483,517,CARD
+Mycobacterium tuberculosis,436,Q,L,19547874,517,CARD
+Mycobacterium tuberculosis,436,Q,N,978-92-4-008241-0,517,CARD
+Mycobacterium tuberculosis,436,Q,P,978-92-4-008241-0,517,CARD
+Mycobacterium tuberculosis,436,Q,R,978-92-4-008241-0,517,CARD
+Mycobacterium tuberculosis,437,N,D,978-92-4-008241-0,518,CARD
+Mycobacterium tuberculosis,437,N,H,978-92-4-008241-0; 11474030,518,CARD
+Mycobacterium tuberculosis,437,N,I,978-92-4-008241-0; 15728936,518,CARD
+Mycobacterium tuberculosis,437,N,S,978-92-4-008241-0,518,CARD
+Mycobacterium tuberculosis,437,N,T,11796356,518,CARD
+Mycobacterium tuberculosis,437,N,Y,978-92-4-008241-0,518,CARD
+Mycobacterium tuberculosis,438,N,H,978-92-4-008241-0,519,CARD
+Mycobacterium tuberculosis,438,N,K,19721079,519,CARD
+Mycobacterium tuberculosis,439,P,A,978-92-4-008241-0,520,CARD
+Mycobacterium tuberculosis,439,P,L,978-92-4-008241-0,520,CARD
+Mycobacterium tuberculosis,439,P,S,978-92-4-008241-0,520,CARD
+Mycobacterium tuberculosis,439,P,T,28904673,520,CARD
+Mycobacterium tuberculosis,440,L,M,10645439,521,CARD
+Mycobacterium tuberculosis,440,L,P,8870258,521,CARD
+Mycobacterium tuberculosis,441,S,A,978-92-4-008241-0,522,CARD
+Mycobacterium tuberculosis,441,S,K,978-92-4-008241-0,522,CARD
+Mycobacterium tuberculosis,441,S,L,978-92-4-008241-0; 35944069; 18294243,522,CARD
+Mycobacterium tuberculosis,441,S,M,978-92-4-008241-0,522,CARD
+Mycobacterium tuberculosis,441,S,Q,978-92-4-008241-0; 35944069; 11136757; 11796356,522,CARD
+Mycobacterium tuberculosis,441,S,V,978-92-4-008241-0,522,CARD
+Mycobacterium tuberculosis,441,S,W,12454132; 978-92-4-008241-0,522,CARD
+Mycobacterium tuberculosis,442,G,A,19721079,523,CARD
+Mycobacterium tuberculosis,442,G,E,978-92-4-008241-0,523,CARD
+Mycobacterium tuberculosis,443,L,F,978-92-4-008241-0,524,CARD
+Mycobacterium tuberculosis,443,L,S,978-92-4-008241-0; 19547874,524,CARD
+Mycobacterium tuberculosis,443,L,W,978-92-4-008241-0,524,CARD
+Mycobacterium tuberculosis,444,T,I,978-92-4-008241-0,525,CARD
+Mycobacterium tuberculosis,444,T,P,978-92-4-008241-0,525,CARD
+Mycobacterium tuberculosis,444,T,S,978-92-4-008241-0,525,CARD
+Mycobacterium tuberculosis,445,H,C,35944069; 978-92-4-008241-0; 11136757,526,CARD
+Mycobacterium tuberculosis,445,H,D,978-92-4-008241-0; 35944069; 30337678; 11136757,526,CARD
+Mycobacterium tuberculosis,445,H,E,8027320,526,CARD
+Mycobacterium tuberculosis,445,H,F,978-92-4-008241-0; 35944069; 19721079,526,CARD
+Mycobacterium tuberculosis,445,H,G,35944069; 978-92-4-008241-0; 10645439,526,CARD
+Mycobacterium tuberculosis,445,H,L,978-92-4-008241-0; 35944069; 30337678; 10423225,526,CARD
+Mycobacterium tuberculosis,445,H,N,978-92-4-008241-0; 35944069; 15184414,526,CARD
+Mycobacterium tuberculosis,445,H,P,978-92-4-008241-0; 35944069; 15814606,526,CARD
+Mycobacterium tuberculosis,445,H,Q,978-92-4-008241-0; 19721079,526,CARD
+Mycobacterium tuberculosis,445,H,R,978-92-4-008241-0; 35944069; 30337678; 11136757,526,CARD
+Mycobacterium tuberculosis,445,H,S,978-92-4-008241-0; 22708343,526,CARD
+Mycobacterium tuberculosis,445,H,T,978-92-4-008241-0; 15184414,526,CARD
+Mycobacterium tuberculosis,445,H,Y,978-92-4-008241-0; 35944069; 30337678; 11136757,526,CARD
+Mycobacterium tuberculosis,446,K,E,978-92-4-008241-0,527,CARD
+Mycobacterium tuberculosis,446,K,N,11796356,527,CARD
+Mycobacterium tuberculosis,446,K,Q,978-92-4-008241-0; 22708343,527,CARD
+Mycobacterium tuberculosis,446,K,R,978-92-4-008241-0,527,CARD
+Mycobacterium tuberculosis,446,K,T,978-92-4-008241-0,527,CARD
+Mycobacterium tuberculosis,447,R,H,11796356,528,CARD
+Mycobacterium tuberculosis,447,R,P,19547874,528,CARD
+Mycobacterium tuberculosis,448,R,K,978-92-4-008241-0,529,CARD
+Mycobacterium tuberculosis,448,R,L,978-92-4-008241-0,529,CARD
+Mycobacterium tuberculosis,448,R,Q,978-92-4-008241-0; 15184414,529,CARD
+Mycobacterium tuberculosis,449,L,M,978-92-4-008241-0,530,CARD
+Mycobacterium tuberculosis,450,S,A,978-92-4-008241-0,531,CARD
+Mycobacterium tuberculosis,450,S,C,978-92-4-008241-0; 8027320,531,CARD
+Mycobacterium tuberculosis,450,S,F,978-92-4-008241-0; 35944069; 19721079,531,CARD
+Mycobacterium tuberculosis,450,S,G,978-92-4-008241-0; 22708343,531,CARD
+Mycobacterium tuberculosis,450,S,L,978-92-4-008241-0; 35944069; 30337678; 17108078,531,CARD
+Mycobacterium tuberculosis,450,S,M,978-92-4-008241-0,531,CARD
+Mycobacterium tuberculosis,450,S,Q,978-92-4-008241-0; 35944069,531,CARD
+Mycobacterium tuberculosis,450,S,V,978-92-4-008241-0,531,CARD
+Mycobacterium tuberculosis,450,S,W,978-92-4-008241-0; 35944069; 30337678; 11136757,531,CARD
+Mycobacterium tuberculosis,450,S,Y,35944069; 978-92-4-008241-0,531,CARD
+Mycobacterium tuberculosis,451,A,G,978-92-4-008241-0,532,CARD
+Mycobacterium tuberculosis,451,A,V,978-92-4-008241-0,532,CARD
+Mycobacterium tuberculosis,452,L,M,978-92-4-008241-0,533,CARD
+Mycobacterium tuberculosis,452,L,P,978-92-4-008241-0; 35944069; 30337678; 22708343,533,CARD
+Mycobacterium tuberculosis,452,L,R,25427352,533,CARD
+Mycobacterium tuberculosis,452,L,V,978-92-4-008241-0,533,CARD
+Mycobacterium tuberculosis,457,L,P,17970586,538,CARD
+Mycobacterium tuberculosis,457,L,R,25427352,538,CARD
+Mycobacterium tuberculosis,464,L,M,18653964,545,CARD
+Mycobacterium tuberculosis,480,I,V,30337678,561,CARD
+Mycobacterium tuberculosis,490,L,V,11136757,571,CARD
+Mycobacterium tuberculosis,491,I,F,35944069; 978-92-4-008241-0; 15814606,572,CARD
+Mycobacterium tuberculosis,493,S,L,17360809,574,CARD
+Mycobacterium tuberculosis,503,F,S,30337678,584,CARD
+Mycobacterium tuberculosis,505,F,L,17360809,586,CARD
+Mycobacterium tuberculosis,545,D,E,35944069,626,CARD
+Mycobacterium tuberculosis,552,R,C,11136757,633,CARD
+Mycobacterium tuberculosis,592,E,D,11136757,672,CARD
+Mycobacterium tuberculosis,676,T,P,35944069,763,CARD
+Mycobacterium tuberculosis,731,L,P,30337678,818,CARD
+Mycobacterium tuberculosis,827,R,H,30337678,914,CARD
+Mycobacterium tuberculosis,835,H,R,30337678,922,CARD
+Mycobacterium tuberculosis,836,G,S,30337678,923,CARD
+Mycobacterium tuberculosis,975,Q,H,30337678,1191,CARD
+Mycobacterium tuberculosis,981,G,D,35944069,1197,CARD
+Mycobacterium tuberculosis,1106,I,T,30337678,1314,CARD
+Staphylococcus aureus,465,Q,R,10543773,510,CARD
+Staphylococcus aureus,466,L,S,10543773,511,CARD
+Staphylococcus aureus,468,Q,K,10543773,513,CARD
+Staphylococcus aureus,473,A,T,10543773,518,CARD
+Staphylococcus aureus,477,A,T,10543773,522,CARD
+Staphylococcus aureus,481,H,N,10543773,526,CARD
+Vibrio vulnificus,522,S,L,37877661,522,CARD

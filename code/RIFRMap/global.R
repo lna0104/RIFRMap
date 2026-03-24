@@ -1,10 +1,42 @@
+# Core UI
 library(shiny)
+library(bs4Dash)
+library(shinydashboard)
+
+# Data
 library(dplyr)
+library(tidyr)
+library(tidyverse)
 library(readr)
-library(ggplot2)
-library(Biostrings)
+library(gtsummary)
 library(DT)
+
+# Plots / widgets
+library(ggplot2)
 library(ggiraph)
+library(plotly)
+library(ggupset)
+library(shinyWidgets)
+library(shinycssloaders)
+library(gt)
+library(wesanderson)
+library(RColorBrewer)
+
+# UI helpers
+library(bslib)
+library(htmltools)
+library(fresh)
+library(sass)
+
+# BioC + GitHub
+library(Biostrings)
+library(ALJEbinf)
+
+# shinyapps.io
+library(rsconnect)
+
+# Bioinformatics
+library(grantham)
 
 # ---- Load data ----
 
@@ -174,12 +206,7 @@ COLOURING_PALETTES <- list(
   none = c(
     none = "#888888"
   ),
-  distribution = c(
-    default = "#000000",
-    ubiquitous = "#3e3bff",
-    polymorphic = "#12947F",
-    unique = "#FF0000"
-  ),
+  distribution = viridisLite::plasma(100, begin = 0.05, end = 0.9),
   aa_type = c(
     hydrophobic_aliphatic = "#F2BB05",
     hydrophobic_aromatic  = "#7B2CBF",
@@ -489,33 +516,6 @@ plotMutations <- function(muts,
     }
   }
 
-  # determine mutation categories for colouring
-  mutCounts <- NULL
-
-  if (colour_by == "distribution") {
-    filteredMuts <- muts |>
-      dplyr::filter(.data$Species %in% speciesToPlot) |>
-      dplyr::mutate(
-        AA_mut_name_Ecoli = paste0(gene, "_", AA_original, AA_pos_Ecoli, AA_mutation)
-      ) |>
-      dplyr::distinct(Species, AA_mut_name_Ecoli, .keep_all = TRUE)
-
-    nSpecies <- filteredMuts |>
-      dplyr::pull(Species) |>
-      unique() |>
-      length()
-
-    mutCounts <- filteredMuts |>
-      dplyr::count(AA_mut_name_Ecoli, name = "n") |>
-      dplyr::mutate(
-        category = dplyr::case_when(
-          n == 1 ~ "unique",
-          n == nSpecies ~ "ubiquitous",
-          TRUE ~ "polymorphic"
-        )
-      )
-  }
-
 
   # plotting parameters
   pars <- getPars()
@@ -581,6 +581,27 @@ plotMutations <- function(muts,
   pal_aa_type <- COLOURING_PALETTES$aa_type
   pal_aa_distance <- COLOURING_PALETTES$aa_distance
 
+  # determine mutation categories for colouring
+  mutCounts <- NULL
+
+  max_species <- NULL
+
+  if (colour_by == "distribution") {
+    filteredMuts <- muts |>
+      dplyr::filter(.data$Species %in% speciesToPlot) |>
+      dplyr::mutate(
+        AA_mut_name_Ecoli = paste0(gene, "_", AA_original, AA_pos_Ecoli, AA_mutation)
+      ) |>
+      dplyr::distinct(Species, AA_mut_name_Ecoli, .keep_all = TRUE)
+
+    mutCounts <- filteredMuts |>
+      dplyr::count(AA_mut_name_Ecoli, name = "n_species")
+
+    max_species <- suppressWarnings(max(mutCounts$n_species, na.rm = TRUE))
+
+    distribution_cols <- COLOURING_PALETTES$distribution
+  }
+
   # calculate max_dist for aa_distance colouring
   max_dist <- NULL
 
@@ -614,15 +635,17 @@ plotMutations <- function(muts,
       }
 
       if (colour_by == "distribution") {
-        blk$Colour[] <- pal_distribution[["default"]]
-
         if (!is.null(mutCounts) && "AA_mut_name_Ecoli" %in% names(blk)) {
           idx <- match(blk$AA_mut_name_Ecoli, mutCounts$AA_mut_name_Ecoli)
-          cat <- mutCounts$category[idx]
+          n_sp <- mutCounts$n_species[idx]
 
-          ok <- !is.na(cat)
-          blk$Colour[ok] <- unname(pal_distribution[cat[ok]])
-          blk$Colour[is.na(blk$Colour)] <- pal_distribution[["default"]]
+          scaled <- round((n_sp / max_species) * 99) + 1
+          scaled[is.na(scaled)] <- 1
+          scaled <- pmax(1, pmin(100, scaled))
+
+          blk$Colour <- distribution_cols[scaled]
+        } else {
+          blk$Colour[] <- distribution_cols[1]
         }
       }
 
