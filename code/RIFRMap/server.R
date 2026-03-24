@@ -429,6 +429,8 @@ function(input, output, session) {
     )
   }
 
+  # ---- Legend ----
+
   output$legend_panel <- renderUI({
     mode <- input$colour_by
 
@@ -454,6 +456,8 @@ function(input, output, session) {
       cols <- COLOURING_PALETTES$distribution
       gradient_css <- paste(cols, collapse = ", ")
 
+      rng <- cluster_dims_r()$distribution_range
+
       return(
         tags$div(
           class = "cluster-legend",
@@ -467,8 +471,8 @@ function(input, output, session) {
           ),
           tags$div(
             style = "display:flex; justify-content:space-between; font-size:0.8em;",
-            tags$span("Low"),
-            tags$span("High")
+            tags$span(paste0(rng["min"])),
+            tags$span(paste0(rng["max"]))
           )
         )
       )
@@ -501,6 +505,7 @@ function(input, output, session) {
     if (mode == "aa_distance") {
       cols <- COLOURING_PALETTES$aa_distance
       gradient_css <- paste(cols, collapse = ", ")
+      rng <- cluster_dims_r()$aa_distance_range
       return(
         tags$div(
           class = "cluster-legend",
@@ -514,8 +519,8 @@ function(input, output, session) {
           ),
           tags$div(
             style = "display:flex; justify-content:space-between; font-size:0.8em;",
-            tags$span("Low"),
-            tags$span("High")
+            tags$span(round(rng["min"], 1)),
+            tags$span(round(rng["max"], 1))
           )
         )
       )

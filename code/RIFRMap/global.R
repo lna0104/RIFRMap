@@ -563,18 +563,6 @@ plotMutations <- function(muts,
     xcols <- dplyr::bind_rows(xcols)
   }
 
-  if (isTRUE(return_dims)) {
-    return(list(
-      width_px  = width_px,
-      height_px = height_px,
-      xTotal    = xTotal,
-      yTotal    = yTotal,
-      pars      = pars,
-      dx        = dx,
-      xcols     = xcols
-    ))
-  }
-
 
   # assign colours
   pal_distribution <- COLOURING_PALETTES$distribution
@@ -584,43 +572,58 @@ plotMutations <- function(muts,
   # determine mutation categories for colouring
   mutCounts <- NULL
 
-  max_species <- NULL
+  # calculate distribution
+  filteredMuts <- muts |>
+    dplyr::filter(.data$Species %in% speciesToPlot) |>
+    dplyr::mutate(
+      AA_mut_name_Ecoli = paste0(gene, "_", AA_original, AA_pos_Ecoli, AA_mutation)
+    ) |>
+    dplyr::distinct(Species, AA_mut_name_Ecoli, .keep_all = TRUE)
 
-  if (colour_by == "distribution") {
-    filteredMuts <- muts |>
-      dplyr::filter(.data$Species %in% speciesToPlot) |>
-      dplyr::mutate(
-        AA_mut_name_Ecoli = paste0(gene, "_", AA_original, AA_pos_Ecoli, AA_mutation)
-      ) |>
-      dplyr::distinct(Species, AA_mut_name_Ecoli, .keep_all = TRUE)
+  mutCounts <- filteredMuts |>
+    dplyr::count(AA_mut_name_Ecoli, name = "n_species")
 
-    mutCounts <- filteredMuts |>
-      dplyr::count(AA_mut_name_Ecoli, name = "n_species")
+  distribution_range <- c(
+    min = min(mutCounts$n_species, na.rm = TRUE),
+    max = max(mutCounts$n_species, na.rm = TRUE)
+  )
 
-    max_species <- suppressWarnings(max(mutCounts$n_species, na.rm = TRUE))
+  max_species <- suppressWarnings(max(mutCounts$n_species, na.rm = TRUE))
 
-    distribution_cols <- COLOURING_PALETTES$distribution
+  # calculate aa_distance colouring
+  all_dist <- unlist(
+    lapply(allBlocks, function(sp_blocks) {
+      unlist(lapply(sp_blocks, function(blk) blk$aa_distance), use.names = FALSE)
+    }),
+    use.names = FALSE
+  )
+
+  all_dist <- all_dist[is.finite(all_dist)]
+
+  aa_distance_range <- c(
+    min = if (length(all_dist)) min(all_dist, na.rm = TRUE) else 0,
+    max = if (length(all_dist)) max(all_dist, na.rm = TRUE) else 1
+  )
+
+  max_dist <- suppressWarnings(max(all_dist, na.rm = TRUE))
+  if (!length(all_dist) || is.na(max_dist) || is.infinite(max_dist) || max_dist <= 0) {
+    max_dist <- 1
   }
 
-  # calculate max_dist for aa_distance colouring
-  max_dist <- NULL
 
-  if (colour_by == "aa_distance") {
-    all_dist <- unlist(
-      lapply(allBlocks, function(sp_blocks) {
-        unlist(lapply(sp_blocks, function(blk) blk$aa_distance), use.names = FALSE)
-      }),
-      use.names = FALSE
-    )
-
-    all_dist <- all_dist[is.finite(all_dist)]
-
-    max_dist <- suppressWarnings(max(all_dist, na.rm = TRUE))
-    if (!length(all_dist) || is.na(max_dist) || is.infinite(max_dist) || max_dist <= 0) {
-      max_dist <- 1
-    }
-
-    distance_cols <- COLOURING_PALETTES$aa_distance
+  # return dims
+  if (isTRUE(return_dims)) {
+    return(list(
+      width_px = width_px,
+      height_px = height_px,
+      xTotal = xTotal,
+      yTotal = yTotal,
+      pars = pars,
+      dx = dx,
+      xcols = xcols,
+      aa_distance_range = aa_distance_range,
+      distribution_range = distribution_range
+    ))
   }
 
 
@@ -643,9 +646,9 @@ plotMutations <- function(muts,
           scaled[is.na(scaled)] <- 1
           scaled <- pmax(1, pmin(100, scaled))
 
-          blk$Colour <- distribution_cols[scaled]
+          blk$Colour <- pal_distribution[scaled]
         } else {
-          blk$Colour[] <- distribution_cols[1]
+          blk$Colour[] <- pal_distribution[1]
         }
       }
 
@@ -663,9 +666,9 @@ plotMutations <- function(muts,
           scaled <- round((blk$aa_distance / max_dist) * 99) + 1
           scaled[is.na(scaled)] <- 1
           scaled <- pmax(1, pmin(100, scaled))
-          blk$Colour <- distance_cols[scaled]
+          blk$Colour <- pal_aa_distance[scaled]
         } else {
-          blk$Colour[] <- distance_cols[1]
+          blk$Colour[] <- pal_aa_distance[1]
         }
       }
 
