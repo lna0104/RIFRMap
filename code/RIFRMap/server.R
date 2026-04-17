@@ -817,7 +817,7 @@ function(input, output, session) {
         ggplot(upset_df, aes(x = sources)) +
           geom_bar() +
           ggupset::scale_x_upset() +
-          labs(y = "Number of mutation sites", x = "Source(s)") +
+          labs(y = "Number of mutations", x = "Source(s)") +
           plotting_theme(legend = "none")
       },
       res = 120

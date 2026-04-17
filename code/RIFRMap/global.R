@@ -756,3 +756,9 @@ source_palette <- c(
   Yang    = "#dff2e1",
   None    = "grey85"
 )
+
+#rsconnect::setAccountInfo(name='lenango', token='F7C8124BB92A4CEA42C95C4602145D1E', secret='uwd6PCdAWS/dVHenwJ08JFuTZe/KLfo0cxjXT/gE')
+#library(rsconnect)
+#deployApp(appDir="code/RIFRMap/", server = "shinyapps.io")
+
+

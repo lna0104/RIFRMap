@@ -35,10 +35,12 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 }
 
 BiocManager::install(
-  setdiff(c("Biostrings", "DECIPHER"), rownames(installed.packages())),
+  setdiff(c("Biostrings", "DECIPHER", "BiocGenerics", "IRanges", "GenomeInfoDb", "S4Vectors", "UCSC.utils"), rownames(installed.packages())),
   ask = FALSE,
+  force = TRUE,
   update = FALSE
 )
+
 
 ## ---- GitHub ----
 if (!requireNamespace("ALJEbinf", quietly = TRUE)) {

@@ -50,7 +50,7 @@ bs4DashPage(
           ),
           p(
             class = "lead text-muted mt-3",
-            "An interactive platform for exploring rifampicin resistance mutations across bacterial species and curated datasets."
+            "An interactive platform for exploring rifampicin resistance mutations across bacterial species and datasets."
           )
         ),
         br(), div(
@@ -197,7 +197,8 @@ bs4DashPage(
             value = "filters",
             div(
               class = "text-muted",
-              p("Select data sources and filtering criteria to define the mutation set used in downstream analyses.")
+              p("Select data sources and filtering criteria to define the mutation set used in downstream analyses."),
+              p(tags$i("Last updated: 24/03/2026"))
             ),
             fluidRow(
               # CARD
@@ -412,8 +413,7 @@ bs4DashPage(
             value = "frequency",
             div(
               class = "text-muted",
-              p("Heatmap summarises how widely each mutation is distributed across species. Each tile represents an amino-acid position (<i>E. coli</i> coordinates) and substituted residue, coloured by the number of species carrying that mutation.
-                     Data sources are ignored.")
+              p("The heatmap summarises the distribution of mutations across species. Each tile represents an amino acid position (", tags$i("E. coli"), " coordinates) and its substituted residue, with colour indicating the number of species harbouring the mutation. Data sources are not distinguished in this view.")
             ),
             fluidRow(
               # --- Heatmap card ---
