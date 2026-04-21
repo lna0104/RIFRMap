@@ -1,3 +1,11 @@
+$(document).on("click", "#go_docs", function() {
+  Shiny.setInputValue("go_docs", Math.random());
+});
+
+$(document).on("click", "#go_explorer", function() {
+  Shiny.setInputValue("go_explorer", Math.random());
+});
+
 // AI assistance disclosure:
 // This script was written/refined with the help of an AI language model (ChatGPT).
 //
@@ -448,3 +456,4 @@
     start();
   }
 })();
+

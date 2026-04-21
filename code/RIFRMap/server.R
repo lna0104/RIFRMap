@@ -1,27 +1,13 @@
 function(input, output, session) {
   # ---- Go to Documentation tab ----
-  observeEvent(input$go_docs,
-    {
-      bs4Dash::updateTabItems(
-        session = session,
-        inputId = "sidebar",
-        selected = "doc"
-      )
-    },
-    ignoreInit = TRUE
-  )
+  observeEvent(input$go_docs, {
+    updateNavbarPage(session, "main_nav", selected = "Documentation")
+  })
 
   # ---- Go to Explorer tab ----
-  observeEvent(input$go_explorer,
-    {
-      bs4Dash::updateTabItems(
-        session = session,
-        inputId = "sidebar",
-        selected = "explorer"
-      )
-    },
-    ignoreInit = TRUE
-  )
+  observeEvent(input$go_explorer, {
+    updateNavbarPage(session, "main_nav", selected = "Explorer")
+  })
 
   ## ---- Populate species dropdowns ----
   observeEvent(TRUE,
