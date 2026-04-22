@@ -1,12 +1,12 @@
 function(input, output, session) {
   # ---- Go to Documentation tab ----
   observeEvent(input$go_docs, {
-    updateNavbarPage(session, "main_nav", selected = "Documentation")
+    updateNavbarPage(session, "main_nav", selected = "doc")
   })
 
   # ---- Go to Explorer tab ----
   observeEvent(input$go_explorer, {
-    updateNavbarPage(session, "main_nav", selected = "Explorer")
+    updateNavbarPage(session, "main_nav", selected = "explore")
   })
 
   ## ---- Populate species dropdowns ----
@@ -19,21 +19,9 @@ function(input, output, session) {
       )
 
       updateSelectInput(
-        session, "cryptic_species",
-        choices = c(sort(unique(cryptic$species))),
-        selected = "Mycobacterium tuberculosis"
-      )
-
-      updateSelectInput(
         session, "dragdb_species",
         choices = c("All species", sort(unique(dragdb$species))),
         selected = "All species"
-      )
-
-      updateSelectInput(
-        session, "yang_species",
-        choices = c(sort(unique(yang$species))),
-        selected = "Escherichia coli"
       )
 
       updateSelectInput(
@@ -59,8 +47,7 @@ function(input, output, session) {
 
     ## CRyPTIC
     if (isTRUE(input$cryptic_enabled)) {
-      d <- cryptic |>
-        filter_by_species(input$cryptic_species, species_col = "species")
+      d <- cryptic
 
       # numeric filters
       d <- filter_range_if(d, "coef", input$cryptic_coef)
@@ -86,8 +73,7 @@ function(input, output, session) {
 
     ## Yang
     if (isTRUE(input$yang_enabled)) {
-      d <- yang |>
-        filter_by_species(input$yang_species, species_col = "species")
+      d <- yang 
 
       d <- filter_range_if(d, "log2_fc", input$yang_log2fc)
 
@@ -115,8 +101,8 @@ function(input, output, session) {
 
   # ---- Redirect to View tab on Apply ----
   observeEvent(input$apply_filters, {
-    updateTabItems(session, "sidebar", "explorer")
-    updateTabsetPanel(session, "explore_steps", selected = "cluster")
+    updateNavbarPage(session, inputId = "main_nav", selected = "explore")
+    updateTabsetPanel(session, inputId = "explore_steps", selected = "cluster")
   })
 
   # ---- Reset button: clear inputs + go back Home
@@ -1173,15 +1159,15 @@ function(input, output, session) {
   }
 
 
-  # ---- Data ----
 
+  # ---- Summary ----
   mutation_data <- reactive({
     df <- combined_rows()
     req(!is.null(df), nrow(df) > 0)
-
+    
     if (!"Ref_codes" %in% names(df)) df$Ref_codes <- NA_character_
     if (!"PMID" %in% names(df)) df$PMID <- NA_character_
-
+    
     pmid_lookup <- refs_paper |>
       transmute(
         PMID = as.character(PMID),
@@ -1189,19 +1175,19 @@ function(input, output, session) {
       ) |>
       filter(!is.na(PMID), PMID != "") |>
       distinct(PMID, .keep_all = TRUE)
-
+    
     df_clean <- df |>
       mutate(
         Ref_codes = na_if(trimws(as.character(Ref_codes)), ""),
         PMID      = na_if(trimws(as.character(PMID)), "")
       )
-
+    
     df_joined <- df_clean |>
       mutate(.row_id = dplyr::row_number()) |>
       tidyr::separate_rows(PMID, sep = "\\s*;\\s*") |>
       mutate(PMID = dplyr::na_if(trimws(PMID), "")) |>
       left_join(pmid_lookup, by = "PMID")
-
+    
     pmid_refcodes <- df_joined |>
       dplyr::group_by(.row_id) |>
       dplyr::summarise(
@@ -1213,7 +1199,7 @@ function(input, output, session) {
         Ref_code_from_pmid = na_if(Ref_code_from_pmid, ""),
         PMID = na_if(PMID, "")
       )
-
+    
     df_clean |>
       mutate(.row_id = dplyr::row_number()) |>
       left_join(pmid_refcodes, by = ".row_id", suffix = c("", "_collapsed")) |>
@@ -1246,124 +1232,7 @@ function(input, output, session) {
         PMID
       )
   })
-
-  refcode_links_tooltip <- function(ref_codes, ref_table,
-                                    code_col = "Ref_code",
-                                    url_col = "DOI",
-                                    title_col = "Full_ref") {
-    # map: code -> url / tooltip text
-    url_map <- setNames(
-      as.character(ref_table[[url_col]]),
-      as.character(ref_table[[code_col]])
-    )
-
-    tip_map <- setNames(
-      as.character(ref_table[[title_col]]),
-      as.character(ref_table[[code_col]])
-    )
-
-    vapply(as.character(ref_codes), function(s) {
-      s <- trimws(s)
-      if (!nzchar(s) || is.na(s)) {
-        return("")
-      }
-
-      # split codes (comma/semicolon separators only)
-      codes <- unlist(strsplit(s, "\\s*[,;]\\s*"))
-      codes <- trimws(codes)
-      codes <- codes[nzchar(codes)]
-
-      out <- vapply(codes, function(code) {
-        url <- url_map[code]
-        tip <- tip_map[code]
-
-        code_esc <- htmltools::htmlEscape(code)
-        tip_esc <- htmltools::htmlEscape(ifelse(is.null(tip) || is.na(tip) || !nzchar(tip),
-          code, tip
-        ))
-
-        if (!is.null(url) && !is.na(url) && nzchar(url)) {
-          sprintf(
-            '<a href="%s" target="_blank" rel="noopener" title="%s">%s</a>',
-            htmltools::htmlEscape(url),
-            tip_esc,
-            code_esc
-          )
-        } else {
-          sprintf('<span title="%s">%s</span>', tip_esc, code_esc)
-        }
-      }, character(1))
-
-      paste(out, collapse = "; ")
-    }, character(1))
-  }
-
-  output$mutation_table <- DT::renderDataTable({
-    data <- mutation_data()
-
-    data <- data |>
-      mutate(Ref_codes = refcode_links_tooltip(
-        Ref_codes,
-        refs_paper,
-        code_col  = "Ref_code",
-        url_col   = "DOI",
-        title_col = "Full_ref"
-      )) |>
-      select(-PMID)
-
-    DT::datatable(
-      data,
-      escape = FALSE,
-      rownames = FALSE,
-      options = list(scrollX = TRUE, pageLength = 25)
-    )
-  })
-
-  output$download_mutations <- downloadHandler(
-    filename = function() paste0("RIFRMap_mutation_table_", Sys.Date(), ".csv"),
-    content = function(file) {
-      readr::write_csv(mutation_data(), file)
-    }
-  )
-
-  filtered_references <- reactive({
-    df <- mutation_data()
-    req(!is.null(df), nrow(df) > 0)
-
-    # extract all codes
-    ref_codes <- df$Ref_codes |>
-      as.character() |>
-      trimws()
-
-    # split multiple codes per cell ("," or ";")
-    ref_codes <- unlist(strsplit(ref_codes, "\\s*[,;]\\s*"))
-
-    ref_codes <- ref_codes[nzchar(ref_codes)]
-    ref_codes <- unique(ref_codes)
-
-    refs_paper |>
-      filter(Ref_code %in% ref_codes)
-  })
-
-  output$ref_table <- DT::renderDataTable({
-    data <- filtered_references()
-
-    DT::datatable(
-      data,
-      escape = FALSE,
-      rownames = FALSE,
-      options = list(scrollX = TRUE, pageLength = 15)
-    )
-  })
-
-  output$download_refs <- downloadHandler(
-    filename = function() paste0("RIFRMap_reference_table_", Sys.Date(), ".csv"),
-    content = function(file) {
-      readr::write_csv(filtered_references(), file)
-    }
-  )
-
-  # ---- Summary ----
+  
   output$summary_table <- render_gt({
     df <- mutation_data()
 
@@ -1427,4 +1296,204 @@ function(input, output, session) {
         y = "Number of observations"
       )
   })
+  
+  # ----- Download -----
+  
+  refcode_links_tooltip <- function(ref_codes, ref_table,
+                                    code_col = "Ref_code",
+                                    url_col = "DOI",
+                                    title_col = "Full_ref") {
+    # map: code -> url / tooltip text
+    url_map <- setNames(
+      as.character(ref_table[[url_col]]),
+      as.character(ref_table[[code_col]])
+    )
+    
+    tip_map <- setNames(
+      as.character(ref_table[[title_col]]),
+      as.character(ref_table[[code_col]])
+    )
+    
+    vapply(as.character(ref_codes), function(s) {
+      s <- trimws(s)
+      if (!nzchar(s) || is.na(s)) {
+        return("")
+      }
+      
+      # split codes (comma/semicolon separators only)
+      codes <- unlist(strsplit(s, "\\s*[,;]\\s*"))
+      codes <- trimws(codes)
+      codes <- codes[nzchar(codes)]
+      
+      out <- vapply(codes, function(code) {
+        url <- url_map[code]
+        tip <- tip_map[code]
+        
+        code_esc <- htmltools::htmlEscape(code)
+        tip_esc <- htmltools::htmlEscape(ifelse(is.null(tip) || is.na(tip) || !nzchar(tip),
+                                                code, tip
+        ))
+        
+        if (!is.null(url) && !is.na(url) && nzchar(url)) {
+          sprintf(
+            '<a href="%s" target="_blank" rel="noopener" title="%s">%s</a>',
+            htmltools::htmlEscape(url),
+            tip_esc,
+            code_esc
+          )
+        } else {
+          sprintf('<span title="%s">%s</span>', tip_esc, code_esc)
+        }
+      }, character(1))
+      
+      paste(out, collapse = "; ")
+    }, character(1))
+  }
+  
+  all_rows <- reactive({
+    bind_rows(
+      list(
+        CARD    = card,
+        CRyPTIC = cryptic,
+        DRAGdb  = dragdb,
+        Yang    = yang,
+        Curated = curated
+      ),
+      .id = "source"
+    )
+  })
+  
+  all_mutation_data <- reactive({
+    df <- all_rows()
+    req(!is.null(df), nrow(df) > 0)
+    
+    if (!"Ref_codes" %in% names(df)) df$Ref_codes <- NA_character_
+    if (!"PMID" %in% names(df)) df$PMID <- NA_character_
+    
+    pmid_lookup <- refs_paper |>
+      dplyr::transmute(
+        PMID = as.character(PMID),
+        Ref_code_from_pmid = as.character(Ref_code)
+      ) |>
+      dplyr::filter(!is.na(PMID), PMID != "") |>
+      dplyr::distinct(PMID, .keep_all = TRUE)
+    
+    df_clean <- df |>
+      dplyr::mutate(
+        Ref_codes = na_if(trimws(as.character(Ref_codes)), ""),
+        PMID      = na_if(trimws(as.character(PMID)), "")
+      )
+    
+    df_joined <- df_clean |>
+      dplyr::mutate(.row_id = dplyr::row_number()) |>
+      tidyr::separate_rows(PMID, sep = "\\s*;\\s*") |>
+      dplyr::mutate(PMID = dplyr::na_if(trimws(PMID), "")) |>
+      dplyr::left_join(pmid_lookup, by = "PMID")
+    
+    pmid_refcodes <- df_joined |>
+      dplyr::group_by(.row_id) |>
+      dplyr::summarise(
+        Ref_code_from_pmid = paste(unique(stats::na.omit(Ref_code_from_pmid)), collapse = "; "),
+        PMID = paste(unique(stats::na.omit(PMID)), collapse = "; "),
+        .groups = "drop"
+      ) |>
+      dplyr::mutate(
+        Ref_code_from_pmid = na_if(Ref_code_from_pmid, ""),
+        PMID = na_if(PMID, "")
+      )
+    
+    df_clean |>
+      dplyr::mutate(.row_id = dplyr::row_number()) |>
+      dplyr::left_join(pmid_refcodes, by = ".row_id", suffix = c("", "_collapsed")) |>
+      dplyr::mutate(
+        Ref_codes = dplyr::coalesce(Ref_codes, Ref_code_from_pmid),
+        PMID = dplyr::coalesce(PMID_collapsed, PMID),
+        Gene = "rpoB",
+        AA_mut_name = paste0(AA_original, AA_pos, AA_mutation),
+        AA_mut_name_Ecoli = paste0(AA_original, AA_pos_Ecoli, AA_mutation)
+      ) |>
+      dplyr::rename(
+        Species      = species,
+        AA_Pos       = AA_pos,
+        AA_Pos_Ecoli = AA_pos_Ecoli,
+        Original     = AA_original,
+        Mutation     = AA_mutation,
+        Source       = source
+      ) |>
+      dplyr::select(
+        Species,
+        Gene,
+        AA_Pos_Ecoli,
+        AA_Pos,
+        Original,
+        Mutation,
+        AA_mut_name_Ecoli,
+        AA_mut_name,
+        Source,
+        Ref_codes,
+        PMID
+      )
+  })
+  
+  all_references <- reactive({
+    df <- all_mutation_data()
+    req(!is.null(df), nrow(df) > 0)
+    
+    ref_codes <- df$Ref_codes |>
+      as.character() |>
+      trimws()
+    
+    ref_codes <- unlist(strsplit(ref_codes, "\\s*[,;]\\s*"))
+    ref_codes <- ref_codes[nzchar(ref_codes)]
+    ref_codes <- unique(ref_codes)
+    
+    refs_paper |>
+      dplyr::filter(Ref_code %in% ref_codes)
+  })
+  
+  output$mutation_table <- DT::renderDataTable({
+    data <- all_mutation_data()
+    
+    data <- data |>
+      dplyr::mutate(Ref_codes = refcode_links_tooltip(
+        Ref_codes,
+        refs_paper,
+        code_col  = "Ref_code",
+        url_col   = "DOI",
+        title_col = "Full_ref"
+      )) |>
+      dplyr::select(-PMID)
+    
+    DT::datatable(
+      data,
+      escape = FALSE,
+      rownames = FALSE,
+      options = list(scrollX = TRUE, pageLength = 25)
+    )
+  })
+  
+  output$download_mutations <- downloadHandler(
+    filename = function() paste0("RIFRMap_mutation_table_", Sys.Date(), ".csv"),
+    content = function(file) {
+      readr::write_csv(all_mutation_data(), file)
+    }
+  )
+  
+  output$ref_table <- DT::renderDataTable({
+    data <- all_references()
+    
+    DT::datatable(
+      data,
+      escape = FALSE,
+      rownames = FALSE,
+      options = list(scrollX = TRUE, pageLength = 15)
+    )
+  })
+  
+  output$download_refs <- downloadHandler(
+    filename = function() paste0("RIFRMap_reference_table_", Sys.Date(), ".csv"),
+    content = function(file) {
+      readr::write_csv(all_references(), file)
+    }
+  )
 }

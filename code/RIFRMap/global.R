@@ -120,28 +120,28 @@ plotting_theme_large_axes <- function(legend = "none", x_top = FALSE) {
   plotting_theme(legend = legend, x_top = x_top) +
     theme(
       axis.title.x = element_text(
-        size = 18,
+        size = 14,
         face = "bold",
         colour = PLOT_STYLE$axis_col,
         margin = margin(t = if (x_top) 8 else 0, b = if (x_top) 0 else 8)
       ),
       axis.title.y = element_text(
-        size = 18,
+        size = 14,
         face = "bold",
         colour = PLOT_STYLE$axis_col,
         margin = margin(r = 8)
       ),
       legend.title = element_text(
-        size = 16,
+        size = 14,
         face = "bold",
         margin = margin(b = 12)
       ),
       axis.text.x = element_text(
-        size = 13,
+        size = 12,
         colour = PLOT_STYLE$axis_col
       ),
       axis.text.y = element_text(
-        size = 13,
+        size = 12,
         colour = PLOT_STYLE$axis_col
       ),
       legend.text = element_text(

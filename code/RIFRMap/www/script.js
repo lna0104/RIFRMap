@@ -6,6 +6,15 @@ $(document).on("click", "#go_explorer", function() {
   Shiny.setInputValue("go_explorer", Math.random());
 });
 
+$(document).on("change", ".filter-box input[type='checkbox']", function() {
+  const box = $(this).closest(".filter-box");
+  box.toggleClass("active", $(this).is(":checked"));
+});
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+});
+
 // AI assistance disclosure:
 // This script was written/refined with the help of an AI language model (ChatGPT).
 //
