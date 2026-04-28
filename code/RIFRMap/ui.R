@@ -13,6 +13,7 @@ shinyUI(
     title = "RIFRMap",
     id = "main_nav",
     theme = "www/styles.css",
+    footer = includeHTML("www/footer.html"),
     fluid = TRUE,
     collapsible = TRUE,
     
