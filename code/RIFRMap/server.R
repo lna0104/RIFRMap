@@ -337,42 +337,45 @@ function(input, output, session) {
       }
       div(class = "plot-empty-msg", st$msg)
     })
+    
+    make_cluster_plot <- function(return_hover_map = TRUE) {
+      st <- cluster_status()
+      req(isTRUE(st$ok))
+      
+      df <- cluster_plotting_df()
+      cl <- clusters_to_plot_r()
+      sp <- cluster_species_to_plot()
+      
+      req(df, cl, sp)
+      
+      plotMutations(
+        muts             = df,
+        clusters         = clusters,
+        seqs             = seqs,
+        coordinates      = coordinates,
+        refs             = refs_seqs,
+        gene             = "rpoB",
+        clustersToPlot   = cl,
+        speciesToPlot    = sp,
+        colour_by        = input$colour_by,
+        mergeDuplicates  = TRUE,
+        return_hover_map = return_hover_map
+      )
+    }
 
     output$clusterPlot <- renderPlot(
       {
-        st <- cluster_status()
-        if (!isTRUE(st$ok)) {
-          return(invisible())
-        }
-
-        df <- cluster_plotting_df()
-        cl <- clusters_to_plot_r()
-        sp <- cluster_species_to_plot()
-
-        out <- plotMutations(
-          muts             = df,
-          clusters         = clusters,
-          seqs             = seqs,
-          coordinates      = coordinates,
-          refs             = refs_seqs,
-          gene             = "rpoB",
-          clustersToPlot   = cl,
-          speciesToPlot    = sp,
-          colour_by        = input$colour_by,
-          mergeDuplicates  = TRUE,
-          return_hover_map = TRUE
-        )
-
-        # capture geometry from this plot
+        out <- make_cluster_plot(return_hover_map = TRUE)
+        
         payload <- list(
           bands = out$bands,
-          plt = out$plt,
+          plt   = out$plt,
           xcols = out$xcols,
-          dx = out$dx
+          dx    = out$dx
         )
-
+        
         hover_payload_r(payload)
-
+        
         invisible()
       },
       width = function() {
@@ -399,8 +402,42 @@ function(input, output, session) {
       },
       ignoreInit = TRUE
     )
-  }
-
+  
+  
+  # ---- Download ----
+  
+  output$download_mutation_map <- downloadHandler(
+    filename = function() {
+      paste0("RIFRMap_mutation_map_plot.", input$mutation_map_format)
+    },
+    
+    content = function(file) {
+      dims <- cluster_dims_r()
+      req(dims)
+      
+      width_px  <- max(300, dims$width_px)
+      height_px <- max(150, dims$height_px)
+      
+      fmt <- input$mutation_map_format
+      width_in <- width_px / 96
+      height_in <- height_px / 96
+      
+      if (fmt == "png") {
+        png(file, width = width_in, height = height_in, units = "in", res = 300)
+      } else if (fmt == "pdf") {
+        pdf(file, width = width_in, height = height_in)
+      } else if (fmt %in% c("jpg", "jpeg")) {
+        jpeg(file, width = width_in, height = height_in, units = "in", res = 300)
+      } else if (fmt == "tiff") {
+        tiff(file, width = width_in, height = height_in, units = "in", res = 300)
+      }
+      
+      on.exit(dev.off(), add = TRUE)
+      
+      make_cluster_plot(return_hover_map = FALSE)
+    }
+  )
+  
   # ---- Legend ----
 
   output$legend_panel <- renderUI({
@@ -517,152 +554,138 @@ function(input, output, session) {
       mode_note
     )
   })
+  }
 
   # ---- Mutation Frequency Tab ----
-
-  output$heatmap_pos_mut <- ggiraph::renderGirafe({
-    df0 <- combined_rows()
-    req(df0, nrow(df0) > 0)
-
-    df <- df0 |>
-      transmute(
-        AA_pos_Ecoli = as.character(AA_pos_Ecoli),
-        AA_mutation = as.character(AA_mutation),
-        Species = as.character(species)
-      ) |>
-      filter(
-        !is.na(AA_pos_Ecoli),
-        !is.na(AA_mutation),
-        !is.na(Species)
-      ) |>
-      distinct()
-
-    all_AAs_sorted <- sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]])
-
-    heat_df <- df |>
-      filter(!is.na(AA_pos_Ecoli), !is.na(AA_mutation), !is.na(Species)) |>
-      group_by(AA_pos_Ecoli, AA_mutation) |>
-      summarise(
-        n_species = n_distinct(Species),
-        .groups = "drop"
-      ) |>
-      tidyr::complete(
-        AA_pos_Ecoli,
-        AA_mutation = all_AAs_sorted,
-        fill = list(n_species = 0)
-      )
-
-    pos_levels <- heat_df$AA_pos_Ecoli |>
-      unique() |>
-      as.numeric() |>
-      sort(decreasing = TRUE) |>
-      as.character()
-
-    n_pos <- length(pos_levels)
-    bar_h_cm <- max(4, min(10, 0.15 * n_pos))
-
-    heat_df <- heat_df |>
-      mutate(
-        AA_mutation = factor(AA_mutation, levels = all_AAs_sorted),
-        AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels),
-        tooltip_txt = paste0(
-          "<b>Position:</b> ", AA_pos_Ecoli,
-          "<br><b>AA:</b> ", AA_mutation,
-          "<br><b>No. species:</b> ", n_species,
-          "<br><i>Click tile to view species list</i>"
-        ),
-        tile_id = paste(AA_pos_Ecoli, AA_mutation)
-      )
-
-    max_n <- max(heat_df$n_species, na.rm = TRUE)
-    if (is.na(max_n) || max_n < 0) max_n <- 0
-
-    cols <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
-
-    # choose fill mapping
-    if (max_n < 4) {
-      levs <- 0:max_n
-      heat_df <- heat_df |> mutate(fill_val = factor(n_species, levels = levs))
-
-      box_cols <- c("white", cols[seq(10, 90, length.out = max(1, max_n))])
-      names(box_cols) <- as.character(levs)
-
-      p <- ggplot(
-        heat_df,
-        aes(
-          x = AA_mutation,
-          y = AA_pos_Ecoli,
-          fill = fill_val,
-          tooltip = tooltip_txt,
-          data_id = tile_id
+  {
+    make_heatmap_pos_mut <- function() {
+      df0 <- combined_rows()
+      req(df0, nrow(df0) > 0)
+      
+      df <- df0 |>
+        transmute(
+          AA_pos_Ecoli = as.character(AA_pos_Ecoli),
+          AA_mutation = as.character(AA_mutation),
+          Species = as.character(species)
+        ) |>
+        filter(!is.na(AA_pos_Ecoli), !is.na(AA_mutation), !is.na(Species)) |>
+        distinct()
+      
+      all_AAs_sorted <- sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]])
+      
+      heat_df <- df |>
+        group_by(AA_pos_Ecoli, AA_mutation) |>
+        summarise(n_species = n_distinct(Species), .groups = "drop") |>
+        tidyr::complete(
+          AA_pos_Ecoli,
+          AA_mutation = all_AAs_sorted,
+          fill = list(n_species = 0)
         )
-      ) +
-        ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
-        scale_x_discrete(position = "top", drop = FALSE) +
-        scale_fill_manual(
-          values = box_cols,
-          breaks = as.character(levs),
-          labels = as.character(levs),
-          drop = FALSE
+      
+      pos_levels <- heat_df$AA_pos_Ecoli |>
+        unique() |>
+        as.numeric() |>
+        sort(decreasing = TRUE) |>
+        as.character()
+      
+      n_pos <- length(pos_levels)
+      bar_h_cm <- max(4, min(10, 0.15 * n_pos))
+      
+      heat_df <- heat_df |>
+        mutate(
+          AA_mutation = factor(AA_mutation, levels = all_AAs_sorted),
+          AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels),
+          tooltip_txt = paste0(
+            "<b>Position:</b> ", AA_pos_Ecoli,
+            "<br><b>AA:</b> ", AA_mutation,
+            "<br><b>No. species:</b> ", n_species,
+            "<br><i>Click tile to view species list</i>"
+          ),
+          tile_id = paste(AA_pos_Ecoli, AA_mutation)
+        )
+      
+      max_n <- max(heat_df$n_species, na.rm = TRUE)
+      if (is.na(max_n) || max_n < 0) max_n <- 0
+      
+      cols <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
+      
+      if (max_n < 4) {
+        levs <- 0:max_n
+        heat_df <- heat_df |> mutate(fill_val = factor(n_species, levels = levs))
+        
+        box_cols <- c("white", cols[seq(10, 90, length.out = max(1, max_n))])
+        names(box_cols) <- as.character(levs)
+        
+        p <- ggplot(
+          heat_df,
+          aes(x = AA_mutation, y = AA_pos_Ecoli, fill = fill_val,
+              tooltip = tooltip_txt, data_id = tile_id)
         ) +
-        guides(
-          fill = guide_legend(
+          ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
+          scale_x_discrete(position = "top", drop = FALSE) +
+          scale_fill_manual(
+            values = box_cols,
+            breaks = as.character(levs),
+            labels = as.character(levs),
+            drop = FALSE
+          ) +
+          guides(fill = guide_legend(
             title = "No. species",
             keyheight = grid::unit(0.5, "cm"),
             keywidth = grid::unit(0.5, "cm")
-          )
-        )
-    } else {
-      if (max_n <= 0) max_n <- 1
-      heat_df <- heat_df |> mutate(fill_val = n_species)
-
-      vals <- c(0, seq(1, max_n, length.out = length(cols)))
-      vals_scaled <- vals / max_n
-
-      p <- ggplot(
-        heat_df,
-        aes(
-          x = AA_mutation,
-          y = AA_pos_Ecoli,
-          fill = fill_val,
-          tooltip = tooltip_txt,
-          data_id = tile_id
-        )
-      ) +
-        ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
-        scale_x_discrete(position = "top", drop = FALSE) +
-        scale_fill_gradientn(
-          colours = c("white", cols),
-          values  = vals_scaled,
-          limits  = c(0, max_n),
-          breaks  = c(0, 1, max_n),
-          labels  = as.character(c(0, 1, max_n)),
-          oob     = scales::squish
+          ))
+      } else {
+        heat_df <- heat_df |> mutate(fill_val = n_species)
+        
+        vals <- c(0, seq(1, max_n, length.out = length(cols)))
+        vals_scaled <- vals / max_n
+        
+        p <- ggplot(
+          heat_df,
+          aes(x = AA_mutation, y = AA_pos_Ecoli, fill = fill_val,
+              tooltip = tooltip_txt, data_id = tile_id)
         ) +
-        guides(
-          fill = guide_colourbar(
+          ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
+          scale_x_discrete(position = "top", drop = FALSE) +
+          scale_fill_gradientn(
+            colours = c("white", cols),
+            values  = vals_scaled,
+            limits  = c(0, max_n),
+            breaks  = c(0, 1, max_n),
+            labels  = as.character(c(0, 1, max_n)),
+            oob     = scales::squish
+          ) +
+          guides(fill = guide_colourbar(
             barheight = grid::unit(bar_h_cm, "cm"),
             barwidth  = grid::unit(0.6, "cm")
-          )
-        )
+          ))
+      }
+      
+      p <- p +
+        labs(
+          x = "Amino acid",
+          y = "Position (E. coli coordinate)",
+          fill = "No. species"
+        ) +
+        plotting_theme_large_axes(legend = "right", x_top = TRUE)
+      
+      list(
+        plot = p,
+        n_pos = n_pos,
+        height_in = max(5, min(35, 0.35 * n_pos))
+      )
     }
-
-    # now add common styling
-    p <- p +
-      labs(x = "Amino acid", y = "Position (E. coli coordinate)", fill = "No. species") +
-      plotting_theme_large_axes(legend = "right", x_top = TRUE)
-
-
-    # height scaling
-    h_in <- max(5, min(35, 0.35 * n_pos))
-
-    ggiraph::girafe(
-      ggobj = p,
-      width_svg = 12,
-      height_svg = h_in,
-      options = list(
-        ggiraph::opts_hover(css = "fill-opacity:1; stroke:black; stroke-width:0.6px;"),
-        ggiraph::opts_tooltip(css = "
+    
+    output$heatmap_pos_mut <- ggiraph::renderGirafe({
+      hm <- make_heatmap_pos_mut()
+      
+      ggiraph::girafe(
+        ggobj = hm$plot,
+        width_svg = 12,
+        height_svg = hm$height_in,
+        options = list(
+          ggiraph::opts_hover(css = "fill-opacity:1; stroke:black; stroke-width:0.6px;"),
+          ggiraph::opts_tooltip(css = "
         background-color: #2C3E50;
         color: #ECF0F1;
         padding: 6px;
@@ -671,69 +694,99 @@ function(input, output, session) {
         font-size: 11px;
         box-shadow: 0 0 10px rgba(0,0,0,0.5);
       "),
-        ggiraph::opts_zoom(max = 3),
-        ggiraph::opts_selection(type = "single", only_shiny = TRUE, css = "stroke:#ff3b30; stroke-width:2px;"),
-        ggiraph::opts_sizing(rescale = TRUE)
+          ggiraph::opts_zoom(max = 3),
+          ggiraph::opts_selection(
+            type = "single",
+            only_shiny = TRUE,
+            css = "stroke:#ff3b30; stroke-width:2px;"
+          ),
+          ggiraph::opts_sizing(rescale = TRUE)
+        )
+      ) |>
+        ggiraph::girafe_options(
+          opts_toolbar(position = "topright", saveaspng = FALSE)
+        )
+    })
+    
+    # In the UI, my output id is "heatmap_pos_mut" => Shiny will create an input input$heatmap_pos_mut_selected
+    
+    # Clicked tile -> species list
+    
+    selected_tile_species <- reactive({
+      df <- cluster_plotting_df()
+      req(df, nrow(df) > 0)
+      
+      sel_id <- input$heatmap_pos_mut_selected
+      req(!is.null(sel_id), nzchar(sel_id))
+      
+      parts <- strsplit(sel_id, " ")[[1]]
+      req(length(parts) >= 2)
+      
+      pos <- suppressWarnings(as.numeric(parts[1]))
+      aa <- parts[2]
+      req(!is.na(pos), nzchar(aa))
+      
+      spp <- df |>
+        filter(AA_pos_Ecoli == pos, AA_mutation == aa) |>
+        distinct(Species) |>
+        arrange(Species)
+      
+      list(pos = pos, aa = aa, species = spp)
+    })
+    
+    
+    output$selected_tile_info <- renderUI({
+      x <- selected_tile_species()
+      tags$div(
+        style = "margin-bottom:8px; font-weight:600;",
+        sprintf(
+          "AA_Pos_Ecoli = %s; Mutation = %s (%d species)",
+          x$pos, x$aa, nrow(x$species)
+        )
       )
-    ) |>
-      ggiraph::girafe_options(
-        opts_toolbar(position = "topright", saveaspng = FALSE)
+    })
+    
+    
+    output$selected_tile_species_table <- DT::renderDT({
+      x <- selected_tile_species()
+      spp <- x$species
+      
+      DT::datatable(
+        spp,
+        rownames = FALSE,
+        options = list(
+          pageLength = 10,
+          scrollY = "260px",
+          dom = "l tip"
+        )
       )
-  })
-
-  # In the UI, my output id is "heatmap_pos_mut" => Shiny will create an input input$heatmap_pos_mut_selected
-
-  # Clicked tile -> species list
-
-  selected_tile_species <- reactive({
-    df <- cluster_plotting_df()
-    req(df, nrow(df) > 0)
-
-    sel_id <- input$heatmap_pos_mut_selected
-    req(!is.null(sel_id), nzchar(sel_id))
-
-    parts <- strsplit(sel_id, " ")[[1]]
-    req(length(parts) >= 2)
-
-    pos <- suppressWarnings(as.numeric(parts[1]))
-    aa <- parts[2]
-    req(!is.na(pos), nzchar(aa))
-
-    spp <- df |>
-      filter(AA_pos_Ecoli == pos, AA_mutation == aa) |>
-      distinct(Species) |>
-      arrange(Species)
-
-    list(pos = pos, aa = aa, species = spp)
-  })
-
-
-  output$selected_tile_info <- renderUI({
-    x <- selected_tile_species()
-    tags$div(
-      style = "margin-bottom:8px; font-weight:600;",
-      sprintf(
-        "AA_Pos_Ecoli = %s; Mutation = %s (%d species)",
-        x$pos, x$aa, nrow(x$species)
-      )
+    })
+    
+    ## ---- Download ----
+    output$download_mutation_freq <- downloadHandler(
+      filename = function() {
+        paste0("RIFRMap_frequency_heatmap.", input$mutation_freq_format)
+      },
+      
+      content = function(file) {
+        hm <- make_heatmap_pos_mut()
+        
+        fmt <- input$mutation_freq_format
+        
+        ggsave(
+          filename = file,
+          plot = hm$plot,
+          device = fmt,
+          width = 12,
+          height = hm$height_in,
+          dpi = 300,
+          limitsize = FALSE
+        )
+      }
     )
-  })
-
-
-  output$selected_tile_species_table <- DT::renderDT({
-    x <- selected_tile_species()
-    spp <- x$species
-
-    DT::datatable(
-      spp,
-      rownames = FALSE,
-      options = list(
-        pageLength = 10,
-        scrollY = "260px",
-        dom = "l tip"
-      )
-    )
-  })
+    
+  }
+  
 
 
   # ---- Source Overlap Tab ----
@@ -746,78 +799,96 @@ function(input, output, session) {
       }
       length(unique(na.omit(df$source)))
     })
-
-    output$mutationUpset <- renderPlot(
-      {
-        req(input$apply_filters > 0)
-
-        df0 <- combined_rows()
-
-        if (is.null(df0) || nrow(df0) == 0) {
-          return(ui_message("No data to show."))
-        }
-
-        df <- df0 |>
-          transmute(
-            AA_pos_Ecoli = as.character(AA_pos_Ecoli),
-            AA_mutation  = as.character(AA_mutation),
-            source       = as.character(source)
-          ) |>
-          filter(
-            !is.na(AA_pos_Ecoli),
-            !is.na(AA_mutation),
-            !is.na(source)
-          ) |>
-          distinct()
-
-        if (is.null(df) || nrow(df) == 0) {
-          return(ui_message("No data to show."))
-        }
-
-        upset_df <- df |>
-          distinct(AA_mutation, AA_pos_Ecoli, source) |>
-          group_by(AA_mutation, AA_pos_Ecoli) |>
-          summarise(
-            sources = list(sort(unique(source))),
-            .groups = "drop"
-          )
-
-        if (is.null(upset_df) || nrow(upset_df) == 0) {
-          return(ui_message("No data to show."))
-        }
-
-        ggplot(upset_df, aes(x = sources)) +
-          geom_bar() +
-          ggupset::scale_x_upset() +
-          labs(y = "Number of mutations", x = "Source(s)") +
-          plotting_theme(legend = "none")
-      },
-      res = 120
-    )
-
-
+    
+    make_mutation_upset_plot <- function() {
+      req(input$apply_filters > 0)
+      
+      df0 <- combined_rows()
+      req(df0, nrow(df0) > 0)
+      
+      df <- df0 |>
+        transmute(
+          AA_pos_Ecoli = as.character(AA_pos_Ecoli),
+          AA_mutation  = as.character(AA_mutation),
+          source       = as.character(source)
+        ) |>
+        filter(!is.na(AA_pos_Ecoli), !is.na(AA_mutation), !is.na(source)) |>
+        distinct()
+      
+      req(nrow(df) > 0)
+      
+      upset_df <- df |>
+        distinct(AA_mutation, AA_pos_Ecoli, source) |>
+        group_by(AA_mutation, AA_pos_Ecoli) |>
+        summarise(
+          sources = list(sort(unique(source))),
+          .groups = "drop"
+        )
+      
+      req(nrow(upset_df) > 0)
+      
+      ggplot(upset_df, aes(x = sources)) +
+        geom_bar() +
+        ggupset::scale_x_upset() +
+        labs(y = "Number of mutations", x = "Source(s)") +
+        plotting_theme(legend = "none")
+    }
+    
+    output$mutationUpset <- renderPlot({
+      make_mutation_upset_plot()
+    }, res = 120)
+    
     output$upset_container <- renderUI({
       df <- combined_rows()
-
+      
       if (is.null(df) || nrow(df) == 0) {
         return(ui_message("No data to show."))
-      } else {
-        ns <- n_sources()
-        w <- ns * 300
+      }
+      
+      ns <- n_sources()
+      w <- ns * 300
+      
+      div(
+        style = "
+      display: flex;
+      justify-content: center;
+      overflow-x: auto;
+      padding: 10px 0;
+    ",
+        
         div(
-          style = "
-            display: flex;
-            justify-content: center;
-            overflow-x: auto;
-            padding: 10px 0;
-          ",
-          div(
-            style = sprintf("width: %dpx;", w),
-            spin(plotOutput("mutationUpset", height = "450px", width = "100%"))
-          )
+          style = sprintf("width: %dpx;", w),
+          
+          spin(plotOutput("mutationUpset", height = "450px", width = "100%"))
+        )
+      )
+    })
+    
+    output$download_sources_upset <- downloadHandler(
+      filename = function() {
+        paste0("RIFRMap_cross_database_overlap_barplot.", input$sources_upset_format)
+      },
+      
+      content = function(file) {
+        ns <- n_sources()
+        req(ns)
+        
+        w_in <- max(8, ns * 3)  # scale with sources
+        h_in <- 5
+        
+        ggsave(
+          filename = file,
+          plot = make_mutation_upset_plot(),
+          device = input$sources_upset_format,
+          width = w_in,
+          height = h_in,
+          dpi = 300,
+          limitsize = FALSE
         )
       }
-    })
+    )
+   
+    
   }
 
   ## ---- Mutation Heatmap ----
@@ -1001,110 +1072,121 @@ function(input, output, session) {
 
 
     ### ---- Heatmap ----
-    output$mutationHeatmap <- ggiraph::renderGirafe({
+    make_mutation_heatmap_plot <- function(legend_position) {
       req(input$apply_filters > 0)
-
+      
+      df <- hm_plotting_df()
+      validate(need(!is.null(df) && nrow(df) > 0, "No data to show."))
+      
+      pos_levels <- selected_pos()
+      
+      clickable_levels <- get_clickable_levels(df)
+      sel <- sync_selected_sources(clickable_levels)
+      
+      keep_levels <- names(sel)[sel]
+      if (length(keep_levels) == 0) {
+        keep_levels <- clickable_levels
+      }
+      
+      df <- df |>
+        filter(source %in% keep_levels)
+      
+      base_grid <- tidyr::expand_grid(
+        AA_pos_Ecoli = pos_levels,
+        AA_mutation  = all_AAs_sorted
+      )
+      
+      df_fill <- base_grid |>
+        left_join(df, by = c("AA_pos_Ecoli", "AA_mutation")) |>
+        group_by(AA_pos_Ecoli, AA_mutation) |>
+        mutate(source = if (all(is.na(source))) "None" else source) |>
+        ungroup() |>
+        filter(!is.na(source)) |>
+        mutate(
+          AA_mutation  = factor(AA_mutation, levels = all_AAs_sorted),
+          AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels),
+          source       = factor(source, levels = source_levels)
+        )
+      
+      df_strip <- df_fill |>
+        mutate(
+          x_fac = factor(as.character(AA_mutation), levels = all_AAs_sorted),
+          y_fac = factor(as.character(AA_pos_Ecoli), levels = pos_levels),
+          x_num = as.numeric(x_fac),
+          y_num = as.numeric(y_fac)
+        ) |>
+        group_by(x_fac, y_fac) |>
+        arrange(source, .by_group = TRUE) |>
+        mutate(
+          all_sources = paste(sort(unique(as.character(source))), collapse = ", "),
+          k = n(),
+          i = row_number(),
+          ymin = y_num - 0.5,
+          ymax = y_num + 0.5,
+          xmin = (x_num - 0.5) + (i - 1) / k,
+          xmax = (x_num - 0.5) + i / k
+        ) |>
+        ungroup()
+      
+      df_tile_border <- df_strip |>
+        distinct(x_num, y_num) |>
+        mutate(
+          xmin = x_num - 0.5,
+          xmax = x_num + 0.5,
+          ymin = y_num - 0.5,
+          ymax = y_num + 0.5
+        )
+      
+      ggplot(df_strip) +
+        ggiraph::geom_rect_interactive(
+          aes(
+            xmin = xmin,
+            xmax = xmax,
+            ymin = ymin,
+            ymax = ymax,
+            fill = source,
+            tooltip = paste0(
+              "Position: ", AA_pos_Ecoli,
+              "<br>AA: ", AA_mutation,
+              "<br>Sources: ", all_sources
+            ),
+            data_id = paste(AA_pos_Ecoli, AA_mutation, sep = "|")
+          ),
+          color = "grey85",
+          linewidth = 0.2
+        ) +
+        geom_rect(
+          data = df_tile_border,
+          aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+          inherit.aes = FALSE,
+          fill = NA,
+          color = "grey60",
+          linewidth = 0.3
+        ) +
+        scale_fill_manual(values = source_palette) +
+        scale_x_continuous(
+          breaks = seq_along(all_AAs_sorted),
+          labels = all_AAs_sorted,
+          position = "top",
+          expand = c(0, 0)
+        ) +
+        scale_y_continuous(
+          breaks = seq_along(pos_levels),
+          labels = pos_levels,
+          expand = c(0, 0)
+        ) +
+        labs(
+          x = "Amino acid",
+          y = "Position (E. coli coordinate)"
+        ) +
+        plotting_theme(legend = legend_position)
+    }
+    
+    output$mutationHeatmap <- ggiraph::renderGirafe({
       tryCatch(
         {
-          df <- hm_plotting_df()
-          validate(need(!is.null(df) && nrow(df) > 0, "No data to show."))
-
-          pos_levels <- selected_pos()
-
-          clickable_levels <- get_clickable_levels(df)
-          sel <- sync_selected_sources(clickable_levels)
-
-          keep_levels <- names(sel)[sel]
-
-          if (length(keep_levels) == 0) {
-            keep_levels <- clickable_levels
-          }
-
-          df <- df %>%
-            filter(source %in% keep_levels)
-
-          base_grid <- tidyr::expand_grid(
-            AA_pos_Ecoli = pos_levels,
-            AA_mutation  = all_AAs_sorted
-          )
-
-          df_fill <- base_grid |>
-            left_join(df, by = c("AA_pos_Ecoli", "AA_mutation")) |>
-            group_by(AA_pos_Ecoli, AA_mutation) |>
-            mutate(source = if (all(is.na(source))) "None" else source) |>
-            ungroup() |>
-            filter(!is.na(source)) |>
-            mutate(
-              AA_mutation  = factor(AA_mutation, levels = all_AAs_sorted),
-              AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels),
-              source       = factor(source, levels = source_levels)
-            )
-
-          # vertical stripes inside each tile
-          df_strip <- df_fill |>
-            mutate(
-              x_fac = factor(as.character(AA_mutation), levels = all_AAs_sorted),
-              y_fac = factor(as.character(AA_pos_Ecoli), levels = pos_levels),
-              x_num = as.numeric(x_fac),
-              y_num = as.numeric(y_fac)
-            ) |>
-            group_by(x_fac, y_fac) |>
-            arrange(source, .by_group = TRUE) |>
-            mutate(
-              all_sources = paste(sort(unique(as.character(source))), collapse = ", "),
-              k = n(),
-              i = row_number(),
-              ymin = y_num - 0.5,
-              ymax = y_num + 0.5,
-              xmin = (x_num - 0.5) + (i - 1) / k,
-              xmax = (x_num - 0.5) + i / k
-            ) |>
-            ungroup()
-
-          # strong borders between tiles only
-          df_tile_border <- df_strip |>
-            distinct(x_num, y_num) |>
-            mutate(
-              xmin = x_num - 0.5, xmax = x_num + 0.5,
-              ymin = y_num - 0.5, ymax = y_num + 0.5
-            )
-
-          p <- ggplot(df_strip) +
-            ggiraph::geom_rect_interactive(
-              aes(
-                xmin = xmin, xmax = xmax,
-                ymin = ymin, ymax = ymax,
-                fill = source,
-                tooltip = paste0(
-                  "Position: ", AA_pos_Ecoli,
-                  "<br>AA: ", AA_mutation,
-                  "<br>Sources: ", all_sources
-                ),
-                data_id = paste(AA_pos_Ecoli, AA_mutation, sep = "|")
-              ),
-              color = "grey85", linewidth = 0.2
-            ) +
-            geom_rect(
-              data = df_tile_border,
-              aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
-              inherit.aes = FALSE,
-              fill = NA, color = "grey60", linewidth = 0.3
-            ) +
-            scale_fill_manual(values = source_palette) +
-            scale_x_continuous(
-              breaks = seq_along(all_AAs_sorted),
-              labels = all_AAs_sorted,
-              position = "top",
-              expand = c(0, 0)
-            ) +
-            scale_y_continuous(
-              breaks = seq_along(pos_levels),
-              labels = pos_levels,
-              expand = c(0, 0)
-            ) +
-            labs(x = "Amino acid", y = "Position (E. coli coordinate)") +
-            plotting_theme(legend = "none")
-
+          p <- make_mutation_heatmap_plot(legend_position = "none")
+          
           ggiraph::girafe(
             ggobj = p,
             width_svg = 12,
@@ -1127,11 +1209,11 @@ function(input, output, session) {
         },
         error = function(e) {
           notify_reselect("heatmap")
-          ggiraph::girafe(ggobj = ggplot() +
-            theme_void())
+          ggiraph::girafe(ggobj = ggplot() + theme_void())
         }
       )
     })
+    
 
     ### ---- Container ----
     output$heatmap_container <- renderUI({
@@ -1157,6 +1239,27 @@ function(input, output, session) {
       )
     })
   }
+  
+  ### ---- Download ----
+  output$download_sources_hm <- downloadHandler(
+    filename = function() {
+      paste0("RIFRMap_cross_database_heatmap.", input$sources_hm_format)
+    },
+    
+    content = function(file) {
+      p <- make_mutation_heatmap_plot(legend_position = "right")
+      
+      ggsave(
+        filename = file,
+        plot = p,
+        device = input$sources_hm_format,
+        width = 12,
+        height = heatmap_height_px() / 96,
+        dpi = 300,
+        limitsize = FALSE
+      )
+    }
+  )
 
 
 

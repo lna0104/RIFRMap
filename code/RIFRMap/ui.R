@@ -300,7 +300,16 @@ shinyUI(
                       selected = c("N", "I", "II", "III"),
                       direction = "horizontal",
                       justified = TRUE
-                    )
+                    ),
+                    
+                    selectInput(
+                      "mutation_map_format",
+                      "Download format",
+                      choices = c("png", "pdf", "jpg", "jpeg", "tiff"),
+                      selected = "png"
+                    ),
+                    
+                    downloadButton("download_mutation_map", "Download plot")
                   ),
                   width = 3
                 ),
@@ -346,8 +355,22 @@ shinyUI(
                 ),
                 column(
                   width = 4,
-                  uiOutput("selected_tile_info"),
-                  DT::DTOutput("selected_tile_species_table")
+                  div(
+                    style = "margin-bottom: 20px;",
+                    selectInput(
+                      "mutation_freq_format",
+                      "Download format",
+                      choices = c("png", "pdf", "jpg", "jpeg", "tiff"),
+                      selected = "png"
+                    ),
+                    
+                    downloadButton("download_mutation_freq", "Download plot")
+                  ),
+                  
+                  div(
+                    uiOutput("selected_tile_info"),
+                    DT::DTOutput("selected_tile_species_table")
+                  )
                 )
               )
             )
@@ -369,6 +392,20 @@ shinyUI(
                   div(
                     class = "plot-header",
                     h3("Cross-database mutation overlap")
+                  ),
+                  
+                  div(
+                    class = "plot-controls-bottom-left",
+                    
+                    selectInput(
+                      "sources_upset_format",
+                      "Download format",
+                      choices = c("png", "pdf", "jpg", "jpeg", "tiff"),
+                      selected = "png",
+                      width = "200px"
+                    ),
+                    
+                    downloadButton("download_sources_upset", "Download plot", style = "width:130px;")
                   ),
                   
                   uiOutput("upset_container")
@@ -397,6 +434,20 @@ shinyUI(
                       icon = icon("rotate-left"),
                       class = "btn-outline-secondary btn-sm"
                     )
+                  ),
+                  
+                  div(
+                    class = "plot-controls-bottom-left",
+                    
+                    selectInput(
+                      "sources_hm_format",
+                      "Download format",
+                      choices = c("png", "pdf", "jpg", "jpeg", "tiff"),
+                      selected = "png",
+                      width = "200px"
+                    ),
+                    
+                    downloadButton("download_sources_hm", "Download plot", style = "width:130px;")
                   ),
                   
                   uiOutput("heatmap_container")

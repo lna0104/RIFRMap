@@ -68,6 +68,7 @@ body {
 /* home page section */
 
 .home-container {
+  min-height: calc(100vh - 80px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -322,6 +323,7 @@ body {
 }
 
 .plot-main {
+  position: relative;
   background: #ffffff;
   border-radius: 14px;
   padding: 10px;
@@ -459,7 +461,7 @@ body {
 .hm-layout{
   display: flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: 8px;
   justify-content: flex-start;
 }
 
@@ -471,11 +473,12 @@ body {
 
   position: relative;
   z-index: 1;
+
 }
 
 /* Legend column */
 .hm-legend{
-  flex: 0 0 260px;
+  flex: 0 0 300px;
   max-height: 85vh;
   overflow-y: auto;
   padding-top: 3rem;
@@ -491,6 +494,10 @@ body {
   flex-direction: column;
   gap: 8px;
   margin: 8px 0 12px 0;
+}
+
+.hm-legend-text {
+  font-size: 14px;    
 }
 
 /* Legend buttons */
@@ -538,8 +545,8 @@ body {
 
 /* Swatch always shows the real color */
 .hm-legend-swatch{
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 3px;
   display: inline-block;
   background: var(--swatch);
@@ -592,5 +599,43 @@ body {
   z-index: 1;
 }
 
+/* Download button */
+
+.plot-controls-bottom-left {
+  position: absolute;
+  top: 12px;   
+  left: 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  z-index: 10;
+
+  background: rgba(255,255,255,0.92);
+  padding: 6px 8px;
+  border-radius: 10px;
+}
+
+/* Footer */
+html, body {
+  min-height: 100vh;
+  margin: 0;
+}
+
+body > .container-fluid {
+  min-height: calc(100vh - 52px); /* navbar height */
+  display: flex;
+  flex-direction: column;
+}
+
+body > .container-fluid > .tab-content {
+  flex: 1 0 auto;
+}
+
+.app-footer {
+  margin-top: auto;
+  flex-shrink: 0;
+}
 
 
