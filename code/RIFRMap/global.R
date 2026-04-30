@@ -38,6 +38,10 @@ library(rsconnect)
 # Bioinformatics
 library(grantham)
 
+# ---- Version and update time ----
+APP_VERSION <- "v1.0.0"
+DATA_LAST_UPDATED <- "24/03/2026"
+
 # ---- Load data ----
 
 card <- readRDS("data/card.rds")

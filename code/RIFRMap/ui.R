@@ -50,7 +50,7 @@ shinyUI(
             div(
               class = "text-muted-explore",
               p("Select data sources and filtering criteria to define the mutation set used in downstream analyses."),
-              p(tags$i("Last updated: 24/03/2026"))
+              p(tags$i(paste0("Last updated: ", DATA_LAST_UPDATED)))
             ),
             fluidRow(
               column(
@@ -530,6 +530,12 @@ shinyUI(
             class = "table-header",
             h3("Mutation Data")
           ), 
+          
+          p(
+            class = "text-muted",
+            tags$em(paste0("Version: ", APP_VERSION, " | Last updated: ", DATA_LAST_UPDATED))
+          ),
+          
           div(
             style = "display:flex; gap:10px; justify-content:flex-end; margin-bottom:8px;",
             downloadButton(
@@ -544,6 +550,12 @@ shinyUI(
             class = "table-header",
             h3("Reference Data")
           ), 
+          
+          p(
+            class = "text-muted",
+            tags$em(paste0("Version: ", APP_VERSION, " | Last updated: ", DATA_LAST_UPDATED))
+          ),
+          
           div(
             style = "display:flex; gap:10px; justify-content:flex-end; margin-bottom:8px;",
             downloadButton(

@@ -1576,7 +1576,7 @@ function(input, output, session) {
   })
   
   output$download_mutations <- downloadHandler(
-    filename = function() paste0("RIFRMap_mutation_table_", Sys.Date(), ".csv"),
+    filename = function() paste0("RIFRMap_mutation_table_", APP_VERSION, "_", Sys.Date(), ".csv"),
     content = function(file) {
       readr::write_csv(all_mutation_data(), file)
     }
@@ -1594,7 +1594,7 @@ function(input, output, session) {
   })
   
   output$download_refs <- downloadHandler(
-    filename = function() paste0("RIFRMap_reference_table_", Sys.Date(), ".csv"),
+    filename = function() paste0("RIFRMap_reference_table_", APP_VERSION, "_", Sys.Date(), ".csv"),
     content = function(file) {
       readr::write_csv(all_references(), file)
     }
