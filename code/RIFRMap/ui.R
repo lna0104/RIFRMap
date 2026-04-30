@@ -38,6 +38,8 @@ shinyUI(
       title = tagList(icon("chart-line"), "Explore"),
       value = "explore",
       fluidPage(
+        class = "filters-row",
+        
         tabsetPanel(
           id = "explore_steps",
           

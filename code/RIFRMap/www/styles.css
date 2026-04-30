@@ -260,6 +260,10 @@ body {
   margin-top: 0;
 }
 
+.filter-box {
+  min-height: 200px;
+}
+
 .info-icon {
   color:#0A9F9D; 
   cursor:pointer; 
