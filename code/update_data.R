@@ -221,3 +221,75 @@ write_csv(
   "data/raw_data/RIF_DRAGdb_mutations_data.csv"
 )
 
+# ----- PointFinder -----
+
+species_list <- c(
+  "campylobacter",
+  "enterococcus_faecalis",
+  "escherichia_coli",
+  "staphylococcus_faecium",
+  "helicobacter_pylori",
+  "klebsiella",
+  "mycobacterium_tuberculosis",
+  "neisseria_gonorrhoeae",
+  "plasmodium_falciparum",
+  "salmonella",
+  "staphylococcus_aureus"
+)
+
+base_url <- "https://bitbucket.org/genomicepidemiology/pointfinder_db/raw/master/"
+
+#dir.create("data/raw_data/pointfinder", showWarnings = FALSE)
+input_dir <- "data/raw_data/pointfinder"
+
+
+for (sp in species_list) {
+  
+  url <- paste0(base_url, sp, "/resistens-overview.txt")
+  dest <- file.path(paste0(input_dir, "/", sp, "_resistens-overview.txt"))
+  
+  tryCatch({
+    download.file(url, destfile = dest, mode = "wb")
+    message("Downloaded: ", sp)
+  }, error = function(e) {
+    message("Failed: ", sp)
+  })
+}
+
+files <- list.files(
+  input_dir,
+  pattern = "resistens-overview\\.txt$",
+  full.names = TRUE
+)
+
+read_pointfinder <- function(file) {
+  
+  species <- basename(file) |>
+    str_remove("_resistens-overview\\.txt$")
+  
+  df <- read_tsv(
+    file,
+    comment = "#",
+    col_types = cols(.default = "c"),
+    show_col_types = FALSE,
+    trim_ws = TRUE
+  )
+  
+  # Fix header if removed by comment="#"
+  if (!"Gene_ID" %in% names(df)) {
+    df <- read_tsv(
+      file,
+      col_types = cols(.default = "c"),
+      show_col_types = FALSE,
+      trim_ws = TRUE
+    )
+    
+    names(df) <- str_replace(names(df), "^#", "")
+  }
+  
+  df |>
+    mutate(species = species)
+}
+
+# Merge all files
+pointfinder_data <- map_dfr(files, read_pointfinder)
