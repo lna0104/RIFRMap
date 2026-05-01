@@ -378,9 +378,9 @@ shinyUI(
             )
           ),
           
-          ## ---- Source Overlap ----
+          ## ---- Dataset Comparison ----
           tabPanel(
-            "Source Overlap",
+            "Dataset Comparison",
             div(
               class = "text-muted-explore",
               p("Source-centric view of mutation evidence. Plots highlight overlap among databases independent of species identity.")
