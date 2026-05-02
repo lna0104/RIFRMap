@@ -12,6 +12,9 @@ This tool is designed to support research into antimicrobial resistance by provi
 
 ## Project Structure
 
+### Data
+
+
 - **raw_data/**  
   Contains all original downloaded data files.
 
