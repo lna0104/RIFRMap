@@ -5,7 +5,9 @@
 .RDataTmp
 *.fna
 *.txt
+*.xlsx
 tmp.R
 .httr-oauth
 .DS_Store
 .quarto
+raw_data/rpoB_references
