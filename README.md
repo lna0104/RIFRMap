@@ -1,12 +1,44 @@
-# RIF Resistance Database
+# RIFMap
 
-This repository contains an end-to-end R workflow for compiling, processing, analysing, and visualising rifampicin (RIF) resistance mutations from multiple public and curated sources. The project integrates heterogeneous datasets, standardises mutation nomenclature, builds a harmonised RIF mutation database, and provides an interactive Shiny application for exploration.
+**RIFRMap** is an interactive Shiny-based platform for exploring rifampicin (RIF) resistance mutations across bacterial species. It integrates multiple public and curated datasets into a unified framework, enabling systematic analysis and comparison of resistance-associated mutations.
 
-## Structure
+The platform standardises mutation nomenclature across heterogeneous sources and provides tools to examine:
+- mutation distribution across species  
+- frequency and prevalence of variants  
+- overlap and consistency between data sources  
 
--   data/raw_data - Contains all original downloaded data files.
--   data/RIFR_data - Stores cleaned datasets used in the analysis.
--   code - The main analysis pipeline scripts.
+RIFRMap provides dynamic visualisations and flexible filtering capabilities, enabling users to explore mutations by species, supporting evidence, and dataset-specific criteria informed by the literature.
+This tool is designed to support research into antimicrobial resistance by providing a comprehensive and accessible view of rifampicin resistance mutations.
+
+## Project Structure
+
+- **raw_data/**  
+  Contains all original downloaded data files.
+
+- **processed_data/**  
+  Stores cleaned and processed datasets used for analysis and the app.
+
+### Data Processing Scripts
+- `install_deps.R` – Install required dependencies  
+- `update_data.R` – Download and update raw datasets  
+- `process_data.R` – Clean and process datasets  
+- `process_refseqs.R` – Generate reference sequence coordinates (`coordinates.RData`)  
+- `helpers.R` – Utility/helper functions  
+
+### Shiny App
+- `ui.R` – User interface  
+- `server.R` – Server logic  
+- `global.R` – Shared objects and data loading  
+
+### Frontend
+- **www/**  
+  Custom CSS, HTML, and JavaScript for the Shiny app  
+  
+## Run the App
+
+```r
+shiny::runApp()  
+```
 
 ## Data Sources
 
@@ -22,7 +54,6 @@ To be included, each AMR determinant must meet all of the following:
 For *Mycobacterium tuberculosis*, additional curated mutation data were integrated from the **CRyPTIC**, **ReSeqTB**, and **WHO 2023** resistance catalogs.
 
 
-
 ### CRyPTIC (Comprehensive Resistance Prediction for Tuberculosis: an International Consortium)
 
 The **CRyPTIC Consortium** profiled MICs for 13 anti-tuberculosis drugs—including rifampicin—in over 15,000 *M. tuberculosis* isolates worldwide [2](https://doi.org/10.1038/s41467-023-44325-5).
@@ -36,8 +67,6 @@ Using multivariable linear mixed models and whole-genome sequencing, they identi
 -   Effect size
 -   Variant count
 -   Benjamini–Hochberg adjusted p-value
--   Homoplasy
-
 
 ### DRAGdb (Drug Resistance Associated Genes Database)
 
@@ -75,9 +104,6 @@ In **RIFRMap**, users can filter this dataset based on:
 -   Number of independent supporting studies
 -   Number of bacterial species in which the mutation has been reported
 
-## Processed Data
-
--   All processed datasets retain only single-variant rifampicin-associated mutations.
 
 ## Citation
 
