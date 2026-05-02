@@ -1,4 +1,4 @@
-# RIFMap
+# RIFRMap
 
 **RIFRMap** is an interactive Shiny-based platform for exploring rifampicin (RIF) resistance mutations across bacterial species. It integrates multiple public and curated datasets into a unified framework, enabling systematic analysis and comparison of resistance-associated mutations.
 
