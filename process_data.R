@@ -6,7 +6,7 @@ library(Biostrings)
 library(rentrez)
 library(xml2)
 
-source("translate_coordinates.R")
+source("helpers.R")
 
 # Global settings and parameters:
 globsets <- list(

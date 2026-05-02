@@ -4,7 +4,7 @@ library(ALJEbinf)
 library(tidyverse)
 library(rentrez)
 
-source("bioinformatics.R")
+source("helpers.R")
 
 # Generate coordinates 
 if(file.exists("processed_data/fastahash.Rds") && as.character(openssl::sha1(file("raw_data/rpoB_references.fasta"))) == readRDS("processed_data/fastahash.Rds")){
