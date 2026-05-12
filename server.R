@@ -65,12 +65,12 @@ function(input, output, session) {
       dfs[["PointFinder"]] <- d
     }
     
-    ## RefGenesCatalog
+    ## Reference Gene Catalog
     if (isTRUE(input$refgenes_enabled)) {
       d <- refgenes |>
         filter_by_species(input$refgenes_species, species_col = "species")
       
-      dfs[["RefGenesCatalog"]] <- d
+      dfs[["Reference Gene Catalog"]] <- d
     }
 
     ## CRyPTIC
@@ -82,9 +82,6 @@ function(input, output, session) {
       d <- filter_range_if(d, "counts", input$cryptic_counts)
       d <- d |>
         filter(bh_corrected_p <= as.numeric(input$cryptic_bhp))
-
-      # categorical filter
-      d <- filter_in_if(d, "homoplasy", input$cryptic_homoplasy)
 
       dfs[["CRyPTIC"]] <- d
     }
@@ -603,7 +600,7 @@ function(input, output, session) {
         filter(!is.na(AA_pos_Ecoli), !is.na(AA_mutation), !is.na(Species)) |>
         distinct()
       
-      all_AAs_sorted <- sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]])
+      all_AAs_sorted <- rev(sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]]))
       
       heat_df <- df |>
         group_by(AA_pos_Ecoli, AA_mutation) |>
@@ -617,11 +614,11 @@ function(input, output, session) {
       pos_levels <- heat_df$AA_pos_Ecoli |>
         unique() |>
         as.numeric() |>
-        sort(decreasing = TRUE) |>
+        sort(decreasing = FALSE) |>
         as.character()
       
       n_pos <- length(pos_levels)
-      bar_h_cm <- max(4, min(10, 0.15 * n_pos))
+      bar_h_cm <- max(4, min(10, 0.2 * n_pos))
       
       heat_df <- heat_df |>
         mutate(
@@ -654,13 +651,14 @@ function(input, output, session) {
               tooltip = tooltip_txt, data_id = tile_id)
         ) +
           ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
-          scale_x_discrete(position = "top", drop = FALSE) +
+          scale_x_discrete(position = "bottom", drop = FALSE) +
           scale_fill_manual(
             values = box_cols,
             breaks = as.character(levs),
             labels = as.character(levs),
             drop = FALSE
           ) +
+          coord_flip() +
           guides(fill = guide_legend(
             title = "No. species",
             keyheight = grid::unit(0.5, "cm"),
@@ -678,7 +676,7 @@ function(input, output, session) {
               tooltip = tooltip_txt, data_id = tile_id)
         ) +
           ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
-          scale_x_discrete(position = "top", drop = FALSE) +
+          scale_x_discrete(position = "bottom", drop = FALSE) +
           scale_fill_gradientn(
             colours = c("white", cols),
             values  = vals_scaled,
@@ -687,10 +685,11 @@ function(input, output, session) {
             labels  = as.character(c(0, 1, max_n)),
             oob     = scales::squish
           ) +
+          coord_flip() +
           guides(fill = guide_colourbar(
             barheight = grid::unit(bar_h_cm, "cm"),
             barwidth  = grid::unit(0.6, "cm")
-          ))
+          )) 
       }
       
       p <- p +
@@ -699,12 +698,16 @@ function(input, output, session) {
           y = "Position (E. coli coordinate)",
           fill = "No. species"
         ) +
-        plotting_theme_large_axes(legend = "right", x_top = TRUE)
+        plotting_theme_large_axes(legend = "right", x_top = TRUE) +
+        theme(
+          axis.text.x = element_text(angle = 90)
+        )
+      
       
       list(
         plot = p,
         n_pos = n_pos,
-        height_in = max(5, min(35, 0.35 * n_pos))
+        height_in = max(5, min(60, 0.5 * n_pos))
       )
     }
     
@@ -713,8 +716,8 @@ function(input, output, session) {
       
       ggiraph::girafe(
         ggobj = hm$plot,
-        width_svg = 12,
-        height_svg = hm$height_in,
+        width_svg = hm$height_in,
+        height_svg = 12,
         options = list(
           ggiraph::opts_hover(css = "fill-opacity:1; stroke:black; stroke-width:0.6px;"),
           ggiraph::opts_tooltip(css = "
@@ -1114,11 +1117,12 @@ function(input, output, session) {
       
       clickable_levels <- get_clickable_levels(df)
       sel <- sync_selected_sources(clickable_levels)
-      
+
       keep_levels <- names(sel)[sel]
       if (length(keep_levels) == 0) {
         keep_levels <- clickable_levels
       }
+      
       
       df <- df |>
         filter(source %in% keep_levels)
@@ -1137,7 +1141,7 @@ function(input, output, session) {
         mutate(
           AA_mutation  = factor(AA_mutation, levels = all_AAs_sorted),
           AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels),
-          source       = factor(source, levels = source_levels)
+          source       = factor(source)
         )
       
       df_strip <- df_fill |>
@@ -1195,7 +1199,11 @@ function(input, output, session) {
           color = "grey60",
           linewidth = 0.3
         ) +
-        scale_fill_manual(values = source_palette) +
+        scale_fill_manual(
+          values = source_palette,
+          breaks = source_levels,
+          name = "Data source"
+        ) +
         scale_x_continuous(
           breaks = seq_along(all_AAs_sorted),
           labels = all_AAs_sorted,
@@ -1494,7 +1502,7 @@ function(input, output, session) {
         Yang    = yang,
         Curated = curated,
         PointFinder = pointfinder,
-        RefGeneCatalog = refgenes
+        "Reference Gene Catalog" = refgenes
       ),
       .id = "source"
     )

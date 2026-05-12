@@ -340,7 +340,9 @@ pointfinder_mapped_ecoli <- pointfinder_processed_data |>
     map_to_ecoli(df, rpoB_target, rpoB_Ecoli)
   }) |>
   dplyr::ungroup() |>
+  dplyr::filter(!stringr::str_detect(AA_mutation, "\\*")) |>
   dplyr::select(-species_sq) 
+  
 
 
 saveRDS(
@@ -397,7 +399,7 @@ refgenes_mapped_ecoli <- refgenes_processed_data |>
   }) |>
   dplyr::ungroup() |>
   dplyr::select(-species_sq) |>
-  mutate(source = "RefGenesCatalog")
+  mutate(source = "Reference Gene Catalog")
 
 saveRDS(
   refgenes_mapped_ecoli,
@@ -432,6 +434,7 @@ saveRDS(
   all_data,
   file = "processed_data/allData.rds"
 )
+
 
 # Process references -----
 

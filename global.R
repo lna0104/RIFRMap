@@ -1,7 +1,6 @@
 # Core UI
 library(shiny)
-library(bs4Dash)
-library(shinydashboard)
+library(shinyjs)
 
 # Data
 library(dplyr)
@@ -9,32 +8,19 @@ library(tidyr)
 library(tidyverse)
 library(readr)
 library(gtsummary)
-library(DT)
 
 # Plots / widgets
 library(ggplot2)
 library(ggiraph)
 library(plotly)
 library(ggupset)
-library(shinyWidgets)
-library(shinycssloaders)
 library(gt)
 library(wesanderson)
 library(RColorBrewer)
 
-# UI helpers
-library(bslib)
-library(htmltools)
-library(fresh)
-library(sass)
-
 # BioC + GitHub
 library(Biostrings)
 library(ALJEbinf)
-
-# shinyapps.io
-library(rsconnect)
-
 # Bioinformatics
 library(grantham)
 
@@ -129,28 +115,28 @@ plotting_theme_large_axes <- function(legend = "none", x_top = FALSE) {
   plotting_theme(legend = legend, x_top = x_top) +
     theme(
       axis.title.x = element_text(
-        size = 14,
+        size = 16,
         face = "bold",
         colour = PLOT_STYLE$axis_col,
         margin = margin(t = if (x_top) 8 else 0, b = if (x_top) 0 else 8)
       ),
       axis.title.y = element_text(
-        size = 14,
+        size = 16,
         face = "bold",
         colour = PLOT_STYLE$axis_col,
         margin = margin(r = 8)
       ),
       legend.title = element_text(
-        size = 14,
+        size = 15,
         face = "bold",
         margin = margin(b = 12)
       ),
       axis.text.x = element_text(
-        size = 12,
+        size = 14,
         colour = PLOT_STYLE$axis_col
       ),
       axis.text.y = element_text(
-        size = 12,
+        size = 14,
         colour = PLOT_STYLE$axis_col
       ),
       legend.text = element_text(
@@ -754,7 +740,16 @@ plotMutations <- function(muts,
 }
 
 # ---- Heatmap ----
-source_levels <- c("CARD", "CRyPTIC", "DRAGdb", "Curated", "Yang", "PointFinder", "RefGenesCatalog","None")
+source_levels <- c(
+  "CARD",
+  "CRyPTIC",
+  "Curated",
+  "DRAGdb",
+  "PointFinder",
+  "Reference Gene Catalog",
+  "Yang",
+  "None"
+)
 all_AAs_sorted <- sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]])
 
 source_palette <- c(
@@ -764,7 +759,7 @@ source_palette <- c(
   Curated = "#fff8f0",
   Yang    = "#dff2e1",
   PointFinder     = "#C8AAAA",  
-  RefGenesCatalog = "#DEE791",  
+  "Reference Gene Catalog" = "#DEE791",  
   None    = "grey85"
 )
 

@@ -1,19 +1,9 @@
-library(shiny)
-library(shinyjs)
-library(shinyBS)
-library(plotly)
-library(leaflet)
-library(shinyWidgets)
-library(ggiraph)
-library(DT)
-library(gt)
-
 shinyUI(
   navbarPage(
     title = "RIFRMap",
     id = "main_nav",
     theme = "www/styles.css",
-    footer = includeHTML("www/footer.html"),
+    #footer = includeHTML("www/footer.html"),
     fluid = TRUE,
     collapsible = TRUE,
     
@@ -76,105 +66,6 @@ shinyUI(
                   class = "filter-box",
                   div(
                     class = "filter-box-header",
-                    checkboxInput("pointfinder_enabled", NULL, FALSE),
-                    h4("PointFinder")
-                  ),
-                  selectInput(
-                    "pointfinder_species", "Species",
-                    choices = NULL,
-                    selected = "All species",
-                    multiple = TRUE,
-                    width = "100%"
-                  )
-                ),
-                
-                div(
-                  class = "filter-box",
-                  div(
-                    class = "filter-box-header",
-                    checkboxInput("yang_enabled", NULL, FALSE),
-                    h4("Yang-RIF")
-                  ),
-                  div(
-                    class = "form-group shiny-input-container",
-                    style = "width: 100%;",
-                    tags$label("Species", `for` = "yang_species"),
-                    tags$input(
-                      id = "yang_species",
-                      type = "text",
-                      value = "Escherichia coli",
-                      class = "form-control",
-                      readonly = "readonly"
-                    )
-                  ), 
-                  sliderInput(
-                    "yang_log2fc", "log2FC",
-                    min = 0, max = 2.7,
-                    value = c(0, 2.7),
-                    step = 0.1,
-                    width = "100%"
-                  )
-                ),
-                
-                div(
-                  class = "filter-box",
-                  div(
-                    class = "filter-box-header",
-                    checkboxInput("dragdb_enabled", NULL, FALSE),
-                    h4("DRAGdb")
-                  ),
-                  
-                  selectInput(
-                    "dragdb_species", "Species",
-                    choices = NULL,
-                    selected = "All species",
-                    multiple = TRUE,
-                    width = "100%"
-                  ),
-                  div(
-                    style = "display:flex; align-items:center; gap:6px;",
-                    
-                    tags$label("PROVEAN score"),
-                    
-                    tags$i(
-                      class = "fa fa-question-circle info-icon",
-                      title = "PROVEAN score predicts the functional impact of amino acid substitutions. Variants with scores ≤ −2.5 are considered deleterious, while scores > −2.5 are considered neutral.",
-                      `data-toggle` = "tooltip"
-                    )
-                  ),
-                  sliderInput(
-                    "dragdb_provean", NULL,
-                    min = -10.7, max = -2.6,
-                    value = c(-10.7, -2.6),
-                    step = 0.5,
-                    width = "100%"
-                  )
-                )
-              ),
-              
-              column(
-                width = 7,
-                
-                div(
-                  class = "filter-box",
-                  div(
-                    class = "filter-box-header",
-                    checkboxInput("refgenes_enabled", NULL, FALSE),
-                    h4("Reference Gene Catalog")
-                  ),
-                  selectInput(
-                    "refgenes_species", "Species",
-                    choices = NULL,
-                    selected = "All species",
-                    multiple = TRUE,
-                    width = "100%"
-                  )
-                ),
-                
-                div(
-                  class = "filter-box",
-                  div(
-                    class = "filter-box-header",
                     checkboxInput("cryptic_enabled", NULL, FALSE),
                     h4("CRyPTIC")
                   ),
@@ -219,12 +110,12 @@ shinyUI(
                       class = "fa fa-question-circle info-icon",
                       title = "Counts represent the number of isolates in which a given mutation was observed in the CRyPTIC dataset.",
                       `data-toggle` = "tooltip"
-                      )
+                    )
                   ),
                   
                   sliderInput(
                     "cryptic_counts", NULL,
-                    min = 0, max = 2326,
+                    min = 1, max = 2326,
                     value = c(0, 2326),
                     step = 1,
                     width = "100%"
@@ -245,8 +136,8 @@ shinyUI(
                   radioButtons(
                     "cryptic_bhp",
                     NULL,
-                    choices = c("0.05" = 0.05, "0.01" = 0.01, "0.005" = 0.005, "0.001" = 0.001),
-                    selected = 0.05,
+                    choices = c("0.05" = 0.05, "0.01" = 0.01, "0.005" = 0.005, "0.001" = 0.001, "None" = 1.0),
+                    selected = 1.0,
                     inline = TRUE
                   ),
                 ),
@@ -277,6 +168,107 @@ shinyUI(
                     min = 1, max = 29,
                     value = c(1, 29),
                     step = 1,
+                    width = "100%"
+                  )
+                )
+                
+        
+              ),
+              
+              column(
+                width = 7,
+                
+                div(
+                  class = "filter-box",
+                  div(
+                    class = "filter-box-header",
+                    checkboxInput("dragdb_enabled", NULL, FALSE),
+                    h4("DRAGdb")
+                  ),
+                  
+                  selectInput(
+                    "dragdb_species", "Species",
+                    choices = NULL,
+                    selected = "All species",
+                    multiple = TRUE,
+                    width = "100%"
+                  ),
+                  div(
+                    style = "display:flex; align-items:center; gap:6px;",
+                    
+                    tags$label("PROVEAN score"),
+                    
+                    tags$i(
+                      class = "fa fa-question-circle info-icon",
+                      title = "PROVEAN score predicts the functional impact of amino acid substitutions. Variants with scores ≤ −2.5 are considered deleterious, while scores > −2.5 are considered neutral.",
+                      `data-toggle` = "tooltip"
+                    )
+                  ),
+                  sliderInput(
+                    "dragdb_provean", NULL,
+                    min = -10.7, max = -2.6,
+                    value = c(-10.7, -2.6),
+                    step = 0.5,
+                    width = "100%"
+                  )
+                ),
+                
+                div(
+                  class = "filter-box",
+                  div(
+                    class = "filter-box-header",
+                    checkboxInput("pointfinder_enabled", NULL, FALSE),
+                    h4("PointFinder")
+                  ),
+                  selectInput(
+                    "pointfinder_species", "Species",
+                    choices = NULL,
+                    selected = "All species",
+                    multiple = TRUE,
+                    width = "100%"
+                  )
+                ),
+                
+                div(
+                  class = "filter-box",
+                  div(
+                    class = "filter-box-header",
+                    checkboxInput("refgenes_enabled", NULL, FALSE),
+                    h4("Reference Gene Catalog")
+                  ),
+                  selectInput(
+                    "refgenes_species", "Species",
+                    choices = NULL,
+                    selected = "All species",
+                    multiple = TRUE,
+                    width = "100%"
+                  )
+                ),
+                
+                div(
+                  class = "filter-box",
+                  div(
+                    class = "filter-box-header",
+                    checkboxInput("yang_enabled", NULL, FALSE),
+                    h4("Yang-RIF")
+                  ),
+                  div(
+                    class = "form-group shiny-input-container",
+                    style = "width: 100%;",
+                    tags$label("Species", `for` = "yang_species"),
+                    tags$input(
+                      id = "yang_species",
+                      type = "text",
+                      value = "Escherichia coli",
+                      class = "form-control",
+                      readonly = "readonly"
+                    )
+                  ), 
+                  sliderInput(
+                    "yang_log2fc", "log2FC",
+                    min = 0.02, max = 2.7,
+                    value = c(0, 2.7),
+                    step = 0.1,
                     width = "100%"
                   )
                 )
@@ -380,15 +372,22 @@ shinyUI(
               
               fluidRow(
                 column(
-                  width = 8,
+                  width = 10,
                   div(
                     class = "plot-main", 
-                    style = "height: 850px; overflow-y: auto; border: 1px solid #eee;",
-                    ggiraph::girafeOutput("heatmap_pos_mut", height = "1200px")
+                    style = "width: 100%; overflow-x: auto; border: 1px solid #eee;",
+                    div(
+                      style = "min-width: 1500px; margin-top: 40px",
+                      ggiraph::girafeOutput(
+                        "heatmap_pos_mut",
+                        width = "100%",
+                        height = "300px"
+                      )
+                    )
                   )
                 ),
                 column(
-                  width = 4,
+                  width = 2,
                   div(
                     style = "margin-bottom: 20px;",
                     selectInput(
@@ -442,7 +441,10 @@ shinyUI(
                     downloadButton("download_sources_upset", "Download plot", style = "width:130px;")
                   ),
                   
-                  uiOutput("upset_container")
+                  div(
+                    style = "margin-top: 120px;",
+                    uiOutput("upset_container")
+                  )
                 )
               ),
               

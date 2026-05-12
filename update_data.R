@@ -231,7 +231,7 @@ species_list <- c(
   "campylobacter",
   "enterococcus_faecalis",
   "escherichia_coli",
-  "staphylococcus_faecium",
+  "enterococcus_faecium",
   "helicobacter_pylori",
   "klebsiella",
   "mycobacterium_tuberculosis",
@@ -244,7 +244,7 @@ species_list <- c(
 base_url <- "https://bitbucket.org/genomicepidemiology/pointfinder_db/raw/master/"
 
 #dir.create("raw_data/pointfinder", showWarnings = FALSE)
-input_dir <- "raw_data/pointfinder"
+input_dir <- "./raw_data/pointfinder"
 
 
 for (sp in species_list) {
@@ -302,7 +302,8 @@ pointfinder_data <- map_dfr(files, read_pointfinder)
 pointfinder_clean_data <- pointfinder_data |> 
   filter(
     Gene_ID == "rpoB",
-    str_detect(Resistance, regex("rifampicin", ignore_case = TRUE))
+    str_detect(Resistance, regex("rifampicin", ignore_case = TRUE)), 
+    !Ref_codon %in% c("del", "ins")
   ) |>
   separate_rows(Res_codon, sep = ",") |>
   mutate(
