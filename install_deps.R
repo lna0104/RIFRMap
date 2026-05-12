@@ -1,12 +1,10 @@
 ## ---- CRAN ----
 cran_pkgs <- c(
-  "bs4Dash",
   "shiny",
   "dplyr",
   "tidyr",
   "tidyverse",
   "ggiraph",
-  "bslib",
   "ggplot2",
   "ggupset",
   "htmltools",
@@ -15,12 +13,8 @@ cran_pkgs <- c(
   "shinycssloaders",
   "gtsummary", 
   "gt",
-  "DT",
   "wesanderson",
   "RColorBrewer",
-  "fresh", 
-  "sass",
-  "shinydashboard",
   "grantham"
 )
 
