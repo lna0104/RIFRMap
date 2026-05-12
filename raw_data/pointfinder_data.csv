@@ -120,25 +120,6 @@ rpoB,rpoB,552,CGC,R,C,RIFAMPICIN,19209951,NA,NA,NA,Mycobacterium tuberculosis,R5
 rpoB,rpoB,592,GAG,E,D,RIFAMPICIN,24731071,NA,NA,NA,Mycobacterium tuberculosis,E592D
 rpoB,rpoB,761,GAG,E,D,RIFAMPICIN,23995137,NA,NA,NA,Mycobacterium tuberculosis,E761D
 rpoB,rpoB,731,CTG,L,P,RIFAMPICIN,29358649,NA,NA,NA,Mycobacterium tuberculosis,L731P
-rpoB,rpoB,1275,-,del,CGGCAC,RIFAMPICIN,24731071,NA,NA,NA,Mycobacterium tuberculosis,del1275CGGCAC
-rpoB,rpoB,1276,-,del,GGCACC,RIFAMPICIN,24731071;19209951,NA,NA,NA,Mycobacterium tuberculosis,del1276GGCACC
-rpoB,rpoB,1294,-,del,CAATTC,RIFAMPICIN,24731071;19209951,NA,NA,NA,Mycobacterium tuberculosis,del1294CAATTC
-rpoB,rpoB,1295,-,del,AATTCATGG,RIFAMPICIN,24731071;19209951,NA,NA,NA,Mycobacterium tuberculosis,del1295AATTCATGG
-rpoB,rpoB,1297,-,del,TTCATGGAC,RIFAMPICIN,"19209951;24731071,19209951",NA,NA,NA,Mycobacterium tuberculosis,del1297TTCATGGAC
-rpoB,rpoB,1297,-,del,TTC,RIFAMPICIN,"19209951;24731071,19209951",NA,NA,NA,Mycobacterium tuberculosis,del1297TTC
-rpoB,rpoB,1299,-,del,CAT,RIFAMPICIN,"24731071;19209951,24731071",NA,NA,NA,Mycobacterium tuberculosis,del1299CAT
-rpoB,rpoB,1299,-,del,CATGGACCAGAA,RIFAMPICIN,"24731071;19209951,24731071",NA,NA,NA,Mycobacterium tuberculosis,del1299CATGGACCAGAA
-rpoB,rpoB,1300,-,del,ATGGACCAGAAC,RIFAMPICIN,19209951;24731071,NA,NA,NA,Mycobacterium tuberculosis,del1300ATGGACCAGAAC
-rpoB,rpoB,1303,-,del,GACCAG,RIFAMPICIN,24731071;19209951,NA,NA,NA,Mycobacterium tuberculosis,del1303GACCAG
-rpoB,rpoB,1306,-,del,CAGAAC,RIFAMPICIN,"24731071;19209951,24731071",NA,NA,NA,Mycobacterium tuberculosis,del1306CAGAAC
-rpoB,rpoB,1306,-,del,CAG,RIFAMPICIN,"24731071;19209951,24731071",NA,NA,NA,Mycobacterium tuberculosis,del1306CAG
-rpoB,rpoB,1308,-,del,GAACAA,RIFAMPICIN,24731071;19209951,NA,NA,NA,Mycobacterium tuberculosis,del1308GAACAA
-rpoB,rpoB,1312,-,del,AAC,RIFAMPICIN,24731071;19209951,NA,NA,NA,Mycobacterium tuberculosis,del1312AAC
-rpoB,rpoB,1336,-,del,AAG,RIFAMPICIN,19209951;24731071,NA,NA,NA,Mycobacterium tuberculosis,del1336AAG
-rpoB,rpoB,1294,-,ins,TTCATG,RIFAMPICIN,"24731071,24731071",NA,NA,NA,Mycobacterium tuberculosis,ins1294TTCATG
-rpoB,rpoB,1294,-,ins,TTC,RIFAMPICIN,"24731071,24731071",NA,NA,NA,Mycobacterium tuberculosis,ins1294TTC
-rpoB,rpoB,1297,-,ins,CGG,RIFAMPICIN,24731071,NA,NA,NA,Mycobacterium tuberculosis,ins1297CGG
-rpoB,rpoB,1300,-,ins,TTC,RIFAMPICIN,24731071,NA,NA,NA,Mycobacterium tuberculosis,ins1300TTC
 rpoB,rpoB,463,AGC,S,P,Rifampicin,21393177,Target modification,NA,NA,Staphylococcus aureus,S463P
 rpoB,rpoB,464,TCT,S,P,Rifampicin,11157898,Target modification,NA,NA,Staphylococcus aureus,S464P
 rpoB,rpoB,465,CAA,Q,K,Rifampicin,21393177,Target modification,NA,NA,Staphylococcus aureus,Q465K
