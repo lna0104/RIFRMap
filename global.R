@@ -753,11 +753,11 @@ source_levels <- c(
 all_AAs_sorted <- sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]])
 
 source_palette <- c(
-  CARD    = "#ead6fd",
+  CARD    = "#dfcce3",
   CRyPTIC = "#ffdfba",
-  DRAGdb  = "#bae1ff",
-  Curated = "#fff8f0",
-  Yang    = "#dff2e1",
+  DRAGdb  = "#fbb4ae",
+  Curated = "#bae1ff",
+  Yang    = "#cdecc6",
   PointFinder     = "#C8AAAA",  
   "Reference Gene Catalog" = "#DEE791",  
   None    = "grey85"
