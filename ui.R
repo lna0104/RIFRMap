@@ -3,7 +3,7 @@ shinyUI(
     title = "RIFRMap",
     id = "main_nav",
     theme = "www/styles.css",
-    footer = includeHTML("www/footer.html"),
+    #footer = includeHTML("www/footer.html"),
     fluid = TRUE,
     collapsible = TRUE,
     
@@ -116,7 +116,7 @@ shinyUI(
                   sliderInput(
                     "cryptic_counts", NULL,
                     min = 1, max = 2326,
-                    value = c(0, 2326),
+                    value = c(1, 2326),
                     step = 1,
                     width = "100%"
                   ),
@@ -267,7 +267,7 @@ shinyUI(
                   sliderInput(
                     "yang_log2fc", "log2FC",
                     min = 0.02, max = 2.7,
-                    value = c(0, 2.7),
+                    value = c(0.02, 2.7),
                     step = 0.1,
                     width = "100%"
                   )
