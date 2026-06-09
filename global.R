@@ -34,7 +34,7 @@ card <- readRDS("processed_data/card.rds")
 cryptic <- readRDS("processed_data/cryptic.rds")
 dragdb <- readRDS("processed_data/dragdb.rds")
 yang <- readRDS("processed_data/yang.rds")
-curated <- readRDS("processed_data/curated.rds")
+rifreport <- readRDS("processed_data/rifreport.rds")
 pointfinder <- readRDS("processed_data/pointfinder.rds")
 refgenes <- readRDS("processed_data/refgenes.rds")
 
@@ -743,7 +743,7 @@ plotMutations <- function(muts,
 source_levels <- c(
   "CARD",
   "CRyPTIC",
-  "Curated",
+  "RifReport",
   "DRAGdb",
   "PointFinder",
   "Reference Gene Catalog",
@@ -756,7 +756,7 @@ source_palette <- c(
   CARD    = "#dfcce3",
   CRyPTIC = "#ffdfba",
   DRAGdb  = "#fbb4ae",
-  Curated = "#bae1ff",
+  RifReport = "#bae1ff",
   Yang    = "#cdecc6",
   PointFinder     = "#C8AAAA",  
   "Reference Gene Catalog" = "#DEE791",  

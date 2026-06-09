@@ -24,11 +24,11 @@ cryptic_data <- read_csv("raw_data/cryptic_data.csv", show_col_types = FALSE)
 card_data <- read_csv("raw_data/card_data.csv", show_col_types = FALSE)
 dragdb_data <- read_csv("raw_data/dragdb_data.csv", show_col_types = FALSE)
 yang_data <- read_csv("raw_data/Yang2023_Fig3a_data_RIF_log2FC.csv", show_col_types = FALSE)
-curated_data <- read_csv("raw_data/curated_data.csv", show_col_types = FALSE) 
+rifreport_data <- read_csv("raw_data/rifreport_data.csv", show_col_types = FALSE) 
 pointfinder_data <- read_csv("raw_data/pointfinder_data.csv", show_col_types = FALSE)
 refgenes_data <- read_csv("raw_data/refgenes_catalog.csv", col_types = cols(.default = "c"), show_col_types = FALSE)
 
-curated_refs <- read_csv("raw_data/curated_references.csv", show_col_types = FALSE) 
+rifreport_refs <- read_csv("raw_data/rifreport_references.csv", show_col_types = FALSE) 
 
 # ----- Load sequencing data -----
 seqs <- readDNAStringSet("raw_data/rpoB_references.fasta")
@@ -261,9 +261,9 @@ for (i in 1:nrow(mut_list_Yang)) {
 saveRDS(yang_mut_list, file = "processed_data/yang.rds")
 
 
-## 5. Curated data (Negin's data) -----
+## 5. RifReport -----
 
-mutation_raw <- curated_data |>
+mutation_raw <- rifreport_data |>
   filter(!is.na(AA_pos_Ecoli), !is.na(AA_original), !is.na(AA_mutation), !is.na(Ref_code)) |>
   dplyr::mutate(AA_original = toupper(AA_original),
                 AA_mutation = toupper(AA_mutation),
@@ -288,7 +288,7 @@ mutation_counts <- full_join(
   by = c("AA_pos_Ecoli", "AA_mutation")
 ) |>
   mutate(
-    source = "Curated",
+    source = "RifReport",
     n_species = coalesce(n_species, 0L),
     n_studies = coalesce(n_studies, 0L)
   )
@@ -301,13 +301,13 @@ mutation_species_rows <- mutation_raw |>
     .groups   = "drop"
   )
   
-curated_processed <- mutation_species_rows |>
+rifreport_processed <- mutation_species_rows |>
   left_join(mutation_counts, by = c("AA_pos_Ecoli", "AA_mutation")) |>
   dplyr::rename(
     species = Species
   )
 
-saveRDS(curated_processed, file = "processed_data/curated.rds")
+saveRDS(rifreport_processed, file = "processed_data/rifreport.rds")
 
 ## 6. PointFinder -----
 

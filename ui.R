@@ -146,25 +146,25 @@ shinyUI(
                   class = "filter-box",
                   div(
                     class = "filter-box-header",
-                    checkboxInput("curated_enabled", NULL, FALSE),
-                    h4("Curated Data")
+                    checkboxInput("rifreport_enabled", NULL, FALSE),
+                    h4("RifReport")
                   ),
                   selectInput(
-                    "curated_species", "Species",
+                    "rifreport_species", "Species",
                     choices = NULL,
                     selected = "All species",
                     multiple = TRUE,
                     width = "100%"
                   ),
                   sliderInput(
-                    "curated_nstudies", "Number of studies",
+                    "rifreport_nstudies", "Number of studies",
                     min = 1, max = 59,
                     value = c(1, 59),
                     step = 1,
                     width = "100%"
                   ),
                   sliderInput(
-                    "curated_nspecies", "Number of species",
+                    "rifreport_nspecies", "Number of species",
                     min = 1, max = 29,
                     value = c(1, 29),
                     step = 1,

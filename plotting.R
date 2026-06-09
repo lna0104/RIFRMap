@@ -21,8 +21,8 @@ plot_data <- all_data |>
 source_palette <- c(
   CARD    = "#dfcce3",
   CRyPTIC = "#ffdfba",
-  DRAGdb  = "#bae1ff",
-  Curated = "#fbb4ae",
+  DRAGdb  = "#fbb4ae",
+  RifReport = "#bae1ff",
   Yang    = "#cdecc6",
   PointFinder     = "#C8AAAA",  
   "Reference Gene Catalog" = "#DEE791",  

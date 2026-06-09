@@ -164,21 +164,21 @@ refs <- read_csv("raw_data/rpoB_references.csv", show_col_types = FALSE)
 seqs <- readDNAStringSet("raw_data/rpoB_references.fasta")
 load("raw_data/coordinates.RData")
 
-curated_mutations <- download_github_csv(
+rifreport_mutations <- download_github_csv(
   repo = "JanEngelstaedter/ResistanceSurveys",
   path = "RIF/RIF_mutations_data.csv",
   token = token,
   filter_species = TRUE
 )
 
-curated_mutations_clean <- curated_mutations |>
+rifreport_mutations_clean <- rifreport_mutations |>
   mutate(
     Gene = coalesce(Gene, "rpoB")
   ) |>
   fillMutationsTable(refs, seqs, coordinates) |>
   filter(!is.na(AA_mut_name_Ecoli))
 
-write_csv(curated_mutations_clean, "data/raw_data/curated_data.csv")
+write_csv(rifreport_mutations_clean, "data/raw_data/rifreport_data.csv")
 
 curated_references <- download_github_csv(
   repo = "JanEngelstaedter/ResistanceSurveys",

@@ -37,8 +37,8 @@ function(input, output, session) {
       )
 
       updateSelectInput(
-        session, "curated_species",
-        choices = c("All species", sort(unique(curated$species))),
+        session, "rifreport_species",
+        choices = c("All species", sort(unique(rifreport$species))),
         selected = "All species"
       )
     },
@@ -105,15 +105,15 @@ function(input, output, session) {
       dfs[["Yang"]] <- d
     }
 
-    ## Curated data
-    if (isTRUE(input$curated_enabled)) {
-      d <- curated |>
-        filter_by_species(input$curated_species, species_col = "species")
+    ## RifReport 
+    if (isTRUE(input$rifreport_enabled)) {
+      d <- rifreport |>
+        filter_by_species(input$rifreport_species, species_col = "species")
 
-      d <- filter_range_if(d, "n_studies", input$curated_nstudies)
-      d <- filter_range_if(d, "n_species", input$curated_nspecies)
+      d <- filter_range_if(d, "n_studies", input$rifreport_nstudies)
+      d <- filter_range_if(d, "n_species", input$rifreport_nspecies)
 
-      dfs[["Curated"]] <- d
+      dfs[["RifReport"]] <- d
     }
 
     if (length(dfs) == 0) {
@@ -138,7 +138,7 @@ function(input, output, session) {
     updateCheckboxInput(session, "cryptic_enabled", value = FALSE)
     updateCheckboxInput(session, "dragdb_enabled", value = FALSE)
     updateCheckboxInput(session, "yang_enabled", value = FALSE)
-    updateCheckboxInput(session, "curated_enabled", value = FALSE)
+    updateCheckboxInput(session, "rifreport_enabled", value = FALSE)
 
     updateSelectInput(session, "card_species", selected = "All species")
     updateSelectInput(session, "pointfinder_species", selected = "All species")
@@ -154,8 +154,8 @@ function(input, output, session) {
 
     updateSliderInput(session, "dragdb_provean", value = c(-10.7, -2.6))
     updateSliderInput(session, "yang_log2fc", value = c(0, 2.7))
-    updateSliderInput(session, "curated_nstudies", value = c(1, 59))
-    updateSliderInput(session, "curated_nspecies", value = c(1, 29))
+    updateSliderInput(session, "rifreport_nstudies", value = c(1, 59))
+    updateSliderInput(session, "rifreport_nspecies", value = c(1, 29))
 
     updateTabItems(session, "sidebar", "filters")
   })
@@ -1500,7 +1500,7 @@ function(input, output, session) {
         CRyPTIC = cryptic,
         DRAGdb  = dragdb,
         Yang    = yang,
-        Curated = curated,
+        RifReport = rifreport,
         PointFinder = pointfinder,
         "Reference Gene Catalog" = refgenes
       ),
