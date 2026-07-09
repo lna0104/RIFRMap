@@ -82,6 +82,17 @@ Treponema phagedenis,B43.1,TRUE,rpoB,ASM815334v1,rpoB_Treponema_phagedenis_B43.1
 Treponema socranskii,ATCC 35534,TRUE,rpoB,ASM2418158v1,rpoB_Treponema_socranskii_ATCC_35534,NZ_CP054258.1,"NZ_CP054258.1 Treponema socranskii subsp. buccale strain ATCC 35534 chromosome, complete genome"
 Vibrio parahaemolyticus,RIMD 2210633,TRUE,rpoB,ASM19609v1,rpoB_Vibrio_parahaemolyticus_RIMD_2210633,NC_004603.1,"NC_004603.1 Vibrio parahaemolyticus RIMD 2210633 chromosome 1, complete sequence"
 Vibrio vulnificus,FORC_037,TRUE,rpoB,ASM220491v1,rpoB_Vibrio_vulnificus_FORC_037,NZ_CP016321.1,"NZ_CP016321.1 Vibrio vulnificus strain FORC_037 chromosome I, complete sequence"
-Shigella sonnei,ATCC 29930,TRUE,rpoB,ASM295039v1,rpoB_Shigella_sonnei_ATCC_29930,,
-Staphylococcus pseudintermedius,Dog029_1,TRUE,rpoB,ASM3404277v1,rpoB_Staphylococcus_pseudintermedius_Dog029_1,,
-Neisseria gonorrhoeae,TUM19854,TRUE,rpoB,ASM1303007v1,rpoB_Neisseria_gonorrhoeae_TUM19854,,
+Shigella sonnei,ATCC 29930,TRUE,rpoB,ASM295039v1,rpoB_Shigella_sonnei_ATCC_29930,NA,NA
+Staphylococcus pseudintermedius,Dog029_1,TRUE,rpoB,ASM3404277v1,rpoB_Staphylococcus_pseudintermedius_Dog029_1,NA,NA
+Neisseria gonorrhoeae,TUM19854,TRUE,rpoB,ASM1303007v1,rpoB_Neisseria_gonorrhoeae_TUM19854,NA,NA
+Staphylococcus epidermidis,ATCC 14990,TRUE,rpoB,ASM609437v1,rpoB_Staphylococcus_epidermidis_ATCC_14990,NZ_CP035290.1,Auto-fetched via NCBI assembly search
+Bartonella henselae,FDAARGOS_1462,TRUE,rpoB,ASM1993092v1,rpoB_Bartonella_henselae_FDAARGOS_1462,NZ_CP082885.1,Auto-fetched via NCBI assembly search
+Bartonella krasnovii,OE 1-1,TRUE,rpoB,ASM360634v3,rpoB_Bartonella_krasnovii_OE_1-1,NZ_CP042965.1,Auto-fetched via NCBI assembly search
+Chlamydia pneumoniae,TW-183,TRUE,rpoB,ASM720v1,rpoB_Chlamydia_pneumoniae_TW-183,NC_005043.1,Auto-fetched via NCBI assembly search
+Lactobacillus delbrueckii,DSM 26046,TRUE,rpoB,ASM188892v1,rpoB_Lactobacillus_delbrueckii_DSM_26046,NZ_CP018218.1,Auto-fetched via NCBI assembly search
+Mycobacterium africanum,NA,FALSE,rpoB,MAF01v1,rpoB_Mycobacterium_africanum_NA,NZ_LR993210.1,Auto-fetched via NCBI assembly search
+Pseudomonas stutzeri,F2a,TRUE,rpoB,ASM1970453v1,rpoB_Pseudomonas_stutzeri_F2a,NZ_AP024722.1,Auto-fetched via NCBI assembly search
+Rhodococcus equi,DSSKP-R-001,TRUE,rpoB,ASM301367v1,rpoB_Rhodococcus_equi_DSSKP-R-001,NZ_CP027795.1,Auto-fetched via NCBI assembly search
+Shewanella decolorationis,sesselensis,TRUE,rpoB,ASM435430v1,rpoB_Shewanella_decolorationis_sesselensis,NZ_CP037898.1,Auto-fetched via NCBI assembly search
+Streptomyces aculeolatus,DSM 41644,TRUE,rpoB,ASM2040060v1,rpoB_Streptomyces_aculeolatus_DSM_41644,NZ_JAINRD010000043.1,Auto-fetched via NCBI assembly search
+Streptomyces albidoflavus,NBC_01110,TRUE,rpoB,ASM4503963v1,rpoB_Streptomyces_albidoflavus_NBC_01110,NZ_CP108647.1,Auto-fetched via NCBI assembly search

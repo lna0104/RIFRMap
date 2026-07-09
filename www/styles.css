@@ -208,6 +208,12 @@ body {
   font-weight: 700;
 }
 
+.doc-updated {
+  margin: -8px 0 12px 0;
+  font-size: 13px;
+  color: #888;
+}
+
 .table-header {
   width: 100%;
   text-align: left;

@@ -1,0 +1,8 @@
+dataset,status,reason,rows,timestamp
+card,updated,Processed CARD data,213,2026-07-08T16:34:56Z
+cryptic,manual-updated,Processed CRyPTIC data,179,2026-07-08T16:34:56Z
+dragdb,updated,Processed DRAGdb data,162,2026-07-08T16:34:56Z
+yang,manual-updated,Processed Yang data,117,2026-07-08T16:34:56Z
+rifreport,updated,Processed RifReport data,841,2026-07-08T16:34:56Z
+pointfinder,updated,Processed PointFinder data,146,2026-07-08T16:34:56Z
+refgenes,updated,Processed Reference Gene Catalog data,67,2026-07-08T16:34:56Z

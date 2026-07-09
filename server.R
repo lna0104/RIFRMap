@@ -9,6 +9,15 @@ function(input, output, session) {
     updateNavbarPage(session, "main_nav", selected = "explore")
   })
 
+  # ---- Docs tab: inject per-dataset last-updated dates ----
+  output$docs_content <- renderUI({
+    html <- paste(readLines("www/doc.html", warn = FALSE), collapse = "\n")
+    for (nm in names(DATASET_LAST_UPDATED)) {
+      html <- gsub(paste0("\\{\\{DATE_", nm, "\\}\\}"), DATASET_LAST_UPDATED[[nm]], html)
+    }
+    HTML(html)
+  })
+
   ## ---- Populate species dropdowns ----
   observeEvent(TRUE,
     {

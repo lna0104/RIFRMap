@@ -607,7 +607,7 @@ shinyUI(
     tabPanel(
       title = tagList(icon("book"), "Docs"),
       value = "doc",
-      includeHTML("www/doc.html")
+      uiOutput("docs_content")
     )
   )
 )

@@ -28,6 +28,23 @@ library(grantham)
 APP_VERSION <- "v1.0.0"
 DATA_LAST_UPDATED <- "01/05/2026"
 
+# Per-dataset "last updated" dates shown on the Docs tab, derived from each
+# processed .rds file's mtime rather than hand-maintained.
+get_dataset_date <- function(path) {
+  if (!file.exists(path)) return("unknown")
+  format(file.info(path)$mtime, "%d/%m/%Y")
+}
+
+DATASET_LAST_UPDATED <- list(
+  CARD        = get_dataset_date("processed_data/card.rds"),
+  CRYPTIC     = get_dataset_date("processed_data/cryptic.rds"),
+  DRAGDB      = get_dataset_date("processed_data/dragdb.rds"),
+  YANG        = get_dataset_date("processed_data/yang.rds"),
+  RIFREPORT   = get_dataset_date("processed_data/rifreport.rds"),
+  POINTFINDER = get_dataset_date("processed_data/pointfinder.rds"),
+  REFGENES    = get_dataset_date("processed_data/refgenes.rds")
+)
+
 # ---- Load data ----
 
 card <- readRDS("processed_data/card.rds")
@@ -763,7 +780,8 @@ source_palette <- c(
   None    = "grey85"
 )
 
-#rsconnect::setAccountInfo(name='lenango', token='F7C8124BB92A4CEA42C95C4602145D1E', secret='uwd6PCdAWS/dVHenwJ08JFuTZe/KLfo0cxjXT/gE')
+# Deployment credentials are supplied locally via rsconnect::setAccountInfo()
+# (run interactively, never committed) before calling deployApp() below.
 #library(rsconnect)
 #deployApp(appDir="code/RIFRMap/", server = "shinyapps.io")
 

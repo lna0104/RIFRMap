@@ -11,11 +11,19 @@ cran_pkgs <- c(
   "remotes",
   "shinyWidgets",
   "shinycssloaders",
-  "gtsummary", 
+  "gtsummary",
   "gt",
   "wesanderson",
   "RColorBrewer",
-  "grantham"
+  "grantham",
+  "rentrez",
+  "httr2",
+  "rvest",
+  "gitcreds",
+  "fs",
+  "janitor",
+  "xml2",
+  "openssl"
 )
 
 install.packages(
