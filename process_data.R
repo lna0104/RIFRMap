@@ -372,6 +372,24 @@ process_rifreport <- function() {
     {
       rifreport_data <- read_csv("raw_data/rifreport_data.csv", show_col_types = FALSE)
 
+      # The upstream ResistanceSurveys repo spells these two Ref_codes
+      # differently between RIF_mutations_data.csv and
+      # RIF_mutations_references.csv (accent dropped for Honore2001,
+      # surname truncated for AlvarezNarvaez2019) - normalize to the
+      # references file's spelling so build_references()'s join doesn't
+      # silently drop the citation for these rows.
+      rifreport_ref_code_fixes <- c(
+        "Honore2001"         = "Honoré2001",
+        "AlvarezNarvaez2019" = "Alvarez2019"
+      )
+      rifreport_data <- rifreport_data |>
+        dplyr::mutate(
+          Ref_code = dplyr::coalesce(
+            unname(rifreport_ref_code_fixes[Ref_code]),
+            Ref_code
+          )
+        )
+
       mutation_raw <- rifreport_data |>
         filter(!is.na(AA_pos_Ecoli), !is.na(AA_original), !is.na(AA_mutation), !is.na(Ref_code)) |>
         dplyr::mutate(

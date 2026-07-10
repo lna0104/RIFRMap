@@ -3,11 +3,9 @@ shinyUI(
     title = "RIFRMap",
     id = "main_nav",
     theme = "www/styles.css",
-    #footer = includeHTML("www/footer.html"),
+    footer = includeHTML("www/footer.html"),
     fluid = TRUE,
     collapsible = TRUE,
-    
-    
     header = tagList(
       tags$head(
         tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
@@ -15,12 +13,11 @@ shinyUI(
       ),
       shinyjs::useShinyjs()
     ),
-    
+
     ## ---------------- Home ----------------
     tabPanel(
       title = tagList(icon("home"), "Home"),
       includeHTML("www/home.html")
-      
     ),
 
     ## ---------------- Explore ----------------
@@ -29,10 +26,9 @@ shinyUI(
       value = "explore",
       fluidPage(
         class = "filters-row",
-        
         tabsetPanel(
           id = "explore_steps",
-          
+
           ## ---- Data Filters ----
           tabPanel(
             "Data Filters",
@@ -45,7 +41,6 @@ shinyUI(
             fluidRow(
               column(
                 width = 5,
-                
                 div(
                   class = "filter-box",
                   div(
@@ -61,7 +56,6 @@ shinyUI(
                     width = "100%"
                   )
                 ),
-                
                 div(
                   class = "filter-box",
                   div(
@@ -69,7 +63,6 @@ shinyUI(
                     checkboxInput("cryptic_enabled", NULL, FALSE),
                     h4("CRyPTIC")
                   ),
-                  
                   div(
                     class = "form-group shiny-input-container",
                     style = "width: 100%;",
@@ -82,7 +75,6 @@ shinyUI(
                       readonly = "readonly"
                     )
                   ),
-                  
                   div(
                     style = "display:flex; align-items:center; gap:6px;",
                     tags$label("Effect size"),
@@ -92,7 +84,6 @@ shinyUI(
                       `data-toggle` = "tooltip"
                     )
                   ),
-                  
                   sliderInput(
                     "cryptic_coef", NULL,
                     min = -4.0, max = 9.6,
@@ -100,19 +91,15 @@ shinyUI(
                     step = 0.1,
                     width = "100%"
                   ),
-                  
                   div(
                     style = "display:flex; align-items:center; gap:6px;",
-                    
                     tags$label("Counts"),
-                    
                     tags$i(
                       class = "fa fa-question-circle info-icon",
                       title = "Counts represent the number of isolates in which a given mutation was observed in the CRyPTIC dataset.",
                       `data-toggle` = "tooltip"
                     )
                   ),
-                  
                   sliderInput(
                     "cryptic_counts", NULL,
                     min = 1, max = 2326,
@@ -120,19 +107,15 @@ shinyUI(
                     step = 1,
                     width = "100%"
                   ),
-                  
                   div(
                     style = "display:flex; align-items:center; gap:6px;",
-                    
                     tags$label("BH-corrected p-value (≤)"),
-                    
                     tags$i(
                       class = "fa fa-question-circle info-icon",
                       title = "Benjamini–Hochberg corrected p-value controlling for multiple testing. Lower values indicate stronger statistical support for association with resistance.",
                       `data-toggle` = "tooltip"
                     )
-                  ), 
-                  
+                  ),
                   radioButtons(
                     "cryptic_bhp",
                     NULL,
@@ -141,7 +124,6 @@ shinyUI(
                     inline = TRUE
                   ),
                 ),
-                
                 div(
                   class = "filter-box",
                   div(
@@ -171,13 +153,9 @@ shinyUI(
                     width = "100%"
                   )
                 )
-                
-        
               ),
-              
               column(
                 width = 7,
-                
                 div(
                   class = "filter-box",
                   div(
@@ -185,7 +163,6 @@ shinyUI(
                     checkboxInput("dragdb_enabled", NULL, FALSE),
                     h4("DRAGdb")
                   ),
-                  
                   selectInput(
                     "dragdb_species", "Species",
                     choices = NULL,
@@ -195,9 +172,7 @@ shinyUI(
                   ),
                   div(
                     style = "display:flex; align-items:center; gap:6px;",
-                    
                     tags$label("PROVEAN score"),
-                    
                     tags$i(
                       class = "fa fa-question-circle info-icon",
                       title = "PROVEAN score predicts the functional impact of amino acid substitutions. Variants with scores ≤ −2.5 are considered deleterious, while scores > −2.5 are considered neutral.",
@@ -212,7 +187,6 @@ shinyUI(
                     width = "100%"
                   )
                 ),
-                
                 div(
                   class = "filter-box",
                   div(
@@ -228,7 +202,6 @@ shinyUI(
                     width = "100%"
                   )
                 ),
-                
                 div(
                   class = "filter-box",
                   div(
@@ -244,7 +217,6 @@ shinyUI(
                     width = "100%"
                   )
                 ),
-                
                 div(
                   class = "filter-box",
                   div(
@@ -263,7 +235,7 @@ shinyUI(
                       class = "form-control",
                       readonly = "readonly"
                     )
-                  ), 
+                  ),
                   sliderInput(
                     "yang_log2fc", "log2FC",
                     min = 0.02, max = 2.7,
@@ -278,7 +250,7 @@ shinyUI(
             actionButton("apply_filters", "APPLY", icon = icon("play"), class = "btn-primary"),
             actionButton("reset_filters", "RESET", icon = icon("rotate-left"))
           ),
-          
+
           ## ---- Mutation Map ----
           tabPanel(
             "Mutation Map",
@@ -293,17 +265,14 @@ shinyUI(
             ),
             div(
               class = "plot-container",
-              
               div(
                 class = "plot-header",
                 h3("Species-level distribution of resistance mutations")
               ),
-              
               sidebarLayout(
                 sidebarPanel(
                   div(
                     class = "plot-controls",
-                    
                     selectInput(
                       inputId = "colour_by",
                       label = "Colour by",
@@ -316,9 +285,7 @@ shinyUI(
                       selected = "none",
                       width = "100%"
                     ),
-                    
                     uiOutput("legend_panel"),
-                    
                     shinyWidgets::checkboxGroupButtons(
                       inputId = "clustersToPlot",
                       label = "Clusters",
@@ -327,19 +294,16 @@ shinyUI(
                       direction = "horizontal",
                       justified = TRUE
                     ),
-                    
                     selectInput(
                       "mutation_map_format",
                       "Download format",
                       choices = c("png", "pdf", "jpg", "jpeg", "tiff"),
                       selected = "png"
                     ),
-                    
                     downloadButton("download_mutation_map", "Download plot")
                   ),
                   width = 3
                 ),
-                
                 mainPanel(
                   div(
                     class = "plot-main",
@@ -351,7 +315,7 @@ shinyUI(
               )
             )
           ),
-          
+
           ## ---- Mutation Frequency ----
           tabPanel(
             "Mutation Frequency",
@@ -369,12 +333,11 @@ shinyUI(
                 class = "plot-header",
                 h3("Species count per amino acid substitution")
               ),
-              
               fluidRow(
                 column(
                   width = 10,
                   div(
-                    class = "plot-main", 
+                    class = "plot-main",
                     style = "width: 100%; overflow-x: auto; border: 1px solid #eee;",
                     div(
                       style = "min-width: 1500px; margin-top: 40px",
@@ -396,10 +359,8 @@ shinyUI(
                       choices = c("png", "pdf", "jpg", "jpeg", "tiff"),
                       selected = "png"
                     ),
-                    
                     downloadButton("download_mutation_freq", "Download plot")
                   ),
-                  
                   div(
                     uiOutput("selected_tile_info"),
                     DT::DTOutput("selected_tile_species_table")
@@ -408,7 +369,7 @@ shinyUI(
               )
             )
           ),
-          
+
           ## ---- Dataset Comparison ----
           tabPanel(
             "Dataset Comparison",
@@ -421,15 +382,12 @@ shinyUI(
                 width = 12,
                 div(
                   class = "plot-main",
-                  
                   div(
                     class = "plot-header",
                     h3("Cross-dataset mutation overlap")
                   ),
-                  
                   div(
                     class = "plot-controls-bottom-left",
-                    
                     selectInput(
                       "sources_upset_format",
                       "Download format",
@@ -437,25 +395,20 @@ shinyUI(
                       selected = "png",
                       width = "200px"
                     ),
-                    
                     downloadButton("download_sources_upset", "Download plot", style = "width:130px;")
                   ),
-                  
                   div(
                     style = "margin-top: 120px;",
                     uiOutput("upset_container")
                   )
                 )
               ),
-              
               column(
                 width = 12,
                 div(
                   class = "plot-main",
-                  
                   div(
                     class = "plot-header plot-header-between",
-                    
                     div(
                       h3("Cross-dataset map of resistance mutations"),
                       p(
@@ -463,7 +416,6 @@ shinyUI(
                         "Click legend items to show or hide sources. Use Reset to restore the full heatmap view."
                       )
                     ),
-                    
                     actionButton(
                       "reset_heatmap_legend",
                       "Reset",
@@ -471,10 +423,8 @@ shinyUI(
                       class = "btn-outline-secondary btn-sm"
                     )
                   ),
-                  
                   div(
                     class = "plot-controls-bottom-left",
-                    
                     selectInput(
                       "sources_hm_format",
                       "Download format",
@@ -482,16 +432,14 @@ shinyUI(
                       selected = "png",
                       width = "200px"
                     ),
-                    
                     downloadButton("download_sources_hm", "Download plot", style = "width:130px;")
                   ),
-                  
                   uiOutput("heatmap_container")
                 )
               )
             )
           ),
-          
+
           ## ---- Summary ----
           tabPanel(
             "Summary",
@@ -504,38 +452,29 @@ shinyUI(
                 width = 4,
                 div(
                   class = "plot-main",
-                  
                   div(
                     class = "plot-header",
                     h3("Summary")
                   ),
-                  
                   gt_output("summary_table")
                 )
               ),
-              
               column(
                 width = 8,
-                
                 div(
                   class = "plot-main",
-                  
                   div(
                     class = "plot-header",
                     h3("Top amino acid mutations")
                   ),
-                  
                   plotOutput("bar_aa_mut_name", height = "320px")
                 ),
-                
                 div(
                   class = "plot-main",
-                  
                   div(
                     class = "plot-header",
                     h3("AA position (E. coli) distribution")
                   ),
-                  
                   plotOutput("hist_aa_pos_ecoli", height = "280px")
                 )
               )
@@ -544,11 +483,10 @@ shinyUI(
         )
       )
     ),
-    
+
     ## ---------------- Data ----------------
     tabPanel(
       title = tagList(icon("database"), "Data"),
-      
       div(
         class = "doc-hero",
         div(
@@ -556,20 +494,17 @@ shinyUI(
           h2("Data")
         )
       ),
-      
       fluidRow(
         column(
           width = 12,
           div(
             class = "table-header",
             h3("Mutation Data")
-          ), 
-          
+          ),
           p(
             class = "text-muted",
             tags$em(paste0("Version: ", APP_VERSION, " | Last updated: ", DATA_LAST_UPDATED))
           ),
-          
           div(
             style = "display:flex; gap:10px; justify-content:flex-end; margin-bottom:8px;",
             downloadButton(
@@ -583,13 +518,11 @@ shinyUI(
           div(
             class = "table-header",
             h3("Reference Data")
-          ), 
-          
+          ),
           p(
             class = "text-muted",
             tags$em(paste0("Version: ", APP_VERSION, " | Last updated: ", DATA_LAST_UPDATED))
           ),
-          
           div(
             style = "display:flex; gap:10px; justify-content:flex-end; margin-bottom:8px;",
             downloadButton(
@@ -602,7 +535,7 @@ shinyUI(
         )
       )
     ),
-    
+
     ## ---------------- Documentation ----------------
     tabPanel(
       title = tagList(icon("book"), "Docs"),

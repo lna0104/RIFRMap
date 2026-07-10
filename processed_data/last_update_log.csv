@@ -6,3 +6,10 @@ yang,manual-updated,Processed Yang data,117,2026-07-08T16:34:56Z
 rifreport,updated,Processed RifReport data,841,2026-07-08T16:34:56Z
 pointfinder,updated,Processed PointFinder data,146,2026-07-08T16:34:56Z
 refgenes,updated,Processed Reference Gene Catalog data,67,2026-07-08T16:34:56Z
+card,skipped,raw data unchanged since last successful run,NA,2026-07-10T07:27:31Z
+cryptic,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-10T07:27:31Z
+dragdb,skipped,raw data unchanged since last successful run,NA,2026-07-10T07:27:31Z
+yang,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-10T07:27:31Z
+rifreport,failed,"no applicable method for 'filter' applied to an object of class ""list"" (using last-known-good processed data, if any)",NA,2026-07-10T07:27:31Z
+pointfinder,skipped,raw data unchanged since last successful run,NA,2026-07-10T07:27:31Z
+refgenes,skipped,raw data unchanged since last successful run,NA,2026-07-10T07:27:31Z

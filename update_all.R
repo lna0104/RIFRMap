@@ -116,7 +116,6 @@ if (length(discovery$failed_species) > 0) {
 
 # ---- 4. Regenerate coordinates (picks up any newly-appended sequences) ----
 coordinates <- regenerate_coordinates_if_needed()
-DR
 # ---- 5. Finish RifReport now that coordinates is available ----
 refs <- read_csv("raw_data/rpoB_references.csv", show_col_types = FALSE)
 seqs <- readDNAStringSet("raw_data/rpoB_references.fasta")
