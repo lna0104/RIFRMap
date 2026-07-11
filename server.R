@@ -1508,7 +1508,7 @@ function(input, output, session) {
         CARD    = card,
         CRyPTIC = cryptic,
         DRAGdb  = dragdb,
-        Yang    = yang,
+        "Yang-RIF" = yang,
         RifReport = rifreport,
         PointFinder = pointfinder,
         "Reference Gene Catalog" = refgenes
