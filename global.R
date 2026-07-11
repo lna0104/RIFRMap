@@ -26,7 +26,6 @@ library(grantham)
 
 # ---- Version and update time ----
 APP_VERSION <- "v1.0.0"
-DATA_LAST_UPDATED <- "01/05/2026"
 
 # Per-dataset "last updated" dates shown on the Docs tab, derived from each
 # processed .rds file's mtime rather than hand-maintained.
@@ -34,6 +33,12 @@ get_dataset_date <- function(path) {
   if (!file.exists(path)) return("unknown")
   format(file.info(path)$mtime, "%d/%m/%Y")
 }
+
+# processed_data/allData.rds is rewritten by combine_all_data() on every
+# pipeline run regardless of which individual source(s) changed, so its
+# mtime is the one reliable signal for "when was the app's data last
+# regenerated" - derived automatically rather than hand-maintained.
+DATA_LAST_UPDATED <- get_dataset_date("processed_data/allData.rds")
 
 DATASET_LAST_UPDATED <- list(
   CARD        = get_dataset_date("processed_data/card.rds"),
