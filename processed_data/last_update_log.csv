@@ -13,3 +13,10 @@ yang,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-10
 rifreport,failed,"no applicable method for 'filter' applied to an object of class ""list"" (using last-known-good processed data, if any)",NA,2026-07-10T07:27:31Z
 pointfinder,skipped,raw data unchanged since last successful run,NA,2026-07-10T07:27:31Z
 refgenes,skipped,raw data unchanged since last successful run,NA,2026-07-10T07:27:31Z
+card,skipped,raw data unchanged since last successful run,NA,2026-07-11T10:25:28Z
+cryptic,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-11T10:25:28Z
+dragdb,skipped,raw data unchanged since last successful run,NA,2026-07-11T10:25:28Z
+yang,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-11T10:25:28Z
+rifreport,failed,"no applicable method for 'filter' applied to an object of class ""list"" (using last-known-good processed data, if any)",NA,2026-07-11T10:25:28Z
+pointfinder,skipped,raw data unchanged since last successful run,NA,2026-07-11T10:25:28Z
+refgenes,skipped,raw data unchanged since last successful run,NA,2026-07-11T10:25:28Z

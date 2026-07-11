@@ -246,7 +246,7 @@ parse_dragdb <- function() {
   dragdb_processed_data <- dragdb_data |>
     filter(
       str_detect(drug, globsets$drug_name),
-      provean < globsets$provean_score
+      provean <= globsets$provean_score
     ) |>
     separate(
       codon_mutation,
