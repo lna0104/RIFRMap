@@ -260,7 +260,7 @@ shinyUI(
               p(
                 "Species-centric mutation cluster view. Data sources are not considered; the plot visualises the distribution of resistance mutations within each species across ",
                 tags$i("rpoB"),
-                " clusters."
+                " clusters. The optional \"Show all mutations\" toggle replaces the cluster view with every mapped mutation across the whole gene."
               )
             ),
             div(
@@ -293,6 +293,11 @@ shinyUI(
                       selected = c("N", "I", "II", "III"),
                       direction = "horizontal",
                       justified = TRUE
+                    ),
+                    checkboxInput(
+                      inputId = "show_all_mutations",
+                      label = "Show all mutations",
+                      value = FALSE
                     ),
                     selectInput(
                       "mutation_map_format",
@@ -541,6 +546,12 @@ shinyUI(
       title = tagList(icon("book"), "Docs"),
       value = "doc",
       uiOutput("docs_content")
+    ),
+
+    ## ---------------- Team ----------------
+    tabPanel(
+      title = tagList(icon("users"), "Team"),
+      includeHTML("www/team.html")
     )
   )
 )

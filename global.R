@@ -30,7 +30,9 @@ APP_VERSION <- "v1.0.0"
 # Per-dataset "last updated" dates shown on the Docs tab, derived from each
 # processed .rds file's mtime rather than hand-maintained.
 get_dataset_date <- function(path) {
-  if (!file.exists(path)) return("unknown")
+  if (!file.exists(path)) {
+    return("unknown")
+  }
   format(file.info(path)$mtime, "%d/%m/%Y")
 }
 
@@ -295,6 +297,14 @@ legend_item <- function(label, color) {
 
 ## ----- Helper functions for cluster plot ----
 
+# Sentinel value for plotMutations()'s "All mutations" mode: a single
+# pseudo-cluster spanning every mapped position across the whole gene,
+# ordered by E. coli coordinate, replacing the N/I/II/III cluster selection
+# entirely (see getPositionOrderedBlockData()). Not a real row in
+# raw_data/clusters.csv - handled as a special case wherever cluster names
+# are resolved/validated.
+ALL_MUTATIONS_LABEL <- "All mutations"
+
 
 getBlockData <- function(muts,
                          clusters,
@@ -384,6 +394,110 @@ getBlockData <- function(muts,
   return(block)
 }
 
+# Block data for the "All mutations" pseudo-cluster: every mutation with a
+# valid, successfully-mapped AA_pos_Ecoli, ordered by genomic (E. coli)
+# position, regardless of whether it falls inside a real cluster's range.
+# Unlike getBlockData(), columns are not a contiguous E. coli range -
+# `positions` is a globally shared, sorted vector of the distinct
+# AA_pos_Ecoli values actually observed (across all species being plotted),
+# computed once by the caller (plotMutations()) and passed in so RelX stays
+# consistent/comparable across species: two species with a mutation at the
+# same E. coli position land in the same column.
+getPositionOrderedBlockData <- function(muts,
+                                        seqs,
+                                        coordinates,
+                                        refs,
+                                        species,
+                                        positions,
+                                        mergeDuplicates = TRUE) {
+  refSeq_ID <- refs$FASTA_name[refs$Species == species][1]
+  coordinatesFocal <- coordinates[[refSeq_ID]]
+
+  block <- muts |>
+    filter(Species == species, AA_pos_Ecoli %in% positions) |>
+    mutate(
+      AA_mut_name_Ecoli = paste0("rpoB", "_", AA_original, AA_pos_Ecoli, AA_mutation),
+      aa_type = get_aa_type(AA_mutation),
+      aa_distance = mapply(get_aa_distance, AA_original, AA_mutation)
+    ) |>
+    filter(
+      !is.na(AA_pos),
+      !is.na(AA_pos_Ecoli),
+      !is.na(AA_original),
+      !is.na(AA_mutation)
+    ) |>
+    arrange(AA_pos_Ecoli, AA_mutation) |>
+    select(AA_pos, AA_pos_Ecoli, AA_original, AA_mutation, AA_mut_name_Ecoli, aa_type, aa_distance)
+
+  if (mergeDuplicates) {
+    block <- distinct(block, AA_pos_Ecoli, AA_mutation, .keep_all = TRUE)
+  }
+
+  block$RelX <- match(block$AA_pos_Ecoli, positions)
+  block$RelY <- rep(NA_integer_, nrow(block))
+  y <- 1L
+  for (i in seq_len(nrow(block))) {
+    if (i > 1) {
+      if (block$AA_pos_Ecoli[i] == block$AA_pos_Ecoli[i - 1]) {
+        y <- y + 1L
+      } else {
+        y <- 1L
+      }
+    }
+    block$RelY[i] <- y
+  }
+
+  # reference-row scaffold: for every position in the shared positions set,
+  # translate to this species' native coordinate and look up its reference
+  # AA there. A translation failure for this species/position (e.g. its
+  # rpoB doesn't extend that far, or an alignment gap sits right there)
+  # leaves that cell's AA_original as NA rather than erroring -
+  # renderBlock()'s text() calls already skip NA labels silently.
+  ref_seq_translated <- seqs[[refSeq_ID]] |>
+    Biostrings::translate(genetic.code = getGeneticCode("Bacterial", full.search = TRUE)) |>
+    as.character()
+
+  nativePos <- vapply(positions, function(pos) {
+    tryCatch(
+      ALJEbinf::translateCoordinate(
+        pos = pos,
+        coordinates = coordinatesFocal,
+        direction = "RefToFocal",
+        AAinput = TRUE,
+        AAoutput = TRUE
+      ),
+      error = function(e) NA_integer_
+    )
+  }, integer(1))
+
+  refAA <- ifelse(
+    is.na(nativePos) | nativePos < 1 | nativePos > nchar(ref_seq_translated),
+    NA_character_,
+    substring(ref_seq_translated, nativePos, nativePos)
+  )
+
+  addInfo <- tibble(
+    AA_pos = nativePos,
+    AA_pos_Ecoli = positions,
+    AA_original = refAA,
+    AA_mutation = NA_character_,
+    AA_mut_name_Ecoli = NA_character_,
+    aa_type = NA_character_,
+    aa_distance = NA_real_,
+    RelX = seq_along(positions),
+    RelY = 0L
+  )
+  addInfoPos <- addInfo |> mutate(RelY = -1L)
+
+  block <- rbind(addInfoPos, addInfo, block)
+  block <- select(
+    block,
+    AA_pos, AA_pos_Ecoli, AA_original, AA_mutation, AA_mut_name_Ecoli,
+    aa_type, aa_distance, RelX, RelY
+  )
+  return(block)
+}
+
 renderBlock <- function(block, x0, y0, dx, dy, colcat = NULL, pars) {
   # positions:
   text(x0 + (block$RelX[block$RelY == -1L] - 1L) * dx,
@@ -452,8 +566,26 @@ plotMutations <- function(muts,
     stop("No species to be plotted need to be provided.")
   }
 
-  # determine clusters to plot
-  if (is.null(clustersToPlot) || length(clustersToPlot) == 0) {
+  # determine clusters to plot. "All mutations" mode (clustersToPlot ==
+  # ALL_MUTATIONS_LABEL) is exclusive - it replaces the normal cluster
+  # selection entirely with a single pseudo-cluster spanning every mapped
+  # position across the whole gene, ordered by E. coli coordinate.
+  allMutationsMode <- identical(clustersToPlot, ALL_MUTATIONS_LABEL) ||
+    (length(clustersToPlot) == 1 && identical(clustersToPlot[[1]], ALL_MUTATIONS_LABEL))
+
+  allPositions <- integer(0)
+  if (isTRUE(allMutationsMode)) {
+    allPositions <- muts |>
+      dplyr::filter(.data$Species %in% speciesToPlot) |>
+      dplyr::pull(.data$AA_pos_Ecoli) |>
+      stats::na.omit() |>
+      unique() |>
+      sort()
+    if (length(allPositions) == 0) {
+      stop("No mapped mutations available to plot.")
+    }
+    clustersToPlot <- ALL_MUTATIONS_LABEL
+  } else if (is.null(clustersToPlot) || length(clustersToPlot) == 0) {
     clustersToPlot <- clusters |>
       dplyr::filter(.data$Gene == gene) |>
       dplyr::arrange(.data$AAstart_Ecoli) |>
@@ -516,16 +648,28 @@ plotMutations <- function(muts,
     names(allBlocks[[i]]) <- clustersToPlot
 
     for (j in seq_along(clustersToPlot)) {
-      blk <- getBlockData(
-        muts = muts,
-        clusters = clusters,
-        seqs = seqs,
-        refSeq_ID = refSeq_ID,
-        coordinatesFocal = coordinates[[refSeq_ID]],
-        species = speciesToPlot[[i]],
-        clusterName = clustersToPlot[[j]],
-        mergeDuplicates = mergeDuplicates
-      )
+      blk <- if (identical(clustersToPlot[[j]], ALL_MUTATIONS_LABEL)) {
+        getPositionOrderedBlockData(
+          muts = muts,
+          seqs = seqs,
+          coordinates = coordinates,
+          refs = refs,
+          species = speciesToPlot[[i]],
+          positions = allPositions,
+          mergeDuplicates = mergeDuplicates
+        )
+      } else {
+        getBlockData(
+          muts = muts,
+          clusters = clusters,
+          seqs = seqs,
+          refSeq_ID = refSeq_ID,
+          coordinatesFocal = coordinates[[refSeq_ID]],
+          species = speciesToPlot[[i]],
+          clusterName = clustersToPlot[[j]],
+          mergeDuplicates = mergeDuplicates
+        )
+      }
 
       allBlocks[[i]][[j]] <- blk
       blockDimsX[i, j] <- suppressWarnings(max(blk$RelX, na.rm = TRUE))
@@ -769,25 +913,23 @@ source_levels <- c(
   "DRAGdb",
   "PointFinder",
   "Reference Gene Catalog",
-  "Yang",
+  "Yang-RIF",
   "None"
 )
 all_AAs_sorted <- sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]])
 
 source_palette <- c(
-  CARD    = "#dfcce3",
+  CARD = "#dfcce3",
   CRyPTIC = "#ffdfba",
-  DRAGdb  = "#fbb4ae",
+  DRAGdb = "#fbb4ae",
   RifReport = "#bae1ff",
-  Yang    = "#cdecc6",
-  PointFinder     = "#C8AAAA",  
-  "Reference Gene Catalog" = "#DEE791",  
-  None    = "grey85"
+  "Yang-RIF" = "#cdecc6",
+  PointFinder = "#C8AAAA",
+  "Reference Gene Catalog" = "#DEE791",
+  None = "grey85"
 )
 
 # Deployment credentials are supplied locally via rsconnect::setAccountInfo()
 # (run interactively, never committed) before calling deployApp() below.
-#library(rsconnect)
-#deployApp(appDir="code/RIFRMap/", server = "shinyapps.io")
-
-
+# library(rsconnect)
+# deployApp(appDir="code/RIFRMap/", server = "shinyapps.io")
