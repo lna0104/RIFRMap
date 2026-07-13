@@ -39,8 +39,12 @@ $(function () {
   let PLT = null;          // par("plt") fractions: [x1, x2, y1, y2]
   let HOVER_ENABLED = false;
 
-  // cached plot-region px (recomputed only on resize)
-  let PR = null;
+  // Currently bound DOM elements. Shiny's clusterPlotUI (server.R) re-renders
+  // the whole plotOutput+canvas subtree (fresh <img>/<canvas> nodes) whenever
+  // cluster_dims_r() changes, so "bound once at startup" is not safe -- we
+  // must keep checking and rebind whenever the live elements differ.
+  let CUR = { plotDiv: null, canvas: null, img: null, wrap: null, ctx: null };
+  let ROBS = null; // ResizeObserver on CUR.img
 
   // ---------- small utils ----------
   function byId(id) {
@@ -173,12 +177,257 @@ $(function () {
     return c.x0 + u * DX;
   }
 
-  function clearCanvas() {
-    const canvas = byId("hoverCanvas");
+  function clearCanvas(canvas) {
+    canvas = canvas || CUR.canvas;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function resetInteractionState() {
+    lastBand = null;
+    lastXPlot = null;
+    lastXpx = null;
+    pending = null;
+  }
+
+  // ---------- plot-region math ----------
+  // Always recomputed from the live <img> box + the current PLT -- never
+  // cached across events. offsetWidth/offsetHeight reads are cheap, and
+  // caching this previously meant a new render's `plt` margins (sent via the
+  // hoverMap message) had no effect on hover math until an unrelated resize
+  // happened to fire, which is the main source of the reported misalignment.
+  function plotRegionPx() {
+    const img = CUR.img;
+    if (!img) return { left: 0, right: 0, top: 0, bottom: 0 };
+
+    const W = img.offsetWidth;
+    const H = img.offsetHeight;
+
+    if (!PLT || !Array.isArray(PLT) || PLT.length !== 4) {
+      return { left: 0, right: W, top: 0, bottom: H };
+    }
+
+    const x1 = +PLT[0], x2 = +PLT[1], y1 = +PLT[2], y2 = +PLT[3];
+    if (![x1, x2, y1, y2].every(Number.isFinite)) {
+      return { left: 0, right: W, top: 0, bottom: H };
+    }
+
+    return {
+      left: x1 * W,
+      right: x2 * W,
+      top: (1 - y2) * H,
+      bottom: (1 - y1) * H
+    };
+  }
+
+  // Resize the canvas backing store to match the live <img> box/DPR. Called
+  // on bind, on ResizeObserver/window resize, on <img> load, and whenever a
+  // hoverMap message arrives (a new render can change `plt` without the
+  // <img> box size changing at all).
+  function syncCanvasBackingStore() {
+    const { img, canvas, ctx } = CUR;
+    if (!img || !canvas || !ctx) return;
+
+    const w = img.offsetWidth;
+    const h = img.offsetHeight;
+
+    // cap DPR for speed (retina can be 2 => 4x pixels)
+    const dpr0 = window.devicePixelRatio || 1;
+    const dpr = (dpr0 >= 2 ? 2 : 1);
+
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+    canvas.width = Math.max(1, Math.round(w * dpr));
+    canvas.height = Math.max(1, Math.round(h * dpr));
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    resetInteractionState();
+  }
+
+  // ---------- overlay drawing ----------
+  function drawOverlay(ctx, pr, band, xPix) {
+    if (!ctx) return;
+    const plotW = pr.right - pr.left;
+    const plotH = pr.bottom - pr.top;
+
+    // clear only plot region
+    ctx.clearRect(pr.left - 2, pr.top - 2, plotW + 4, plotH + 4);
+
+    // Horizontal band
+    if (band) {
+      const yTop = pr.top + (1 - band.ymax) * plotH;
+      const yBot = pr.top + (1 - band.ymin) * plotH;
+
+      ctx.fillStyle = "rgba(0,0,0,0.06)";
+      ctx.fillRect(pr.left, yTop, plotW, yBot - yTop);
+
+      ctx.strokeStyle = "rgba(0,0,0,0.18)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(pr.left + 0.5, yTop + 0.5, plotW - 1, (yBot - yTop) - 1);
+    }
+
+    // Vertical band width ≈ one AA column (dx) in pixels
+    if (Number.isFinite(xPix)) {
+      const bandW = (Number.isFinite(DX) && DX > 0)
+        ? Math.max(3, DX * plotW * 0.8)   // ~80% of one AA column
+        : 10;
+
+      const x = Math.max(pr.left, Math.min(pr.right, xPix));
+      const xLeft = x - bandW / 2;
+
+      ctx.fillStyle = "rgba(0,0,0,0.06)";
+      ctx.fillRect(xLeft, pr.top, bandW, plotH);
+
+      ctx.strokeStyle = "rgba(0,0,0,0.18)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(
+        Math.round(xLeft) + 0.5,
+        Math.round(pr.top) + 0.5,
+        Math.max(1, Math.round(bandW) - 1),
+        Math.max(1, Math.round(plotH) - 1)
+      );
+    }
+  }
+
+  // ---- state for throttled drawing ----
+  let lastBand = null;    // {ymin,ymax} in plot coords
+  let lastXPlot = null;   // snapped x in plot coords
+  let lastXpx = null;     // snapped x in CSS pixels
+
+  // draw scheduling (single RAF for BOTH x and y changes)
+  let pending = null; // {ctx, pr, band, xpx}
+  let rafDraw = false;
+
+  function requestDraw(ctx, pr, band, xpx) {
+    // avoid redundant draws
+    const sameBand =
+      (band === lastBand) ||
+      (band && lastBand && band.ymin === lastBand.ymin && band.ymax === lastBand.ymax);
+
+    const sameX = (xpx === lastXpx);
+
+    if (sameBand && sameX) return;
+
+    pending = { ctx, pr, band, xpx };
+    if (rafDraw) return;
+
+    rafDraw = true;
+    requestAnimationFrame(() => {
+      rafDraw = false;
+      if (!pending) return;
+
+      lastBand = pending.band;
+      lastXpx  = pending.xpx;
+
+      drawOverlay(pending.ctx, pending.pr, lastBand, lastXpx);
+      pending = null;
+    });
+  }
+
+  // ---------- mouse events (bound once per live element set, see bindHoverOverlay) ----------
+  function onMouseMove(e) {
+    const { img, ctx } = CUR;
+    if (!img || !ctx) return;
+
+    if (!HOVER_ENABLED || !SPECIES_BANDS.length) {
+      const pr0 = plotRegionPx();
+      ctx.clearRect(pr0.left, pr0.top, pr0.right - pr0.left, pr0.bottom - pr0.top);
+      return;
+    }
+
+    const rect = img.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    const pr = plotRegionPx();
+    if (mx < pr.left || mx > pr.right || my < pr.top || my > pr.bottom) {
+      resetInteractionState();
+      ctx.clearRect(pr.left, pr.top, pr.right - pr.left, pr.bottom - pr.top);
+      return;
+    }
+
+    const plotW = pr.right - pr.left;
+    const plotH = pr.bottom - pr.top;
+
+    // mouse → plot coords (0..1)
+    const xPlot = (mx - pr.left) / plotW;
+    const yPlot = 1 - ((my - pr.top) / plotH);
+
+    // Resolve the snapped column and the row band from this single mouse
+    // position, then issue ONE combined draw. Previously these were two
+    // separate requestDraw() calls that each captured the other axis's
+    // not-yet-committed value (lastXpx/lastBand are only updated inside the
+    // deferred rAF callback) -- when both axes changed on the same event,
+    // the second call clobbered the first and silently dropped one axis's
+    // highlight for that frame.
+    const xSnapPlot = snapXToAA(xPlot);
+    const xpx = (xSnapPlot == null) ? null : (pr.left + xSnapPlot * plotW);
+
+    let band = null;
+    const s = findSpeciesAtY(yPlot);
+    if (s) {
+      const zone = bandNameAtY(s, yPlot);
+      if (zone && s[zone]) band = s[zone];
+    }
+
+    lastXPlot = xSnapPlot;
+    requestDraw(ctx, pr, band, xpx);
+  }
+
+  function onMouseLeave() {
+    const { ctx } = CUR;
+    const pr = plotRegionPx();
+    resetInteractionState();
+    if (ctx) ctx.clearRect(pr.left, pr.top, pr.right - pr.left, pr.bottom - pr.top);
+  }
+
+  // ---------- binding ----------
+  // Idempotent: safe to call on every DOM mutation. Only does work when the
+  // live <img>/<canvas> differ from what we're currently bound to, which
+  // happens whenever clusterPlotUI (server.R) re-renders the plot subtree
+  // (e.g. a filter change alters the plot's pixel dimensions).
+  function bindHoverOverlay() {
+    const plotDiv = byId("clusterPlot");
+    const canvas = byId("hoverCanvas");
+    if (!plotDiv || !canvas) return false;
+
+    const img = plotDiv.querySelector("img");
+    if (!img) return false;
+
+    const wrap = canvas.parentElement || plotDiv;
+
+    if (CUR.img === img && CUR.canvas === canvas && CUR.wrap === wrap) {
+      return true; // already bound to the current live elements
+    }
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return false;
+
+    if (CUR.wrap) {
+      CUR.wrap.removeEventListener("mousemove", onMouseMove);
+      CUR.wrap.removeEventListener("mouseleave", onMouseLeave);
+    }
+    if (ROBS) {
+      ROBS.disconnect();
+      ROBS = null;
+    }
+
+    CUR = { plotDiv, canvas, img, wrap, ctx };
+
+    wrap.addEventListener("mousemove", onMouseMove);
+    wrap.addEventListener("mouseleave", onMouseLeave);
+
+    ROBS = new ResizeObserver(syncCanvasBackingStore);
+    ROBS.observe(img);
+    img.addEventListener("load", syncCanvasBackingStore);
+    window.addEventListener("resize", syncCanvasBackingStore);
+
+    syncCanvasBackingStore();
+    return true;
   }
 
   // ---------- Shiny message handler ----------
@@ -192,6 +441,7 @@ $(function () {
         XCOLS = [];
         DX = null;
         PLT = null;
+        resetInteractionState();
         clearCanvas();
         return;
       }
@@ -216,244 +466,35 @@ $(function () {
 
       HOVER_ENABLED = SPECIES_BANDS.length > 0;
 
+      // A new render can swap in a fresh <img>/<canvas> (clusterPlotUI) and/or
+      // change `plt` margins without changing the <img> box size, so rebind
+      // defensively and force a full geometry resync rather than waiting for
+      // a resize/load event that may not come.
+      bindHoverOverlay();
+      syncCanvasBackingStore();
+
       // console.log("hoverMap:", "bands=", SPECIES_BANDS.length, "xcols=", XCOLS.length, "dx=", DX, "plt=", PLT);
     });
   }
 
-  // ---------- hover drawing ----------
-  function setupHoverOverlay() {
-    const plotDiv = byId("clusterPlot");
-    const canvas = byId("hoverCanvas");
-    if (!plotDiv || !canvas) return false;
-
-    const img = plotDiv.querySelector("img");
-    if (!img) return false;
-
-    const wrap = canvas.parentElement || plotDiv;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return false;
-
-    // ---- sizing / DPR ----
-    function plotRegionPx() {
-      const W = img.offsetWidth;
-      const H = img.offsetHeight;
-
-      if (!PLT || !Array.isArray(PLT) || PLT.length !== 4) {
-        return { left: 0, right: W, top: 0, bottom: H };
-      }
-
-      const x1 = +PLT[0], x2 = +PLT[1], y1 = +PLT[2], y2 = +PLT[3];
-      if (![x1, x2, y1, y2].every(Number.isFinite)) {
-        return { left: 0, right: W, top: 0, bottom: H };
-      }
-
-      return {
-        left: x1 * W,
-        right: x2 * W,
-        top: (1 - y2) * H,
-        bottom: (1 - y1) * H
-      };
-    }
-
-    function syncCanvas() {
-      const w = img.offsetWidth;
-      const h = img.offsetHeight;
-
-      // cap DPR for speed (retina can be 2 => 4x pixels)
-      const dpr0 = window.devicePixelRatio || 1;
-      const dpr = (dpr0 >= 2 ? 2 : 1);
-
-      canvas.style.width = w + "px";
-      canvas.style.height = h + "px";
-      canvas.width = Math.max(1, Math.round(w * dpr));
-      canvas.height = Math.max(1, Math.round(h * dpr));
-
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      PR = plotRegionPx(); // cache plot region
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    function getPR() {
-      return PR || plotRegionPx();
-    }
-
-    // ---- overlay drawing (only clears plot region) ----
-    function drawOverlay(pr, band, xPix) {
-      const plotW = pr.right - pr.left;
-      const plotH = pr.bottom - pr.top;
-
-      // clear only plot region
-      ctx.clearRect(pr.left - 2, pr.top - 2, plotW + 4, plotH + 4);
-
-      // Horizontal band
-      if (band) {
-        const yTop = pr.top + (1 - band.ymax) * plotH;
-        const yBot = pr.top + (1 - band.ymin) * plotH;
-
-        ctx.fillStyle = "rgba(0,0,0,0.06)";
-        ctx.fillRect(pr.left, yTop, plotW, yBot - yTop);
-
-        ctx.strokeStyle = "rgba(0,0,0,0.18)";
-        ctx.lineWidth = 1;
-        ctx.strokeRect(pr.left + 0.5, yTop + 0.5, plotW - 1, (yBot - yTop) - 1);
-      }
-
-      // Vertical band width ≈ one AA column (dx) in pixels
-      if (Number.isFinite(xPix)) {
-        const bandW = (Number.isFinite(DX) && DX > 0)
-          ? Math.max(3, DX * plotW * 0.8)   // ~80% of one AA column
-          : 10;
-
-        const x = Math.max(pr.left, Math.min(pr.right, xPix));
-        const xLeft = x - bandW / 2;
-
-        ctx.fillStyle = "rgba(0,0,0,0.06)";
-        ctx.fillRect(xLeft, pr.top, bandW, plotH);
-
-        ctx.strokeStyle = "rgba(0,0,0,0.18)";
-        ctx.lineWidth = 1;
-        ctx.strokeRect(
-          Math.round(xLeft) + 0.5,
-          Math.round(pr.top) + 0.5,
-          Math.max(1, Math.round(bandW) - 1),
-          Math.max(1, Math.round(plotH) - 1)
-        );
-      }
-    }
-
-    // ---- state for throttled drawing ----
-    let lastKey = null;     // species::zone
-    let lastBand = null;    // {ymin,ymax} in plot coords
-    let lastXPlot = null;   // snapped x in plot coords
-    let lastXpx = null;     // snapped x in CSS pixels
-
-    // draw scheduling (single RAF for BOTH x and y changes)
-    let pending = null; // {band, xpx}
-    let rafDraw = false;
-
-    function requestDraw(pr, band, xpx) {
-      // avoid redundant draws
-      const sameBand =
-        (band === lastBand) ||
-        (band && lastBand && band.ymin === lastBand.ymin && band.ymax === lastBand.ymax);
-
-      const sameX = (xpx === lastXpx);
-
-      if (sameBand && sameX) return;
-
-      pending = { pr, band, xpx };
-      if (rafDraw) return;
-
-      rafDraw = true;
-      requestAnimationFrame(() => {
-        rafDraw = false;
-        if (!pending) return;
-
-        lastBand = pending.band;
-        lastXpx  = pending.xpx;
-
-        drawOverlay(pending.pr, lastBand, lastXpx);
-        pending = null;
-      });
-    }
-
-    function updateBandFromY(pr, yPlot) {
-      if (!HOVER_ENABLED || !SPECIES_BANDS.length) {
-        lastKey = null;
-        requestDraw(pr, null, lastXpx);
-        return;
-      }
-
-      const s = findSpeciesAtY(yPlot);
-      if (!s) {
-        lastKey = null;
-        requestDraw(pr, null, lastXpx);
-        return;
-      }
-
-      const zone = bandNameAtY(s, yPlot);
-      if (!zone || !s[zone]) {
-        lastKey = null;
-        requestDraw(pr, null, lastXpx);
-        return;
-      }
-
-      const key = `${s.species}::${zone}`;
-      if (key === lastKey) return;
-
-      lastKey = key;
-      requestDraw(pr, s[zone], lastXpx);
-    }
-
-    // ---- mouse events ----
-    wrap.addEventListener("mousemove", function (e) {
-      if (!HOVER_ENABLED || !SPECIES_BANDS.length) {
-        const pr0 = getPR();
-        ctx.clearRect(pr0.left, pr0.top, pr0.right - pr0.left, pr0.bottom - pr0.top);
-        return;
-      }
-
-      const rect = img.getBoundingClientRect();
-      const mx = e.clientX - rect.left;
-      const my = e.clientY - rect.top;
-
-      const pr = getPR();
-      if (mx < pr.left || mx > pr.right || my < pr.top || my > pr.bottom) {
-        lastKey = null;
-        lastBand = null;
-        lastXPlot = null;
-        lastXpx = null;
-        ctx.clearRect(pr.left, pr.top, pr.right - pr.left, pr.bottom - pr.top);
-        return;
-      }
-
-      const plotW = pr.right - pr.left;
-      const plotH = pr.bottom - pr.top;
-
-      // mouse → plot coords (0..1)
-      const xPlot = (mx - pr.left) / plotW;
-      const yPlot = 1 - ((my - pr.top) / plotH);
-
-      // snap X and only update if snapped col changes
-      const xSnapPlot = snapXToAA(xPlot);
-      if (xSnapPlot !== lastXPlot) {
-        lastXPlot = xSnapPlot;
-      
-        const xpxNew = (xSnapPlot == null) ? null : (pr.left + xSnapPlot * plotW);
-        requestDraw(pr, lastBand, xpxNew);
-      }
-
-      // update band (also draws via RAF only when it changes)
-      updateBandFromY(pr, yPlot);
-    });
-
-    wrap.addEventListener("mouseleave", function () {
-      const pr = getPR();
-      lastKey = null;
-      lastBand = null;
-      lastXPlot = null;
-      lastXpx = null;
-      ctx.clearRect(pr.left, pr.top, pr.right - pr.left, pr.bottom - pr.top);
-    });
-
-    // Keep canvas aligned with image resizing
-    new ResizeObserver(syncCanvas).observe(img);
-    window.addEventListener("resize", syncCanvas);
-    img.addEventListener("load", syncCanvas);
-
-    syncCanvas();
-    return true;
-  }
-
+  // ---------- boot ----------
+  // Keep watching for the lifetime of the page: clusterPlotUI can replace the
+  // plot subtree at any time (not just once at startup), so a one-shot setup
+  // is not sufficient.
   function start() {
-    if (setupHoverOverlay()) return;
+    bindHoverOverlay();
 
     const root = document.body || document.documentElement;
     if (!root) return;
 
+    let scheduled = false;
     const obs = new MutationObserver(() => {
-      setupHoverOverlay();
+      if (scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(() => {
+        scheduled = false;
+        bindHoverOverlay();
+      });
     });
 
     obs.observe(root, { childList: true, subtree: true });
