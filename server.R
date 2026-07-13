@@ -26,13 +26,13 @@ function(input, output, session) {
         choices = c("All species", sort(unique(card$species))),
         selected = "All species"
       )
-      
+
       updateSelectInput(
         session, "pointfinder_species",
         choices = c("All species", sort(unique(pointfinder$species))),
         selected = "All species"
       )
-      
+
       updateSelectInput(
         session, "refgenes_species",
         choices = c("All species", sort(unique(refgenes$species))),
@@ -65,20 +65,20 @@ function(input, output, session) {
 
       dfs[["CARD"]] <- d
     }
-    
+
     ## PointFinder
     if (isTRUE(input$pointfinder_enabled)) {
       d <- pointfinder |>
         filter_by_species(input$pointfinder_species, species_col = "species")
-      
+
       dfs[["PointFinder"]] <- d
     }
-    
+
     ## Reference Gene Catalog
     if (isTRUE(input$refgenes_enabled)) {
       d <- refgenes |>
         filter_by_species(input$refgenes_species, species_col = "species")
-      
+
       dfs[["Reference Gene Catalog"]] <- d
     }
 
@@ -107,14 +107,14 @@ function(input, output, session) {
 
     ## Yang
     if (isTRUE(input$yang_enabled)) {
-      d <- yang 
+      d <- yang
 
       d <- filter_range_if(d, "log2_fc", input$yang_log2fc)
 
-      dfs[["Yang"]] <- d
+      dfs[["Yang-RIF"]] <- d
     }
 
-    ## RifReport 
+    ## RifReport
     if (isTRUE(input$rifreport_enabled)) {
       d <- rifreport |>
         filter_by_species(input$rifreport_species, species_col = "species")
@@ -272,8 +272,14 @@ function(input, output, session) {
       })
     })
 
-    # Canonical ordered clusters (compute once per selection)
+    # Canonical ordered clusters (compute once per selection). "All
+    # mutations" mode (global.R's ALL_MUTATIONS_LABEL) is exclusive - when
+    # active it overrides the N/I/II/III checkbox selection entirely.
     clusters_to_plot_r <- reactive({
+      if (isTRUE(input$show_all_mutations)) {
+        return(ALL_MUTATIONS_LABEL)
+      }
+
       if (no_clusters_selected(input$clustersToPlot)) {
         return(character(0))
       }
@@ -285,11 +291,22 @@ function(input, output, session) {
         unique()
     })
 
+    # "All mutations" mode disables the per-cluster checkboxes (they're
+    # ignored while it's active, so grey them out to avoid implying they
+    # still matter)
+    observeEvent(input$show_all_mutations, {
+      if (isTRUE(input$show_all_mutations)) {
+        shinyjs::disable("clustersToPlot")
+      } else {
+        shinyjs::enable("clustersToPlot")
+      }
+    })
+
     # Cache plot dimensions so we don’t call plotMutations twice
     cluster_dims_r <- reactiveVal(NULL)
 
     observeEvent(
-      list(input$apply_filters, input$clustersToPlot, input$colour_by),
+      list(input$apply_filters, input$clustersToPlot, input$colour_by, input$show_all_mutations),
       {
         df <- cluster_plotting_df()
         sp <- cluster_species_to_plot()
@@ -324,6 +341,7 @@ function(input, output, session) {
       input$apply_filters
       input$clustersToPlot
       input$colour_by
+      input$show_all_mutations
       TRUE
     })
 
@@ -375,17 +393,17 @@ function(input, output, session) {
       }
       div(class = "plot-empty-msg", st$msg)
     })
-    
+
     make_cluster_plot <- function(return_hover_map = TRUE) {
       st <- cluster_status()
       req(isTRUE(st$ok))
-      
+
       df <- cluster_plotting_df()
       cl <- clusters_to_plot_r()
       sp <- cluster_species_to_plot()
-      
+
       req(df, cl, sp)
-      
+
       plotMutations(
         muts             = df,
         clusters         = clusters,
@@ -404,16 +422,16 @@ function(input, output, session) {
     output$clusterPlot <- renderPlot(
       {
         out <- make_cluster_plot(return_hover_map = TRUE)
-        
+
         payload <- list(
           bands = out$bands,
           plt   = out$plt,
           xcols = out$xcols,
           dx    = out$dx
         )
-        
+
         hover_payload_r(payload)
-        
+
         invisible()
       },
       width = function() {
@@ -440,158 +458,165 @@ function(input, output, session) {
       },
       ignoreInit = TRUE
     )
-  
-  
-  # ---- Download ----
-  
-  output$download_mutation_map <- downloadHandler(
-    filename = function() {
-      paste0("RIFRMap_mutation_map_plot.", input$mutation_map_format)
-    },
-    
-    content = function(file) {
-      dims <- cluster_dims_r()
-      req(dims)
-      
-      width_px  <- max(300, dims$width_px)
-      height_px <- max(150, dims$height_px)
-      
-      fmt <- input$mutation_map_format
-      width_in <- width_px / 96
-      height_in <- height_px / 96
-      
-      if (fmt == "png") {
-        png(file, width = width_in, height = height_in, units = "in", res = 300)
-      } else if (fmt == "pdf") {
-        pdf(file, width = width_in, height = height_in)
-      } else if (fmt %in% c("jpg", "jpeg")) {
-        jpeg(file, width = width_in, height = height_in, units = "in", res = 300)
-      } else if (fmt == "tiff") {
-        tiff(file, width = width_in, height = height_in, units = "in", res = 300)
+
+
+    # ---- Download ----
+
+    output$download_mutation_map <- downloadHandler(
+      filename = function() {
+        paste0("RIFRMap_mutation_map_plot.", input$mutation_map_format)
+      },
+      content = function(file) {
+        dims <- cluster_dims_r()
+        req(dims)
+
+        width_px <- max(300, dims$width_px)
+        height_px <- max(150, dims$height_px)
+
+        fmt <- input$mutation_map_format
+        width_in <- width_px / 96
+        height_in <- height_px / 96
+
+        if (fmt == "png") {
+          png(file, width = width_in, height = height_in, units = "in", res = 300)
+        } else if (fmt == "pdf") {
+          pdf(file, width = width_in, height = height_in)
+        } else if (fmt %in% c("jpg", "jpeg")) {
+          jpeg(file, width = width_in, height = height_in, units = "in", res = 300)
+        } else if (fmt == "tiff") {
+          tiff(file, width = width_in, height = height_in, units = "in", res = 300)
+        }
+
+        on.exit(dev.off(), add = TRUE)
+
+        make_cluster_plot(return_hover_map = FALSE)
       }
-      
-      on.exit(dev.off(), add = TRUE)
-      
-      make_cluster_plot(return_hover_map = FALSE)
-    }
-  )
-  
-  # ---- Legend ----
+    )
 
-  output$legend_panel <- renderUI({
-    mode <- input$colour_by
+    # ---- Legend ----
 
-    if (is.null(mode)) {
-      return(NULL)
-    }
+    output$legend_panel <- renderUI({
+      mode <- input$colour_by
 
-    pal <- COLOURING_PALETTES[[mode]]
+      if (is.null(mode)) {
+        return(NULL)
+      }
 
-    # none
-    if (mode == "none") {
-      return(
-        tags$div(
-          class = "cluster-legend",
-          tags$div(class = "cluster-legend-title", "Legend"),
-          legend_item("All mutations", pal["none"])
-        )
-      )
-    }
+      pal <- COLOURING_PALETTES[[mode]]
 
-    # distribution
-    if (mode == "distribution") {
-      cols <- COLOURING_PALETTES$distribution
-      gradient_css <- paste(cols, collapse = ", ")
-
-      rng <- cluster_dims_r()$distribution_range
-
-      return(
-        tags$div(
-          class = "cluster-legend",
-          tags$div(class = "cluster-legend-title", "Distribution across species"),
+      # none
+      if (mode == "none") {
+        return(
           tags$div(
-            style = sprintf(
-              "height:14px; border-radius:6px; margin-bottom:6px;
+            class = "cluster-legend",
+            tags$div(class = "cluster-legend-title", "Legend"),
+            legend_item("All mutations", pal["none"])
+          )
+        )
+      }
+
+      # distribution
+      if (mode == "distribution") {
+        cols <- COLOURING_PALETTES$distribution
+        gradient_css <- paste(cols, collapse = ", ")
+
+        rng <- cluster_dims_r()$distribution_range
+
+        return(
+          tags$div(
+            class = "cluster-legend",
+            tags$div(class = "cluster-legend-title", "Distribution across species"),
+            tags$div(
+              style = sprintf(
+                "height:14px; border-radius:6px; margin-bottom:6px;
            background: linear-gradient(to right, %s);",
-              gradient_css
+                gradient_css
+              )
+            ),
+            tags$div(
+              style = "display:flex; justify-content:space-between; font-size:0.8em;",
+              tags$span(paste0(rng["min"])),
+              tags$span(paste0(rng["max"]))
             )
-          ),
-          tags$div(
-            style = "display:flex; justify-content:space-between; font-size:0.8em;",
-            tags$span(paste0(rng["min"])),
-            tags$span(paste0(rng["max"]))
           )
         )
-      )
-    }
+      }
 
-    # aa_type
-    if (mode == "aa_type") {
-      labels <- c(
-        hydrophobic_aliphatic = "Hydrophobic: Aliphatic",
-        hydrophobic_aromatic  = "Hydrophobic: Aromatic",
-        polar_uncharged       = "Hydrophilic: Polar Uncharged",
-        acidic                = "Hydrophilic: Acidic",
-        basic                 = "Hydrophilic: Basic",
-        unknown               = "Unknown"
-      )
-
-      return(
-        tags$div(
-          class = "cluster-legend",
-          tags$div(class = "cluster-legend-title", "Amino acid type"),
-          lapply(names(labels), function(nm) {
-            legend_item(labels[[nm]], pal[[nm]])
-          })
+      # aa_type
+      if (mode == "aa_type") {
+        labels <- c(
+          hydrophobic_aliphatic = "Hydrophobic: Aliphatic",
+          hydrophobic_aromatic  = "Hydrophobic: Aromatic",
+          polar_uncharged       = "Hydrophilic: Polar Uncharged",
+          acidic                = "Hydrophilic: Acidic",
+          basic                 = "Hydrophilic: Basic",
+          unknown               = "Unknown"
         )
-      )
-    }
 
-
-    # aa_distance
-    if (mode == "aa_distance") {
-      cols <- COLOURING_PALETTES$aa_distance
-      gradient_css <- paste(cols, collapse = ", ")
-      rng <- cluster_dims_r()$aa_distance_range
-      return(
-        tags$div(
-          class = "cluster-legend",
-          tags$div(class = "cluster-legend-title", "Amino acid distance"),
+        return(
           tags$div(
-            style = sprintf(
-              "height:14px; border-radius:6px; margin-bottom:6px;
+            class = "cluster-legend",
+            tags$div(class = "cluster-legend-title", "Amino acid type"),
+            lapply(names(labels), function(nm) {
+              legend_item(labels[[nm]], pal[[nm]])
+            })
+          )
+        )
+      }
+
+
+      # aa_distance
+      if (mode == "aa_distance") {
+        cols <- COLOURING_PALETTES$aa_distance
+        gradient_css <- paste(cols, collapse = ", ")
+        rng <- cluster_dims_r()$aa_distance_range
+        return(
+          tags$div(
+            class = "cluster-legend",
+            tags$div(class = "cluster-legend-title", "Amino acid distance"),
+            tags$div(
+              style = sprintf(
+                "height:14px; border-radius:6px; margin-bottom:6px;
      background: linear-gradient(to right, %s);",
-              gradient_css
+                gradient_css
+              )
+            ),
+            tags$div(
+              style = "display:flex; justify-content:space-between; font-size:0.8em;",
+              tags$span(round(rng["min"], 1)),
+              tags$span(round(rng["max"], 1))
             )
-          ),
-          tags$div(
-            style = "display:flex; justify-content:space-between; font-size:0.8em;",
-            tags$span(round(rng["min"], 1)),
-            tags$span(round(rng["max"], 1))
           )
         )
+      }
+
+      NULL
+    })
+
+    # plot note
+
+    output$clusterPlotNote <- renderUI({
+      mode_note <- switch(input$colour_by,
+        none = "",
+        distribution = "Colours indicate how broadly each mutation is distributed across species.",
+        aa_type = "Colours indicate the biochemical class of the mutated amino acid.",
+        aa_distance = "Colours indicate Grantham distance, which measures the evolutionary distance between the original and mutated amino acids."
       )
-    }
 
-    NULL
-  })
+      all_mutations_note <- if (isTRUE(input$show_all_mutations)) {
+        "Showing all mutations with a valid E. coli position across the whole gene - not grouped by the four curated RRDR clusters (N, I, II, III)."
+      } else {
+        ""
+      }
 
-  # plot note
-
-  output$clusterPlotNote <- renderUI({
-    mode_note <- switch(input$colour_by,
-      none = "",
-      distribution = "Colours indicate how broadly each mutation is distributed across species.",
-      aa_type = "Colours indicate the biochemical class of the mutated amino acid.",
-      aa_distance = "Colours indicate Grantham distance, which measures the evolutionary distance between the original and mutated amino acids."
-    )
-
-    tags$div(
-      class = "text-muted",
-      style = "font-size: 0.85em; margin-bottom: 6px;",
-      mode_note
-    )
-  })
+      tags$div(
+        class = "text-muted",
+        style = "font-size: 0.85em; margin-bottom: 6px;",
+        mode_note,
+        if (nzchar(mode_note) && nzchar(all_mutations_note)) tags$br(),
+        all_mutations_note
+      )
+    })
   }
 
   # ---- Mutation Frequency Tab ----
@@ -599,7 +624,7 @@ function(input, output, session) {
     make_heatmap_pos_mut <- function() {
       df0 <- combined_rows()
       req(df0, nrow(df0) > 0)
-      
+
       df <- df0 |>
         transmute(
           AA_pos_Ecoli = as.character(AA_pos_Ecoli),
@@ -608,9 +633,9 @@ function(input, output, session) {
         ) |>
         filter(!is.na(AA_pos_Ecoli), !is.na(AA_mutation), !is.na(Species)) |>
         distinct()
-      
+
       all_AAs_sorted <- rev(sort(strsplit("HAKRGILPVFWYDESTCMNQ", "")[[1]]))
-      
+
       heat_df <- df |>
         group_by(AA_pos_Ecoli, AA_mutation) |>
         summarise(n_species = n_distinct(Species), .groups = "drop") |>
@@ -619,16 +644,16 @@ function(input, output, session) {
           AA_mutation = all_AAs_sorted,
           fill = list(n_species = 0)
         )
-      
+
       pos_levels <- heat_df$AA_pos_Ecoli |>
         unique() |>
         as.numeric() |>
         sort(decreasing = FALSE) |>
         as.character()
-      
+
       n_pos <- length(pos_levels)
       bar_h_cm <- max(4, min(10, 0.2 * n_pos))
-      
+
       heat_df <- heat_df |>
         mutate(
           AA_mutation = factor(AA_mutation, levels = all_AAs_sorted),
@@ -641,23 +666,25 @@ function(input, output, session) {
           ),
           tile_id = paste(AA_pos_Ecoli, AA_mutation)
         )
-      
+
       max_n <- max(heat_df$n_species, na.rm = TRUE)
       if (is.na(max_n) || max_n < 0) max_n <- 0
-      
+
       cols <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
-      
+
       if (max_n < 4) {
         levs <- 0:max_n
         heat_df <- heat_df |> mutate(fill_val = factor(n_species, levels = levs))
-        
+
         box_cols <- c("white", cols[seq(10, 90, length.out = max(1, max_n))])
         names(box_cols) <- as.character(levs)
-        
+
         p <- ggplot(
           heat_df,
-          aes(x = AA_mutation, y = AA_pos_Ecoli, fill = fill_val,
-              tooltip = tooltip_txt, data_id = tile_id)
+          aes(
+            x = AA_mutation, y = AA_pos_Ecoli, fill = fill_val,
+            tooltip = tooltip_txt, data_id = tile_id
+          )
         ) +
           ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
           scale_x_discrete(position = "bottom", drop = FALSE) +
@@ -675,14 +702,16 @@ function(input, output, session) {
           ))
       } else {
         heat_df <- heat_df |> mutate(fill_val = n_species)
-        
+
         vals <- c(0, seq(1, max_n, length.out = length(cols)))
         vals_scaled <- vals / max_n
-        
+
         p <- ggplot(
           heat_df,
-          aes(x = AA_mutation, y = AA_pos_Ecoli, fill = fill_val,
-              tooltip = tooltip_txt, data_id = tile_id)
+          aes(
+            x = AA_mutation, y = AA_pos_Ecoli, fill = fill_val,
+            tooltip = tooltip_txt, data_id = tile_id
+          )
         ) +
           ggiraph::geom_tile_interactive(color = "grey80", linewidth = 0.2) +
           scale_x_discrete(position = "bottom", drop = FALSE) +
@@ -698,9 +727,9 @@ function(input, output, session) {
           guides(fill = guide_colourbar(
             barheight = grid::unit(bar_h_cm, "cm"),
             barwidth  = grid::unit(0.6, "cm")
-          )) 
+          ))
       }
-      
+
       p <- p +
         labs(
           x = "Amino acid",
@@ -711,18 +740,18 @@ function(input, output, session) {
         theme(
           axis.text.x = element_text(angle = 90)
         )
-      
-      
+
+
       list(
         plot = p,
         n_pos = n_pos,
         height_in = max(5, min(60, 0.5 * n_pos))
       )
     }
-    
+
     output$heatmap_pos_mut <- ggiraph::renderGirafe({
       hm <- make_heatmap_pos_mut()
-      
+
       ggiraph::girafe(
         ggobj = hm$plot,
         width_svg = hm$height_in,
@@ -751,34 +780,34 @@ function(input, output, session) {
           opts_toolbar(position = "topright", saveaspng = FALSE)
         )
     })
-    
+
     # In the UI, my output id is "heatmap_pos_mut" => Shiny will create an input input$heatmap_pos_mut_selected
-    
+
     # Clicked tile -> species list
-    
+
     selected_tile_species <- reactive({
       df <- cluster_plotting_df()
       req(df, nrow(df) > 0)
-      
+
       sel_id <- input$heatmap_pos_mut_selected
       req(!is.null(sel_id), nzchar(sel_id))
-      
+
       parts <- strsplit(sel_id, " ")[[1]]
       req(length(parts) >= 2)
-      
+
       pos <- suppressWarnings(as.numeric(parts[1]))
       aa <- parts[2]
       req(!is.na(pos), nzchar(aa))
-      
+
       spp <- df |>
         filter(AA_pos_Ecoli == pos, AA_mutation == aa) |>
         distinct(Species) |>
         arrange(Species)
-      
+
       list(pos = pos, aa = aa, species = spp)
     })
-    
-    
+
+
     output$selected_tile_info <- renderUI({
       x <- selected_tile_species()
       tags$div(
@@ -789,12 +818,12 @@ function(input, output, session) {
         )
       )
     })
-    
-    
+
+
     output$selected_tile_species_table <- DT::renderDT({
       x <- selected_tile_species()
       spp <- x$species
-      
+
       DT::datatable(
         spp,
         rownames = FALSE,
@@ -805,18 +834,17 @@ function(input, output, session) {
         )
       )
     })
-    
+
     ## ---- Download ----
     output$download_mutation_freq <- downloadHandler(
       filename = function() {
         paste0("RIFRMap_frequency_heatmap.", input$mutation_freq_format)
       },
-      
       content = function(file) {
         hm <- make_heatmap_pos_mut()
-        
+
         fmt <- input$mutation_freq_format
-        
+
         ggsave(
           filename = file,
           plot = hm$plot,
@@ -828,9 +856,7 @@ function(input, output, session) {
         )
       }
     )
-    
   }
-  
 
 
   # ---- Dataset Comparison Tab ----
@@ -843,13 +869,13 @@ function(input, output, session) {
       }
       length(unique(na.omit(df$source)))
     })
-    
+
     make_mutation_upset_plot <- function() {
       req(input$apply_filters > 0)
-      
+
       df0 <- combined_rows()
       req(df0, nrow(df0) > 0)
-      
+
       df <- df0 |>
         transmute(
           AA_pos_Ecoli = as.character(AA_pos_Ecoli),
@@ -858,9 +884,9 @@ function(input, output, session) {
         ) |>
         filter(!is.na(AA_pos_Ecoli), !is.na(AA_mutation), !is.na(source)) |>
         distinct()
-      
+
       req(nrow(df) > 0)
-      
+
       upset_df <- df |>
         distinct(AA_mutation, AA_pos_Ecoli, source) |>
         group_by(AA_mutation, AA_pos_Ecoli) |>
@@ -868,30 +894,33 @@ function(input, output, session) {
           sources = list(sort(unique(source))),
           .groups = "drop"
         )
-      
+
       req(nrow(upset_df) > 0)
-      
+
       ggplot(upset_df, aes(x = sources)) +
         geom_bar() +
         ggupset::scale_x_upset() +
         labs(y = "Number of mutations", x = "Source(s)") +
         plotting_theme(legend = "none")
     }
-    
-    output$mutationUpset <- renderPlot({
-      make_mutation_upset_plot()
-    }, res = 120)
-    
+
+    output$mutationUpset <- renderPlot(
+      {
+        make_mutation_upset_plot()
+      },
+      res = 120
+    )
+
     output$upset_container <- renderUI({
       df <- combined_rows()
-      
+
       if (is.null(df) || nrow(df) == 0) {
         return(ui_message("No data to show."))
       }
-      
+
       ns <- n_sources()
       w <- ns * 300
-      
+
       div(
         style = "
       display: flex;
@@ -899,27 +928,24 @@ function(input, output, session) {
       overflow-x: auto;
       padding: 10px 0;
     ",
-        
         div(
           style = sprintf("width: %dpx;", w),
-          
           spin(plotOutput("mutationUpset", height = "450px", width = "100%"))
         )
       )
     })
-    
+
     output$download_sources_upset <- downloadHandler(
       filename = function() {
         paste0("RIFRMap_cross_dataset_overlap_barplot.", input$sources_upset_format)
       },
-      
       content = function(file) {
         ns <- n_sources()
         req(ns)
-        
-        w_in <- max(8, ns * 3)  # scale with sources
+
+        w_in <- max(8, ns * 3) # scale with sources
         h_in <- 5
-        
+
         ggsave(
           filename = file,
           plot = make_mutation_upset_plot(),
@@ -931,8 +957,6 @@ function(input, output, session) {
         )
       }
     )
-   
-    
   }
 
   ## ---- Heatmap ----
@@ -1118,12 +1142,12 @@ function(input, output, session) {
     ### ---- Heatmap ----
     make_mutation_heatmap_plot <- function(legend_position) {
       req(input$apply_filters > 0)
-      
+
       df <- hm_plotting_df()
       validate(need(!is.null(df) && nrow(df) > 0, "No data to show."))
-      
+
       pos_levels <- selected_pos()
-      
+
       clickable_levels <- get_clickable_levels(df)
       sel <- sync_selected_sources(clickable_levels)
 
@@ -1131,16 +1155,16 @@ function(input, output, session) {
       if (length(keep_levels) == 0) {
         keep_levels <- clickable_levels
       }
-      
-      
+
+
       df <- df |>
         filter(source %in% keep_levels)
-      
+
       base_grid <- tidyr::expand_grid(
         AA_pos_Ecoli = pos_levels,
         AA_mutation  = all_AAs_sorted
       )
-      
+
       df_fill <- base_grid |>
         left_join(df, by = c("AA_pos_Ecoli", "AA_mutation")) |>
         group_by(AA_pos_Ecoli, AA_mutation) |>
@@ -1152,7 +1176,7 @@ function(input, output, session) {
           AA_pos_Ecoli = factor(AA_pos_Ecoli, levels = pos_levels),
           source       = factor(source)
         )
-      
+
       df_strip <- df_fill |>
         mutate(
           x_fac = factor(as.character(AA_mutation), levels = all_AAs_sorted),
@@ -1172,7 +1196,7 @@ function(input, output, session) {
           xmax = (x_num - 0.5) + i / k
         ) |>
         ungroup()
-      
+
       df_tile_border <- df_strip |>
         distinct(x_num, y_num) |>
         mutate(
@@ -1181,7 +1205,7 @@ function(input, output, session) {
           ymin = y_num - 0.5,
           ymax = y_num + 0.5
         )
-      
+
       ggplot(df_strip) +
         ggiraph::geom_rect_interactive(
           aes(
@@ -1230,12 +1254,12 @@ function(input, output, session) {
         ) +
         plotting_theme(legend = legend_position)
     }
-    
+
     output$mutationHeatmap <- ggiraph::renderGirafe({
       tryCatch(
         {
           p <- make_mutation_heatmap_plot(legend_position = "none")
-          
+
           ggiraph::girafe(
             ggobj = p,
             width_svg = 12,
@@ -1258,11 +1282,12 @@ function(input, output, session) {
         },
         error = function(e) {
           notify_reselect("heatmap")
-          ggiraph::girafe(ggobj = ggplot() + theme_void())
+          ggiraph::girafe(ggobj = ggplot() +
+            theme_void())
         }
       )
     })
-    
+
 
     ### ---- Container ----
     output$heatmap_container <- renderUI({
@@ -1288,16 +1313,15 @@ function(input, output, session) {
       )
     })
   }
-  
+
   ### ---- Download ----
   output$download_sources_hm <- downloadHandler(
     filename = function() {
       paste0("RIFRMap_cross_dataset_heatmap.", input$sources_hm_format)
     },
-    
     content = function(file) {
       p <- make_mutation_heatmap_plot(legend_position = "right")
-      
+
       ggsave(
         filename = file,
         plot = p,
@@ -1311,15 +1335,14 @@ function(input, output, session) {
   )
 
 
-
   # ---- Summary ----
   mutation_data <- reactive({
     df <- combined_rows()
     req(!is.null(df), nrow(df) > 0)
-    
+
     if (!"Ref_codes" %in% names(df)) df$Ref_codes <- NA_character_
     if (!"PMID" %in% names(df)) df$PMID <- NA_character_
-    
+
     pmid_lookup <- refs_paper |>
       transmute(
         PMID = as.character(PMID),
@@ -1327,19 +1350,19 @@ function(input, output, session) {
       ) |>
       filter(!is.na(PMID), PMID != "") |>
       distinct(PMID, .keep_all = TRUE)
-    
+
     df_clean <- df |>
       mutate(
         Ref_codes = na_if(trimws(as.character(Ref_codes)), ""),
         PMID      = na_if(trimws(as.character(PMID)), "")
       )
-    
+
     df_joined <- df_clean |>
       mutate(.row_id = dplyr::row_number()) |>
       tidyr::separate_rows(PMID, sep = "\\s*;\\s*") |>
       mutate(PMID = dplyr::na_if(trimws(PMID), "")) |>
       left_join(pmid_lookup, by = "PMID")
-    
+
     pmid_refcodes <- df_joined |>
       dplyr::group_by(.row_id) |>
       dplyr::summarise(
@@ -1351,7 +1374,7 @@ function(input, output, session) {
         Ref_code_from_pmid = na_if(Ref_code_from_pmid, ""),
         PMID = na_if(PMID, "")
       )
-    
+
     df_clean |>
       mutate(.row_id = dplyr::row_number()) |>
       left_join(pmid_refcodes, by = ".row_id", suffix = c("", "_collapsed")) |>
@@ -1384,7 +1407,7 @@ function(input, output, session) {
         PMID
       )
   })
-  
+
   output$summary_table <- render_gt({
     df <- mutation_data()
 
@@ -1448,9 +1471,9 @@ function(input, output, session) {
         y = "Number of observations"
       )
   })
-  
+
   # ----- Data -----
-  
+
   refcode_links_tooltip <- function(ref_codes, ref_table,
                                     code_col = "Ref_code",
                                     url_col = "DOI",
@@ -1460,32 +1483,32 @@ function(input, output, session) {
       as.character(ref_table[[url_col]]),
       as.character(ref_table[[code_col]])
     )
-    
+
     tip_map <- setNames(
       as.character(ref_table[[title_col]]),
       as.character(ref_table[[code_col]])
     )
-    
+
     vapply(as.character(ref_codes), function(s) {
       s <- trimws(s)
       if (!nzchar(s) || is.na(s)) {
         return("")
       }
-      
+
       # split codes (comma/semicolon separators only)
       codes <- unlist(strsplit(s, "\\s*[,;]\\s*"))
       codes <- trimws(codes)
       codes <- codes[nzchar(codes)]
-      
+
       out <- vapply(codes, function(code) {
         url <- url_map[code]
         tip <- tip_map[code]
-        
+
         code_esc <- htmltools::htmlEscape(code)
         tip_esc <- htmltools::htmlEscape(ifelse(is.null(tip) || is.na(tip) || !nzchar(tip),
-                                                code, tip
+          code, tip
         ))
-        
+
         if (!is.null(url) && !is.na(url) && nzchar(url)) {
           sprintf(
             '<a href="%s" target="_blank" rel="noopener" title="%s">%s</a>',
@@ -1497,17 +1520,17 @@ function(input, output, session) {
           sprintf('<span title="%s">%s</span>', tip_esc, code_esc)
         }
       }, character(1))
-      
+
       paste(out, collapse = "; ")
     }, character(1))
   }
-  
+
   all_rows <- reactive({
     bind_rows(
       list(
-        CARD    = card,
+        CARD = card,
         CRyPTIC = cryptic,
-        DRAGdb  = dragdb,
+        DRAGdb = dragdb,
         "Yang-RIF" = yang,
         RifReport = rifreport,
         PointFinder = pointfinder,
@@ -1516,14 +1539,14 @@ function(input, output, session) {
       .id = "source"
     )
   })
-  
+
   all_mutation_data <- reactive({
     df <- all_rows()
     req(!is.null(df), nrow(df) > 0)
-    
+
     if (!"Ref_codes" %in% names(df)) df$Ref_codes <- NA_character_
     if (!"PMID" %in% names(df)) df$PMID <- NA_character_
-    
+
     pmid_lookup <- refs_paper |>
       dplyr::transmute(
         PMID = as.character(PMID),
@@ -1531,19 +1554,19 @@ function(input, output, session) {
       ) |>
       dplyr::filter(!is.na(PMID), PMID != "") |>
       dplyr::distinct(PMID, .keep_all = TRUE)
-    
+
     df_clean <- df |>
       dplyr::mutate(
         Ref_codes = na_if(trimws(as.character(Ref_codes)), ""),
         PMID      = na_if(trimws(as.character(PMID)), "")
       )
-    
+
     df_joined <- df_clean |>
       dplyr::mutate(.row_id = dplyr::row_number()) |>
       tidyr::separate_rows(PMID, sep = "\\s*;\\s*") |>
       dplyr::mutate(PMID = dplyr::na_if(trimws(PMID), "")) |>
       dplyr::left_join(pmid_lookup, by = "PMID")
-    
+
     pmid_refcodes <- df_joined |>
       dplyr::group_by(.row_id) |>
       dplyr::summarise(
@@ -1555,7 +1578,7 @@ function(input, output, session) {
         Ref_code_from_pmid = na_if(Ref_code_from_pmid, ""),
         PMID = na_if(PMID, "")
       )
-    
+
     df_clean |>
       dplyr::mutate(.row_id = dplyr::row_number()) |>
       dplyr::left_join(pmid_refcodes, by = ".row_id", suffix = c("", "_collapsed")) |>
@@ -1588,26 +1611,26 @@ function(input, output, session) {
         PMID
       )
   })
-  
+
   all_references <- reactive({
     df <- all_mutation_data()
     req(!is.null(df), nrow(df) > 0)
-    
+
     ref_codes <- df$Ref_codes |>
       as.character() |>
       trimws()
-    
+
     ref_codes <- unlist(strsplit(ref_codes, "\\s*[,;]\\s*"))
     ref_codes <- ref_codes[nzchar(ref_codes)]
     ref_codes <- unique(ref_codes)
-    
+
     refs_paper |>
       dplyr::filter(Ref_code %in% ref_codes)
   })
-  
+
   output$mutation_table <- DT::renderDataTable({
     data <- all_mutation_data()
-    
+
     data <- data |>
       dplyr::mutate(Ref_codes = refcode_links_tooltip(
         Ref_codes,
@@ -1617,7 +1640,7 @@ function(input, output, session) {
         title_col = "Full_ref"
       )) |>
       dplyr::select(-PMID)
-    
+
     DT::datatable(
       data,
       escape = FALSE,
@@ -1625,17 +1648,17 @@ function(input, output, session) {
       options = list(scrollX = TRUE, pageLength = 25)
     )
   })
-  
+
   output$download_mutations <- downloadHandler(
     filename = function() paste0("RIFRMap_mutation_table_", APP_VERSION, "_", Sys.Date(), ".csv"),
     content = function(file) {
       readr::write_csv(all_mutation_data(), file)
     }
   )
-  
+
   output$ref_table <- DT::renderDataTable({
     data <- all_references()
-    
+
     DT::datatable(
       data,
       escape = FALSE,
@@ -1643,7 +1666,7 @@ function(input, output, session) {
       options = list(scrollX = TRUE, pageLength = 15)
     )
   })
-  
+
   output$download_refs <- downloadHandler(
     filename = function() paste0("RIFRMap_reference_table_", APP_VERSION, "_", Sys.Date(), ".csv"),
     content = function(file) {
