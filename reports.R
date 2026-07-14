@@ -21,7 +21,36 @@ pos_min        <- min(all_data$AA_pos_Ecoli, na.rm = TRUE)
 pos_max        <- max(all_data$AA_pos_Ecoli, na.rm = TRUE)
 
 # -----------------------------------------------------------------------------
-# 3. Per-source summary
+# 3. Top species by unique mutations
+# -----------------------------------------------------------------------------
+top_species <- all_data |>
+  mutate(mut_id = paste(AA_pos_Ecoli, AA_mutation)) |>
+  group_by(species) |>
+  summarise(n_unique_mutations = n_distinct(mut_id), .groups = "drop") |>
+  arrange(desc(n_unique_mutations)) |>
+  slice_head(n = 5)
+
+top_species_sources <- all_data |>
+  filter(species %in% top_species$species) |>
+  group_by(species) |>
+  summarise(sources = paste(sort(unique(source)), collapse = ", "), .groups = "drop")
+
+top_species <- top_species |>
+  left_join(top_species_sources, by = "species")
+
+top_species_text <- paste(
+  sprintf(
+    "    %d. %-45s %d\n       Sources: %s",
+    seq_len(nrow(top_species)),
+    top_species$species,
+    top_species$n_unique_mutations,
+    top_species$sources
+  ),
+  collapse = "\n\n"
+)
+
+# -----------------------------------------------------------------------------
+# 4. Per-source summary
 # -----------------------------------------------------------------------------
 per_source <- all_data |>
   group_by(source) |>
@@ -36,7 +65,7 @@ per_source <- all_data |>
                           "RefGenesCatalog", "Curated", "Yang")))
 
 # -----------------------------------------------------------------------------
-# 4. Cross-source overlap
+# 5. Cross-source overlap
 # -----------------------------------------------------------------------------
 overlap <- all_data |>
   mutate(mut_id = paste(AA_pos_Ecoli, AA_mutation)) |>
@@ -65,7 +94,7 @@ all7_text <- if (length(all7_mutations) == 0) {
 }
 
 # -----------------------------------------------------------------------------
-# 5. Per-source exclusive mutations (not in any other source)
+# 6. Per-source exclusive mutations (not in any other source)
 # -----------------------------------------------------------------------------
 mut_source_membership <- all_data |>
   mutate(mut_id = paste(AA_pos_Ecoli, AA_mutation)) |>
@@ -100,7 +129,7 @@ per_source_text <- paste(
 )
 
 # -----------------------------------------------------------------------------
-# 6. Build and write report
+# 7. Build and write report
 # -----------------------------------------------------------------------------
 report <- paste0(
   "RIFRMap - Data Summary Report\n",
@@ -113,9 +142,14 @@ report <- paste0(
   "    Total unique E. coli positions covered      : ", n_positions, "\n",
   "    Total unique mutations                      : ", n_AA_mutations, "\n",
   "    E. coli position range                      : ", pos_min, " -- ", pos_max, "\n\n",
-  
+
   "--------------------------------------------------------------------\n\n",
-  
+
+  "TOP 5 SPECIES BY UNIQUE MUTATIONS\n",
+  top_species_text, "\n\n",
+
+  "--------------------------------------------------------------------\n\n",
+
   "PER SOURCE\n\n",
   per_source_text, "\n\n",
   

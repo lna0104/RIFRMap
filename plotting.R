@@ -25,8 +25,7 @@ source_palette <- c(
   RifReport = "#bae1ff",
   Yang    = "#cdecc6",
   PointFinder     = "#C8AAAA",  
-  "Reference Gene Catalog" = "#DEE791",  
-  None    = "grey85"
+  "Reference Gene Catalog" = "#DEE791"
 )
 
 # A. Number of unique mutations per source
@@ -69,43 +68,51 @@ plot_n_species <- ggplot(plot_data,
     axis.title = element_text(face = "bold")
   )
 
-# C. Number of mutations per species, stacked by source — top 25 species
-# Summarise per species × source
-species_data <- all_data |>
-  group_by(species, source) |>
-  summarise(
-    n_unique_pairs = n_distinct(paste(AA_pos_Ecoli, AA_mutation, sep = "_")),
-    .groups = "drop"
-  )
+# C. Number of mutations per species, stacked by source — top 25 species by
+# TRUE unique mutation count (deduplicated across sources, matching the
+# per-species counts in reports.R). 
+mut_species_source <- all_data |>
+  mutate(mut_id = paste(AA_pos_Ecoli, AA_mutation, sep = "_")) |>
+  distinct(species, mut_id, source)
 
-# Identify top 25 species by total mutations
-top25_species <- species_data |>
-  group_by(species) |>
-  summarise(total = sum(n_unique_pairs), .groups = "drop") |>
+mut_species_totals <- mut_species_source |>
+  group_by(species, mut_id) |>
+  summarise(n_sources = n_distinct(source), primary_source = dplyr::first(source), .groups = "drop")
+
+species_data <- mut_species_totals |>
+  mutate(source = if_else(n_sources > 1, "Multiple", primary_source)) |>
+  count(species, source, name = "n_unique_pairs")
+
+# Identify top 25 species by true unique mutation total
+top25_species <- mut_species_totals |>
+  count(species, name = "total") |>
   slice_max(total, n = 25) |>
   arrange(desc(total)) |>
   pull(species)
+
+source_palette_c <- c(source_palette, "Multiple" = "#404040")
+source_palette_c <- source_palette_c[names(source_palette_c) != "None"]
 
 # Filter and set factor levels (ordered by total, descending)
 species_data_top25 <- species_data |>
   filter(species %in% top25_species) |>
   mutate(
     species = factor(species, levels = top25_species),
-    source  = factor(source, levels = names(source_palette))
+    source  = factor(source, levels = names(source_palette_c))
   )
 
 plot_species <- ggplot(
   species_data_top25,
   aes(x = species, y = n_unique_pairs, fill = source)
 ) +
-  geom_col(width = 0.7, show.legend = FALSE) +
+  geom_col(width = 0.7) +
   labs(
     x    = "Species",
     y    = "Number of mutations",
     fill = "Source"
   ) +
   theme_classic(base_size = 12) +
-  scale_fill_manual(values = source_palette, drop = FALSE) +
+  scale_fill_manual(values = source_palette_c, drop = FALSE) +
   theme(
     axis.text.x     = element_text(angle = 45, hjust = 1, face = "italic"),
     plot.margin     = margin(t = 5.5, r = 5.5, b = 5.5, l = 40),
