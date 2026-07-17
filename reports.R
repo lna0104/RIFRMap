@@ -3,7 +3,7 @@ library(dplyr)
 library(tidyr)
 library(readr)
 
-file_name <- "processed_data/RIFRMap_data_summary.txt"
+file_name <- "output/RIFRMap_data_summary.txt"
 
 # -----------------------------------------------------------------------------
 # 1. Load data
@@ -170,3 +170,4 @@ report <- paste0(
 write_file(report, file_name)
 cat(report)
 cat(paste0("\nThis summary has been saved in file ", file_name, ".\n"))
+
