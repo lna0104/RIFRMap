@@ -7,8 +7,9 @@ library(RColorBrewer)
 
 all_data <- readRDS("processed_data/allData.rds") |>
   mutate(
-    genus = stringr::word(species, 1)
-  ) 
+    genus = stringr::word(species, 1),
+    source = if_else(source == "Yang", "Yang-RIF", source)
+  )
 
 plot_data <- all_data |>
   group_by(source) |>
@@ -23,7 +24,7 @@ source_palette <- c(
   CRyPTIC = "#ffdfba",
   DRAGdb  = "#fbb4ae",
   RifReport = "#bae1ff",
-  Yang    = "#cdecc6",
+  "Yang-RIF" = "#cdecc6",
   PointFinder     = "#C8AAAA",  
   "Reference Gene Catalog" = "#DEE791"
 )
