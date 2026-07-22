@@ -20,3 +20,24 @@ yang,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-11
 rifreport,failed,"no applicable method for 'filter' applied to an object of class ""list"" (using last-known-good processed data, if any)",NA,2026-07-11T10:25:28Z
 pointfinder,skipped,raw data unchanged since last successful run,NA,2026-07-11T10:25:28Z
 refgenes,skipped,raw data unchanged since last successful run,NA,2026-07-11T10:25:28Z
+card,skipped,raw data unchanged since last successful run,NA,2026-07-21T13:19:08Z
+cryptic,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-21T13:19:08Z
+dragdb,skipped,raw data unchanged since last successful run,NA,2026-07-21T13:19:08Z
+yang,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-21T13:19:08Z
+rifreport,failed,"no applicable method for 'filter' applied to an object of class ""list"" (using last-known-good processed data, if any)",NA,2026-07-21T13:19:08Z
+pointfinder,skipped,raw data unchanged since last successful run,NA,2026-07-21T13:19:08Z
+refgenes,skipped,raw data unchanged since last successful run,NA,2026-07-21T13:19:08Z
+card,skipped,raw data unchanged since last successful run,NA,2026-07-22T06:12:18Z
+cryptic,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-22T06:12:18Z
+dragdb,skipped,raw data unchanged since last successful run,NA,2026-07-22T06:12:18Z
+yang,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-22T06:12:18Z
+rifreport,failed,"no applicable method for 'filter' applied to an object of class ""list"" (using last-known-good processed data, if any)",NA,2026-07-22T06:12:18Z
+pointfinder,skipped,raw data unchanged since last successful run,NA,2026-07-22T06:12:18Z
+refgenes,skipped,raw data unchanged since last successful run,NA,2026-07-22T06:12:18Z
+card,skipped,raw data unchanged since last successful run,NA,2026-07-22T07:10:20Z
+cryptic,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-22T07:10:20Z
+dragdb,skipped,raw data unchanged since last successful run,NA,2026-07-22T07:10:20Z
+yang,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-22T07:10:20Z
+rifreport,failed,"no applicable method for 'filter' applied to an object of class ""list"" (using last-known-good processed data, if any)",NA,2026-07-22T07:10:20Z
+pointfinder,skipped,raw data unchanged since last successful run,NA,2026-07-22T07:10:20Z
+refgenes,skipped,raw data unchanged since last successful run,NA,2026-07-22T07:10:20Z

@@ -90,7 +90,7 @@ Bartonella henselae,FDAARGOS_1462,TRUE,rpoB,ASM1993092v1,rpoB_Bartonella_hensela
 Bartonella krasnovii,OE 1-1,TRUE,rpoB,ASM360634v3,rpoB_Bartonella_krasnovii_OE_1-1,NZ_CP042965.1,Auto-fetched via NCBI assembly search
 Chlamydia pneumoniae,TW-183,TRUE,rpoB,ASM720v1,rpoB_Chlamydia_pneumoniae_TW-183,NC_005043.1,Auto-fetched via NCBI assembly search
 Lactobacillus delbrueckii,DSM 26046,TRUE,rpoB,ASM188892v1,rpoB_Lactobacillus_delbrueckii_DSM_26046,NZ_CP018218.1,Auto-fetched via NCBI assembly search
-Mycobacterium africanum,NA,FALSE,rpoB,MAF01v1,rpoB_Mycobacterium_africanum_NA,NZ_LR993210.1,Auto-fetched via NCBI assembly search
+Mycobacterium africanum,GM041182,FALSE,rpoB,ASM25335v1,rpoB_Mycobacterium_africanum_GM041182,NC_015758.1,
 Pseudomonas stutzeri,F2a,TRUE,rpoB,ASM1970453v1,rpoB_Pseudomonas_stutzeri_F2a,NZ_AP024722.1,Auto-fetched via NCBI assembly search
 Rhodococcus equi,DSSKP-R-001,TRUE,rpoB,ASM301367v1,rpoB_Rhodococcus_equi_DSSKP-R-001,NZ_CP027795.1,Auto-fetched via NCBI assembly search
 Shewanella decolorationis,sesselensis,TRUE,rpoB,ASM435430v1,rpoB_Shewanella_decolorationis_sesselensis,NZ_CP037898.1,Auto-fetched via NCBI assembly search
