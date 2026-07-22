@@ -9,37 +9,40 @@ RIFRMap is an interactive Shiny application for exploring rifampicin (RIF) resis
 
 ## Installation & Usage
 
-RIFRMap requires a working R installation and the R package dependencies listed in `install_deps.R`.
+RIFRMap requires a working R installation and the R package dependencies listed in `code/install_deps.R`.
 
 ```r
 # Install required dependencies
-source("install_deps.R")
+source("code/install_deps.R")
 
 # Launch the application
-shiny::runApp()
+shiny::runApp("code")
 ```
 
 ## Implementation
 
-RIFRMap is implemented as an R Shiny application, organised into a data-processing pipeline and a Shiny front end.
+RIFRMap is implemented as an R Shiny application, organised into a data-processing pipeline and a Shiny front end. All source code (pipeline scripts, the Shiny app, and its front-end assets) lives under `code/`; `raw_data/`, `processed_data/`, `output/`, and `plots/` sit at the repo root alongside it, since they're data/generated artifacts rather than source. Pipeline scripts are run with the working directory set to the repo root (e.g. `source("code/update_all.R")`); the Shiny app's working directory is `code/` at runtime, set automatically by `shiny::runApp("code")`.
 
 **Data.** Raw records retrieved from each source are stored under `raw_data/`; the standardised, analysis-ready datasets produced from them are stored under `processed_data/`.
 
-**Data-processing pipeline.** A set of R scripts retrieve, validate, and standardise mutation records from each of the seven sources onto the canonical *E. coli* numbering scheme:
+**Data-processing pipeline.** A set of R scripts retrieve, validate, and standardise mutation records from each of the seven sources onto the canonical *E. coli* numbering scheme. Refreshing data is a two-step, validate-then-release process: `source("code/validate_all.R")` downloads/processes everything and writes a validation report without publishing anything, then `source("code/update_all.R")` re-validates and, only if the entire run is clean, publishes it.
 
-- `install_deps.R` — installs required R package dependencies
-- `update_data.R` — downloads and updates raw datasets from their original sources
-- `process_refseqs.R` — generates and maintains the reference-sequence coordinate map used for cross-species standardisation
-- `process_data.R` — cleans, filters, and standardises each raw dataset onto the canonical numbering scheme
-- `update_all.R` — orchestrates a full, end-to-end data refresh across all seven sources
-- `helpers.R` — shared utility functions used throughout the pipeline
+- `code/install_deps.R` — installs required R package dependencies
+- `code/update_data.R` — downloads and updates raw datasets from their original sources
+- `code/process_refseqs.R` — generates and maintains the reference-sequence coordinate map used for cross-species standardisation
+- `code/process_data.R` — cleans, filters, and standardises each raw dataset onto the canonical numbering scheme
+- `code/pipeline_run.R` — shared download/process/validate core used by both `validate_all.R` and `update_all.R`
+- `code/validate_all.R` — Stage 1: validates a full refresh without publishing anything
+- `code/update_all.R` — Stage 2: re-validates, then publishes if and only if the whole run is clean
+- `code/update_report.R` — validation checks, plus the validation/release reports and changelog
+- `code/helpers.R` — shared utility functions used throughout the pipeline
 
 **Shiny application.** The processed data are loaded once at application start-up and served through:
 
-- `ui.R` — user interface
-- `server.R` — server logic and reactive behaviour
-- `global.R` — shared objects, themes, and data loading
-- `www/` — front-end assets (CSS, HTML, JavaScript)
+- `code/ui.R` — user interface
+- `code/server.R` — server logic and reactive behaviour
+- `code/global.R` — shared objects, themes, and data loading
+- `code/www/` — front-end assets (CSS, HTML, JavaScript)
 
 ## Data Sources
 

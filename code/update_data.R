@@ -8,7 +8,7 @@ library(rvest)
 library(gitcreds)
 library(Biostrings)
 
-source("helpers.R")
+source("code/helpers.R")
 
 # ----- Helper functions -----
 
@@ -527,7 +527,8 @@ update_rifreport_download <- function(token) {
 update_rifreport_finalize <- function(raw_mutations, refs, seqs, coordinates) {
   result <- list(
     dataset = "rifreport", status = "error", message = NA_character_,
-    path = "raw_data/rifreport_data.csv", rows = NA_integer_
+    path = "raw_data/rifreport_data.csv", rows = NA_integer_,
+    excluded_rows = NULL
   )
   tryCatch(
     {
@@ -535,9 +536,23 @@ update_rifreport_finalize <- function(raw_mutations, refs, seqs, coordinates) {
         stop("coordinates not available - run process_refseqs.R's coordinate logic first")
       }
 
-      rifreport_mutations_clean <- raw_mutations |>
-        fillMutationsTable(refs, seqs, coordinates) |>
+      rifreport_filled <- raw_mutations |>
+        fillMutationsTable(refs, seqs, coordinates)
+
+      rifreport_mutations_clean <- rifreport_filled |>
         filter(!is.na(AA_mut_name_Ecoli))
+
+      # Rows fillMutationsTable() couldn't resolve carry their own reason in
+      # `Warning` (e.g. "No reference sequence available") - surfaced to the
+      # caller instead of silently discarded, for run_validation_checks()
+      # (update_report.R) to fold into the Stage 1 validation report.
+      excluded <- rifreport_filled |>
+        filter(is.na(AA_mut_name_Ecoli)) |>
+        dplyr::select(Species, Strain, Warning) |>
+        dplyr::distinct()
+      if (nrow(excluded) > 0) {
+        result$excluded_rows <- excluded
+      }
 
       if (nrow(rifreport_mutations_clean) == 0) {
         stop("No RifReport rows could be mapped to E. coli coordinates")
@@ -565,7 +580,7 @@ update_rifreport_finalize <- function(raw_mutations, refs, seqs, coordinates) {
 # update_all.R sets `.pipeline_orchestrating` before sourcing this file, so
 # this block is skipped there and only the functions above get defined.
 if (!exists(".pipeline_orchestrating", inherits = FALSE)) {
-  source("process_refseqs.R")
+  source("code/process_refseqs.R")
 
   refs <- read_csv("raw_data/rpoB_references.csv", show_col_types = FALSE)
   seqs <- readDNAStringSet("raw_data/rpoB_references.fasta")

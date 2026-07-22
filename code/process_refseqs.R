@@ -4,7 +4,7 @@ library(ALJEbinf)
 library(rentrez)
 library(openssl)
 
-source("helpers.R")
+source("code/helpers.R")
 
 # ---- Reference discovery & auto-fetch ----
 #

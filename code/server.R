@@ -1628,6 +1628,24 @@ function(input, output, session) {
       dplyr::filter(Ref_code %in% ref_codes)
   })
 
+  output$changelog_summary <- renderUI({
+    if (is.null(CHANGELOG) || nrow(CHANGELOG) == 0) {
+      return(NULL)
+    }
+
+    latest_date <- max(CHANGELOG$run_date)
+    latest <- CHANGELOG |> dplyr::filter(run_date == latest_date)
+
+    wellPanel(
+      h4(paste0("What's new — release ", latest_date)),
+      tags$ul(
+        lapply(seq_len(nrow(latest)), function(i) {
+          tags$li(tags$strong(latest$dataset[i]), ": ", latest$summary[i])
+        })
+      )
+    )
+  })
+
   output$mutation_table <- DT::renderDataTable({
     data <- all_mutation_data()
 

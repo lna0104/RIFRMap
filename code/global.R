@@ -40,37 +40,47 @@ get_dataset_date <- function(path) {
 # pipeline run regardless of which individual source(s) changed, so its
 # mtime is the one reliable signal for "when was the app's data last
 # regenerated" - derived automatically rather than hand-maintained.
-DATA_LAST_UPDATED <- get_dataset_date("processed_data/allData.rds")
+DATA_LAST_UPDATED <- get_dataset_date("../processed_data/allData.rds")
 
 DATASET_LAST_UPDATED <- list(
-  CARD        = get_dataset_date("processed_data/card.rds"),
-  CRYPTIC     = get_dataset_date("processed_data/cryptic.rds"),
-  DRAGDB      = get_dataset_date("processed_data/dragdb.rds"),
-  YANG        = get_dataset_date("processed_data/yang.rds"),
-  RIFREPORT   = get_dataset_date("processed_data/rifreport.rds"),
-  POINTFINDER = get_dataset_date("processed_data/pointfinder.rds"),
-  REFGENES    = get_dataset_date("processed_data/refgenes.rds")
+  CARD        = get_dataset_date("../processed_data/card.rds"),
+  CRYPTIC     = get_dataset_date("../processed_data/cryptic.rds"),
+  DRAGDB      = get_dataset_date("../processed_data/dragdb.rds"),
+  YANG        = get_dataset_date("../processed_data/yang.rds"),
+  RIFREPORT   = get_dataset_date("../processed_data/rifreport.rds"),
+  POINTFINDER = get_dataset_date("../processed_data/pointfinder.rds"),
+  REFGENES    = get_dataset_date("../processed_data/refgenes.rds")
 )
+
+# "What's new" history for the Data tab, written by update_all.R's
+# append_changelog() (see update_report.R) - one row per dataset that
+# actually changed in a given run. Absent until the first run that produces
+# a real change, so this must tolerate not existing yet.
+CHANGELOG <- if (file.exists("../processed_data/changelog.csv")) {
+  readr::read_csv("../processed_data/changelog.csv", show_col_types = FALSE)
+} else {
+  NULL
+}
 
 # ---- Load data ----
 
-card <- readRDS("processed_data/card.rds")
-cryptic <- readRDS("processed_data/cryptic.rds")
-dragdb <- readRDS("processed_data/dragdb.rds")
-yang <- readRDS("processed_data/yang.rds")
-rifreport <- readRDS("processed_data/rifreport.rds")
-pointfinder <- readRDS("processed_data/pointfinder.rds")
-refgenes <- readRDS("processed_data/refgenes.rds")
+card <- readRDS("../processed_data/card.rds")
+cryptic <- readRDS("../processed_data/cryptic.rds")
+dragdb <- readRDS("../processed_data/dragdb.rds")
+yang <- readRDS("../processed_data/yang.rds")
+rifreport <- readRDS("../processed_data/rifreport.rds")
+pointfinder <- readRDS("../processed_data/pointfinder.rds")
+refgenes <- readRDS("../processed_data/refgenes.rds")
 
-refs_seqs <- read_csv("raw_data/rpoB_references.csv", show_col_types = FALSE)
-refs_paper <- read_csv("processed_data/all_references.csv", show_col_types = FALSE) |>
+refs_seqs <- read_csv("../raw_data/rpoB_references.csv", show_col_types = FALSE)
+refs_paper <- read_csv("../processed_data/all_references.csv", show_col_types = FALSE) |>
   mutate(
     across(where(is.character), ~ iconv(.x, from = "", to = "UTF-8", sub = ""))
   )
 
-clusters <- read_csv("raw_data/clusters.csv", show_col_types = FALSE)
-seqs <- readDNAStringSet("raw_data/rpoB_references.fasta")
-load("processed_data/coordinates.RData")
+clusters <- read_csv("../raw_data/clusters.csv", show_col_types = FALSE)
+seqs <- readDNAStringSet("../raw_data/rpoB_references.fasta")
+load("../processed_data/coordinates.RData")
 
 # ----  Theme plot ----
 
@@ -931,5 +941,12 @@ source_palette <- c(
 
 # Deployment credentials are supplied locally via rsconnect::setAccountInfo()
 # (run interactively, never committed) before calling deployApp() below.
+# Since the repo's July 2026 reorg, this repo's own code/ directory holds
+# the app's source (this file's siblings + www/), while raw_data/ and
+# processed_data/ - both read by this file at startup - live one level up
+# at the repo root. Deploying just appDir="code" will NOT bundle those
+# sibling data directories; pass appFiles=... (or stage a combined copy)
+# so the deployed app can still find them. The path below is unrelated,
+# pre-existing local deployment staging - review before reusing.
 # library(rsconnect)
 # deployApp(appDir="code/RIFRMap/", server = "shinyapps.io")

@@ -6,7 +6,7 @@ library(Biostrings)
 library(rentrez)
 library(xml2)
 
-source("helpers.R")
+source("code/helpers.R")
 
 # Global settings and parameters:
 globsets <- list(
@@ -43,6 +43,12 @@ load_reference_context <- function() {
 # list(dataset=, status=c("ok","error"), message=, path=, rows=, data=),
 # the orchestrator can continue past one
 # source's failure and still combine whatever succeeded.
+#
+# None of these functions writes `data` to `path` themselves - update_all.R
+# persists it centrally, and only if the *entire* run passes validation
+# (see run_validation_checks() in update_report.R and
+# run_pipeline_validation()'s `is_clean` in pipeline_run.R) - a single
+# dataset's error blocks every dataset's commit this run, not just its own.
 #
 # The 4 sources that filter mutations to species with a known rpoB reference
 # (CARD, DRAGdb, PointFinder, Reference Gene Catalog) are split into a
@@ -110,8 +116,6 @@ process_cryptic <- function(ctx) {
       )
 
       if (nrow(cryptic_mapped_ecoli) == 0) stop("CRyPTIC produced zero mapped rows")
-
-      saveRDS(cryptic_mapped_ecoli, file = "processed_data/cryptic.rds")
 
       result$status <- "ok"
       result$message <- "Processed CRyPTIC data"
@@ -218,8 +222,6 @@ map_card <- function(parsed, ctx) {
 
       if (nrow(card_mapped_ecoli) == 0) stop("CARD produced zero mapped rows")
 
-      saveRDS(card_mapped_ecoli, file = "processed_data/card.rds")
-
       result$status <- "ok"
       result$message <- "Processed CARD data"
       result$rows <- nrow(card_mapped_ecoli)
@@ -303,8 +305,6 @@ map_dragdb <- function(parsed, ctx) {
 
       if (nrow(dragdb_mapped_ecoli) == 0) stop("DRAGdb produced zero mapped rows")
 
-      saveRDS(dragdb_mapped_ecoli, file = "processed_data/dragdb.rds")
-
       result$status <- "ok"
       result$message <- "Processed DRAGdb data"
       result$rows <- nrow(dragdb_mapped_ecoli)
@@ -347,8 +347,6 @@ process_yang <- function(ctx) {
       }
 
       if (nrow(yang_mut_list) == 0) stop("Yang produced zero rows")
-
-      saveRDS(yang_mut_list, file = "processed_data/yang.rds")
 
       result$status <- "ok"
       result$message <- "Processed Yang data"
@@ -438,8 +436,6 @@ process_rifreport <- function() {
 
       if (nrow(rifreport_processed) == 0) stop("RifReport produced zero rows")
 
-      saveRDS(rifreport_processed, file = "processed_data/rifreport.rds")
-
       result$status <- "ok"
       result$message <- "Processed RifReport data"
       result$rows <- nrow(rifreport_processed)
@@ -497,8 +493,6 @@ map_pointfinder <- function(parsed, ctx) {
         dplyr::select(-species_sq)
 
       if (nrow(pointfinder_mapped_ecoli) == 0) stop("PointFinder produced zero mapped rows")
-
-      saveRDS(pointfinder_mapped_ecoli, file = "processed_data/pointfinder.rds")
 
       result$status <- "ok"
       result$message <- "Processed PointFinder data"
@@ -574,8 +568,6 @@ map_refgenes <- function(parsed, ctx) {
         mutate(source = "Reference Gene Catalog")
 
       if (nrow(refgenes_mapped_ecoli) == 0) stop("Reference Gene Catalog produced zero mapped rows")
-
-      saveRDS(refgenes_mapped_ecoli, file = "processed_data/refgenes.rds")
 
       result$status <- "ok"
       result$message <- "Processed Reference Gene Catalog data"

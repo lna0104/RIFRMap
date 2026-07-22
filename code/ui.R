@@ -502,6 +502,7 @@ shinyUI(
       fluidRow(
         column(
           width = 12,
+          uiOutput("changelog_summary"),
           div(
             class = "table-header",
             h3("Mutation Data")
