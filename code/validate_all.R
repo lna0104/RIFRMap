@@ -39,8 +39,9 @@ if (result$is_clean) {
   )
 } else {
   message(
-    "Validation found ", result$n_failures, " processing failure(s) and ", result$n_errors,
-    " validation error(s) - see ", validation_report_path, ". Fix the underlying issue(s) and re-run ",
-    "source(\"code/validate_all.R\") until clean before releasing."
+    "Validation found ", result$n_failures, " processing failure(s) - see ",
+    validation_report_path, ". Fix the underlying issue(s) and re-run ",
+    "source(\"code/validate_all.R\") until clean before releasing. ",
+    "Any warnings in the report are informational and do not block a release."
   )
 }

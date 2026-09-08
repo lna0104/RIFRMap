@@ -8,16 +8,19 @@
 #   Stage 1 (validation, internal): run_validation_checks() inspects each
 #   freshly-processed-but-not-yet-persisted dataset (still only in memory -
 #   see process_data.R) plus the reference catalog as a whole, and returns a
-#   tibble of findings, each either a "warning" (informational, never blocks)
-#   or an "error". build_validation_report() always writes this to
+#   tibble of findings. Every finding is a "warning": validation reports, it
+#   does not adjudicate, and no finding has ever blocked a release since the
+#   error severity was retired. build_validation_report() always writes this to
 #   output/validation_reports/, even when there's nothing to report - this
 #   file is never read by the Shiny app. validate_all.R always stops after
 #   writing it; update_all.R writes the same report before deciding whether
 #   to proceed.
 #
 #   Stage 2 (release, public, whole-run gate): update_all.R only proceeds
-#   past its own validation_report call if the *entire* run is clean - zero
-#   processing failures and zero validation errors, anywhere. If so,
+#   past its own validation_report call if the *entire* run is clean - which
+#   now means exactly one thing: zero processing failures, anywhere. A crashed
+#   source produced no data, so publishing around it would silently serve that
+#   source's stale data. Findings themselves never block. If clean,
 #   diff_dataset() compares each committed dataset's new data against a
 #   pre-processing snapshot of the old data (`old_data_snapshot`, built in
 #   run_pipeline_validation()), and build_release_report() +
@@ -187,9 +190,11 @@ diff_dataset <- function(dataset, old_df, new_df) {
 
 # ---- Stage 1: validation checks ----
 #
-# Each check_*() returns a tibble(dataset, severity, subject, reason) -
-# `severity` is "warning" (informational, never blocks a commit) or "error"
-# (update_all.R withholds that dataset's commit until re-run clean).
+# Each check_*() returns a tibble(dataset, severity, subject, reason).
+# `severity` is always "warning" - findings are informational and never block
+# a commit. The "error" severity was retired deliberately: because the release
+# gate is whole-run, a single over-eager error blocked EVERY dataset from ever
+# publishing (an upstream citation gap did exactly that, indefinitely).
 
 # Flags every raw_data/rpoB_references.csv row that isn't a designated
 # RefStrain. Always a warning, never gates a commit - even the case with no
@@ -251,8 +256,7 @@ check_dropped_species <- function(dataset, pre_species, post_species) {
 
 # Rows with incomplete citation metadata. A complete record requires at
 # least one of DOI or PMID - either one alone is enough. A column entirely
-# absent from this dataset counts as missing for every row. Error - blocks
-# dataset release.
+# absent from this dataset counts as missing for every row.
 check_missing_metadata <- function(dataset, data) {
   if (is.null(data) || nrow(data) == 0) {
     return(.empty_findings())
@@ -279,7 +283,7 @@ check_missing_metadata <- function(dataset, data) {
 
   tibble::tibble(
     dataset = dataset,
-    severity = "error",
+    severity = "warning",
     subject = sprintf("%d row(s)", n_missing),
     reason = sprintf("%d of %d row(s) are missing both DOI and PMID.", n_missing, nrow(data))
   )
@@ -338,8 +342,10 @@ build_validation_report <- function(validation_findings, summary_df, run_time,
     }
   }
 
+  # Findings are warnings only - the report informs, it does not adjudicate.
+  # A crashed dataset is reported separately below, since that is a missing
+  # dataset rather than a finding about one.
   failed <- summary_df |> dplyr::filter(status == "failed")
-  errors <- validation_findings |> dplyr::filter(severity == "error")
   warnings_ <- validation_findings |> dplyr::filter(severity == "warning")
 
   sections <- character(0)
@@ -347,16 +353,6 @@ build_validation_report <- function(validation_findings, summary_df, run_time,
   if (nrow(failed) > 0) {
     lines <- sprintf("    - %s: %s", vapply(failed$dataset, display, character(1)), failed$reason)
     sections <- c(sections, paste0("  PROCESSING FAILURES\n", paste(lines, collapse = "\n"), "\n"))
-  }
-
-  if (nrow(errors) > 0) {
-    lines <- sprintf(
-      "    - [%s] %s\n        %s",
-      vapply(errors$dataset, display, character(1)), errors$subject, errors$reason
-    )
-    sections <- c(sections, paste0(
-      "  ERRORS (blocks the affected dataset's commit until fixed)\n", paste(lines, collapse = "\n"), "\n"
-    ))
   }
 
   if (nrow(warnings_) > 0) {

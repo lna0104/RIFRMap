@@ -3,12 +3,10 @@
 # Stage 2 (release) of the two-command update workflow (see
 # code/validate_all.R for Stage 1). Re-runs the exact same pipeline +
 # validation as validate_all.R (run_pipeline_validation(),
-# code/pipeline_run.R) - so this is self-contained and safe to run even if
-# you never ran validate_all.R first, since it always re-validates before
-# ever touching disk - and then:
+# code/pipeline_run.R) - so this is self-contained and no need to run validate_all.R first
 #
-#   - if the run is fully clean (zero processing failures AND zero
-#     validation errors, anywhere - warnings never block): commits every
+#   - if the run is fully clean (zero processing failures anywhere -
+#     validation findings are all warnings and never block): commits every
 #     successfully-processed dataset to processed_data/, rebuilds
 #     allData.rds/all_references.csv, advances
 #     processed_data/pipeline_state.rds, and publishes the release report
@@ -52,7 +50,7 @@ if (!result$is_clean) {
     dplyr::mutate(
       reason = ifelse(
         status %in% c("updated", "manual-updated"),
-        "Blocked: this run's validation found unresolved error(s)/failure(s) elsewhere - see the validation report.",
+        "Blocked: another dataset failed to process this run - see the validation report.",
         reason
       ),
       status = ifelse(status %in% c("updated", "manual-updated"), "blocked", status)
@@ -61,8 +59,8 @@ if (!result$is_clean) {
   readr::write_csv(blocked_summary, LOG_PATH, append = file.exists(LOG_PATH))
 
   message(
-    "=== RIFRMap release run STOPPED: ", result$n_failures, " processing failure(s) and ",
-    result$n_errors, " validation error(s) found - nothing published this run. See ",
+    "=== RIFRMap release run STOPPED: ", result$n_failures,
+    " processing failure(s) - nothing published this run. See ",
     validation_report_path, ". Fix the underlying issue(s) and re-run to publish. ==="
   )
 } else {

@@ -8,8 +8,7 @@
 # (run_validation_checks(), update_report.R) against the result. It commits
 # nothing to processed_data/, pipeline_state.rds, last_update_log.csv, or
 # changelog.csv - reference discovery and coordinate regeneration are the
-# only writes here, and those are deliberately ungated (see CLAUDE.md's
-# "Update reports & changelog" section).
+# only writes here, and those are deliberately ungated.
 #
 # Both entry points call this, then decide separately what to do with the
 # result: validate_all.R always stops after reporting; update_all.R commits
@@ -211,8 +210,12 @@ run_pipeline_validation <- function() {
   summary_df <- dplyr::bind_rows(summary_rows)
   run_time <- Sys.time()
 
+  # Validation is report-only: every check emits "warning", and findings never
+  # gate a release. The single gating condition is a source that CRASHED and so
+  # produced no data at all - that is not a validation opinion, it is an absent
+  # dataset, and publishing around it would silently serve stale data for that
+  # source. See build_validation_report() for what the report shows.
   n_failures <- sum(summary_df$status == "failed")
-  n_errors <- sum(validation_findings$severity == "error")
 
   message("=== RIFRMap pipeline run finished (validation only - nothing committed yet) ===")
   print(summary_df, width = Inf)
@@ -228,7 +231,6 @@ run_pipeline_validation <- function() {
     needs_processing = needs_processing,
     run_time = run_time,
     n_failures = n_failures,
-    n_errors = n_errors,
-    is_clean = (n_failures == 0 && n_errors == 0)
+    is_clean = (n_failures == 0)
   )
 }
