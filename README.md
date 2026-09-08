@@ -16,12 +16,12 @@ RIFRMap requires a working R installation and the R package dependencies listed 
 source("code/install_deps.R")
 
 # Launch the application
-shiny::runApp("code")
+shiny::runApp()
 ```
 
 ## Implementation
 
-RIFRMap is implemented as an R Shiny application, organised into a data-processing pipeline and a Shiny front end. All source code (pipeline scripts, the Shiny app, and its front-end assets) lives under `code/`; `raw_data/`, `processed_data/`, `output/`, and `plots/` sit at the repo root alongside it, since they're data/generated artifacts rather than source. Pipeline scripts are run with the working directory set to the repo root (e.g. `source("code/update_all.R")`); the Shiny app's working directory is `code/` at runtime, set automatically by `shiny::runApp("code")`.
+RIFRMap is implemented as an R Shiny application, organised into a data-processing pipeline and a Shiny front end. The pipeline scripts live under `code/`; the Shiny app's entrypoints (`ui.R`, `server.R`, `global.R`) and its front-end assets (`www/`) sit at the repo root, alongside `raw_data/`, `processed_data/`, `output/`, and `plots/`. Pipeline scripts are run with the working directory set to the repo root (e.g. `source("code/update_all.R")`); the Shiny app's working directory is also the repo root at runtime, set automatically by `shiny::runApp()`.
 
 **Data.** Raw records retrieved from each source are stored under `raw_data/`; the standardised, analysis-ready datasets produced from them are stored under `processed_data/`.
 
@@ -39,10 +39,10 @@ RIFRMap is implemented as an R Shiny application, organised into a data-processi
 
 **Shiny application.** The processed data are loaded once at application start-up and served through:
 
-- `code/ui.R` — user interface
-- `code/server.R` — server logic and reactive behaviour
-- `code/global.R` — shared objects, themes, and data loading
-- `code/www/` — front-end assets (CSS, HTML, JavaScript)
+- `ui.R` — user interface
+- `server.R` — server logic and reactive behaviour
+- `global.R` — shared objects, themes, and data loading
+- `www/` — front-end assets (CSS, HTML, JavaScript)
 
 ## Data Sources
 

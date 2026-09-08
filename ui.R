@@ -86,8 +86,8 @@ shinyUI(
                   ),
                   sliderInput(
                     "cryptic_coef", NULL,
-                    min = -4.0, max = 9.6,
-                    value = c(-4, 9.6),
+                    min = SLIDER_RANGES$cryptic_coef[1], max = SLIDER_RANGES$cryptic_coef[2],
+                    value = SLIDER_RANGES$cryptic_coef,
                     step = 0.1,
                     width = "100%"
                   ),
@@ -102,8 +102,8 @@ shinyUI(
                   ),
                   sliderInput(
                     "cryptic_counts", NULL,
-                    min = 1, max = 2326,
-                    value = c(1, 2326),
+                    min = SLIDER_RANGES$cryptic_counts[1], max = SLIDER_RANGES$cryptic_counts[2],
+                    value = SLIDER_RANGES$cryptic_counts,
                     step = 1,
                     width = "100%"
                   ),
@@ -140,15 +140,15 @@ shinyUI(
                   ),
                   sliderInput(
                     "rifreport_nstudies", "Number of studies",
-                    min = 1, max = 59,
-                    value = c(1, 59),
+                    min = SLIDER_RANGES$rifreport_nstudies[1], max = SLIDER_RANGES$rifreport_nstudies[2],
+                    value = SLIDER_RANGES$rifreport_nstudies,
                     step = 1,
                     width = "100%"
                   ),
                   sliderInput(
                     "rifreport_nspecies", "Number of species",
-                    min = 1, max = 29,
-                    value = c(1, 29),
+                    min = SLIDER_RANGES$rifreport_nspecies[1], max = SLIDER_RANGES$rifreport_nspecies[2],
+                    value = SLIDER_RANGES$rifreport_nspecies,
                     step = 1,
                     width = "100%"
                   )
@@ -181,8 +181,8 @@ shinyUI(
                   ),
                   sliderInput(
                     "dragdb_provean", NULL,
-                    min = -10.7, max = -2.6,
-                    value = c(-10.7, -2.6),
+                    min = SLIDER_RANGES$dragdb_provean[1], max = SLIDER_RANGES$dragdb_provean[2],
+                    value = SLIDER_RANGES$dragdb_provean,
                     step = 0.5,
                     width = "100%"
                   )
@@ -238,8 +238,8 @@ shinyUI(
                   ),
                   sliderInput(
                     "yang_log2fc", "log2FC",
-                    min = 0.02, max = 2.7,
-                    value = c(0.02, 2.7),
+                    min = SLIDER_RANGES$yang_log2fc[1], max = SLIDER_RANGES$yang_log2fc[2],
+                    value = SLIDER_RANGES$yang_log2fc,
                     step = 0.1,
                     width = "100%"
                   )
