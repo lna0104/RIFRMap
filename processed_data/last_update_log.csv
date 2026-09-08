@@ -41,3 +41,24 @@ yang,manual-unchanged,raw data unchanged since last successful run,NA,2026-07-22
 rifreport,failed,"no applicable method for 'filter' applied to an object of class ""list"" (using last-known-good processed data, if any)",NA,2026-07-22T07:10:20Z
 pointfinder,skipped,raw data unchanged since last successful run,NA,2026-07-22T07:10:20Z
 refgenes,skipped,raw data unchanged since last successful run,NA,2026-07-22T07:10:20Z
+card,blocked,Blocked: this run's validation found unresolved error(s)/failure(s) elsewhere - see the validation report.,213,2026-09-08T17:11:08Z
+cryptic,manual-unchanged,raw data unchanged since last successful run,NA,2026-09-08T17:11:08Z
+dragdb,skipped,raw data unchanged since last successful run,NA,2026-09-08T17:11:08Z
+yang,manual-unchanged,raw data unchanged since last successful run,NA,2026-09-08T17:11:08Z
+rifreport,blocked,Blocked: this run's validation found unresolved error(s)/failure(s) elsewhere - see the validation report.,841,2026-09-08T17:11:08Z
+pointfinder,skipped,raw data unchanged since last successful run,NA,2026-09-08T17:11:08Z
+refgenes,blocked,Blocked: this run's validation found unresolved error(s)/failure(s) elsewhere - see the validation report.,67,2026-09-08T17:11:08Z
+card,updated,Processed CARD data,213,2026-09-08T18:06:31Z
+cryptic,manual-unchanged,raw data unchanged since last successful run,NA,2026-09-08T18:06:31Z
+dragdb,skipped,raw data unchanged since last successful run,NA,2026-09-08T18:06:31Z
+yang,manual-unchanged,raw data unchanged since last successful run,NA,2026-09-08T18:06:31Z
+rifreport,updated,Processed RifReport data,841,2026-09-08T18:06:31Z
+pointfinder,skipped,raw data unchanged since last successful run,NA,2026-09-08T18:06:31Z
+refgenes,updated,Processed Reference Gene Catalog data,67,2026-09-08T18:06:31Z
+card,updated,Processed CARD data,213,2026-09-08T18:06:31Z
+cryptic,manual-unchanged,raw data unchanged since last successful run,NA,2026-09-08T18:06:31Z
+dragdb,skipped,raw data unchanged since last successful run,NA,2026-09-08T18:06:31Z
+yang,manual-unchanged,raw data unchanged since last successful run,NA,2026-09-08T18:06:31Z
+rifreport,updated,Processed RifReport data,841,2026-09-08T18:06:31Z
+pointfinder,skipped,raw data unchanged since last successful run,NA,2026-09-08T18:06:31Z
+refgenes,updated,Processed Reference Gene Catalog data,67,2026-09-08T18:06:31Z

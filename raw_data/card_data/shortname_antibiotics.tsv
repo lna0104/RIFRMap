@@ -21,6 +21,7 @@ DAO	Dapsone
 DAP	Daptomycin
 DCS	D-cycloserine
 DLM	Delamanid
+DUR	Durlobactam
 EDN	Edeine
 ELF	Elfamycin
 EMB	Ethambutol
@@ -39,6 +40,7 @@ GENC	Gentamicin C
 HGM	Hyrgomycin B
 INH	Isoniazid
 IPM	Imipenem
+ITZ	Itraconazole
 KAN	Kanamycin
 KAS	Kasugamicin
 KIR	Kirromycin
@@ -50,6 +52,7 @@ MULT	Multiple antibiotics
 MUP	Mupirocin
 MTZ	Metronidazole
 MXF	Moxifloxacin
+NAF	Nafcillin
 NEO	Neomycin
 NIT	Nitrofurantoin
 OFX	Ofloxacin
@@ -74,5 +77,6 @@ TRC	Triclosan
 TYL	Tylosin
 VAN	Vancomycin
 VIO	Viomycin
+VRC	Voriconazole
 ZOL	Zoliflodacin
 CAP	capreomycin

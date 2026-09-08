@@ -36,8 +36,9 @@ AMR Gene Family	ARO:3005390	ALG6 beta-lactamases
 AMR Gene Family	ARO:3005391	ALI beta-lactamase
 AMR Gene Family	ARO:3007430	alm glycyl carrier protein
 AMR Gene Family	ARO:3007432	alm glycyltransferase
-AMR Gene Family	ARO:3003830	Aminocoumarin resistant alaS
-AMR Gene Family	ARO:3003840	aminocoumarin resistant cysB
+AMR Gene Family	ARO:3009332	amikacin-resistant eis
+AMR Gene Family	ARO:3003830	aminocoumarin-resistant alaS
+AMR Gene Family	ARO:3003840	aminocoumarin-resistant cysB
 AMR Gene Family	ARO:3000479	aminocoumarin resistant gyrB
 AMR Gene Family	ARO:3000457	aminocoumarin resistant parE
 AMR Gene Family	ARO:3000480	aminocoumarin resistant parY
@@ -46,6 +47,7 @@ AMR Gene Family	ARO:3007419	aminoglycoside bifunctional resistance protein
 AMR Gene Family	ARO:3004183	aminosalicylate resistant dihydrofolate reductase
 AMR Gene Family	ARO:3004155	aminosalicylate resistant dihydrofolate synthase
 AMR Gene Family	ARO:3004152	aminosalicylate resistant thymidylate synthase
+AMR Gene Family	ARO:3009644	AMM beta-lactamase
 AMR Gene Family	ARO:3004232	ampC-type beta-lactamase
 AMR Gene Family	ARO:3007797	ampR transcriptional regulator with mutation conferring resistance to monobactam antibiotics
 AMR Gene Family	ARO:3007693	AMZ beta-lactamase
@@ -55,9 +57,11 @@ AMR Gene Family	ARO:3004275	ANT(3'')
 AMR Gene Family	ARO:3000229	ANT(4')
 AMR Gene Family	ARO:3000225	ANT(6)
 AMR Gene Family	ARO:3000228	ANT(9)
+AMR Gene Family	ARO:3009640	antibiotic efflux regulatory protein
 AMR Gene Family	ARO:3007477	antibiotic resistant ATP synthase
 AMR Gene Family	ARO:3004251	antibiotic-resistant cya adenylate cyclase
 AMR Gene Family	ARO:3007549	antibiotic resistant ergosterol biosynthesis pathway transcription factor
+AMR Gene Family	ARO:3009338	antibiotic resistant F420 biosynthesis protein
 AMR Gene Family	ARO:3004284	antibiotic resistant fabG
 AMR Gene Family	ARO:3004270	antibiotic resistant fabI
 AMR Gene Family	ARO:3003734	antibiotic resistant fusA
@@ -75,9 +79,13 @@ AMR Gene Family	ARO:3003755	Antibiotic resistant nfsB
 AMR Gene Family	ARO:3005002	antibiotic resistant polyketide synthase genes
 AMR Gene Family	ARO:3004250	antibiotic-resistant ptsI phosphotransferase
 AMR Gene Family	ARO:3003419	antibiotic-resistant rpsL
-AMR Gene Family	ARO:3003443	Antibiotic resistant tlyA
+AMR Gene Family	ARO:3003443	antibiotic resistant tlyA
 AMR Gene Family	ARO:3004248	antibiotic-resistant UhpT
-AMR Gene Family	ARO:3009134	antifungal resistance-associated MSH2
+AMR Gene Family	ARO:3009134	antifungal resistance-associated MSH
+AMR Gene Family	ARO:3009392	antifungal resistant cdc
+AMR Gene Family	ARO:3007668	antifungal resistant HMG-CoA reductase
+AMR Gene Family	ARO:3009632	antifungal resistant Ura
+AMR Gene Family	ARO:3009631	antifungal resistant USX
 AMR Gene Family	ARO:3000128	APH(2'')
 AMR Gene Family	ARO:3000127	APH(3'')
 AMR Gene Family	ARO:3000126	APH(3')
@@ -93,6 +101,12 @@ AMR Gene Family	ARO:3007863	ASU1 beta-lactamase
 AMR Gene Family	ARO:0010001	ATP-binding cassette (ABC) antibiotic efflux pump
 AMR Gene Family	ARO:3005393	AXC beta-lactamase
 AMR Gene Family	ARO:3004744	AZECL Beta-lactamase
+AMR Gene Family	ARO:3009413	azole resistant beta-1,3-glucan synthase
+AMR Gene Family	ARO:3009621	azole resistant fungal 14 alpha demethylase
+AMR Gene Family	ARO:3009295	azole-resistant fungal ase1
+AMR Gene Family	ARO:3009624	azole resistant fungal C-5 sterol desaturase
+AMR Gene Family	ARO:3009200	azole-resistant fungal cytochrome P450 enzyme
+AMR Gene Family	ARO:3009636	azole resistant Upc2
 AMR Gene Family	ARO:3007864	B3SU1 beta-lactamase
 AMR Gene Family	ARO:3007865	B3SU2 beta-lactamase
 AMR Gene Family	ARO:3004260	Bah amidohydrolase
@@ -101,6 +115,7 @@ AMR Gene Family	ARO:3004748	BCL Beta-lactamase
 AMR Gene Family	ARO:3007673	bedaquiline resistant Rv0678
 AMR Gene Family	ARO:3007691	bedaquiline resistant Rv2535c
 AMR Gene Family	ARO:3002384	BEL beta-lactamase
+AMR Gene Family	ARO:3009546	benzimidazole resistant fungal cytochrome P450 enzyme
 AMR Gene Family	ARO:3004750	BES Beta-lactamase
 AMR Gene Family	ARO:3004752	BIC Beta-lactamase
 AMR Gene Family	ARO:3004754	BIL Beta-lactamase
@@ -120,6 +135,7 @@ AMR Gene Family	ARO:3004760	BRO Beta-lactamase
 AMR Gene Family	ARO:3005394	BSU beta-lactamase
 AMR Gene Family	ARO:3004293	BUT beta-lactamase
 AMR Gene Family	ARO:3007634	CAE beta-lactamase
+AMR Gene Family	ARO:3009564	calcineurin inhibitor resistant BycA
 AMR Gene Family	ARO:3004558	CAM beta-lactamase
 AMR Gene Family	ARO:3005048	Camphor Resistance Protein
 AMR Gene Family	ARO:3007074	capreomycin phosphotransferase
@@ -134,7 +150,7 @@ AMR Gene Family	ARO:3005396	CDD beta-lactamase
 AMR Gene Family	ARO:3004192	CepA beta-lactamase
 AMR Gene Family	ARO:3004199	CepS beta-lactamase
 AMR Gene Family	ARO:3004200	CfiA beta-lactamase
-AMR Gene Family	ARO:3000202	Cfr 23S ribosomal RNA methyltransferase
+AMR Gene Family	ARO:3000202	Cfr-like 23S rRNA methyltransferase
 AMR Gene Family	ARO:3004252	cfr methyltrasnferase
 AMR Gene Family	ARO:3003000	CfxA beta-lactamase
 AMR Gene Family	ARO:3004765	CGA beta-lactamase
@@ -154,6 +170,7 @@ AMR Gene Family	ARO:3007181	class A Mycobacterium tuberculosis bla beta-lactamas
 AMR Gene Family	ARO:3004231	class C LRA beta-lactamase
 AMR Gene Family	ARO:3004241	class D LRA beta-lactamase
 AMR Gene Family	ARO:3007853	clofazimine resistant Rv0678
+AMR Gene Family	ARO:3009334	clofazimine resistant Rv2535c
 AMR Gene Family	ARO:3005397	CMA beta-lactamase
 AMR Gene Family	ARO:3004774	CME beta-lactamase
 AMR Gene Family	ARO:3004776	CMH beta-lactamase
@@ -200,14 +217,16 @@ AMR Gene Family	ARO:3005405	EAM beta-lactamase
 AMR Gene Family	ARO:3004204	EBR beta-lactamase
 AMR Gene Family	ARO:3005406	EC beta-lactamase
 AMR Gene Family	ARO:3007426	ECF transporter S component
-AMR Gene Family	ARO:3007546	echinocandin antibiotic-resistant beta-1,3-D-glucan synthase
+AMR Gene Family	ARO:3007546	echinocandin-resistant beta-1,3-D-glucan synthase
+AMR Gene Family	ARO:3009625	echinocandin resistant fungal C-5 sterol desaturase
+AMR Gene Family	ARO:3009246	echinocandin-resistant fungal cytochrome P450 enzyme
 AMR Gene Family	ARO:3005407	ECM beta-lactamase
 AMR Gene Family	ARO:3005408	ECV beta-lactamase
 AMR Gene Family	ARO:3004064	Edeine acetyltransferase
 AMR Gene Family	ARO:3005409	EFM beta-lactamase
 AMR Gene Family	ARO:3001312	elfamycin resistant EF-Tu
 AMR Gene Family	ARO:3005410	ELM beta-lactamase
-AMR Gene Family	ARO:3000560	Erm 23S ribosomal RNA methyltransferase
+AMR Gene Family	ARO:3000560	Erm-like 23S rRNA methyltransferase
 AMR Gene Family	ARO:3004781	ERP beta-lactamase
 AMR Gene Family	ARO:3004222	ESP beta-lactamase
 AMR Gene Family	ARO:3002876	ethambutol resistant aftA
@@ -245,9 +264,11 @@ AMR Gene Family	ARO:3000067	FOX beta-lactamase
 AMR Gene Family	ARO:3004794	FPH beta-lactamase
 AMR Gene Family	ARO:3004796	FRI beta-lactamase
 AMR Gene Family	ARO:3004800	FTU beta-lactamase
+AMR Gene Family	ARO:3009565	fungal BycA
 AMR Gene Family	ARO:3007641	fungal nucleobase transporters
 AMR Gene Family	ARO:3007556	fungal uracil phosphoribosyltransferase
 AMR Gene Family	ARO:3003025	fusidic acid inactivation enzyme
+AMR Gene Family	ARO:3000100	gene modulating beta-lactam resistance
 AMR Gene Family	ARO:3004281	General Bacterial Porin with reduced permeability to beta-lactams
 AMR Gene Family	ARO:3004282	General Bacterial Porin with reduced permeability to peptide antibiotics
 AMR Gene Family	ARO:3000066	GES beta-lactamase
@@ -267,7 +288,6 @@ AMR Gene Family	ARO:3007054	Helicobater pylori 16S RNA mutants conferring resist
 AMR Gene Family	ARO:3004447	HERA beta-lactamase
 AMR Gene Family	ARO:3007870	HER beta-lactamase
 AMR Gene Family	ARO:3004209	HMB beta-lactamase
-AMR Gene Family	ARO:3007668	HMG-CoA reductase-encoding genes
 AMR Gene Family	ARO:3005011	IDC beta-lactamase
 AMR Gene Family	ARO:3000018	IMI beta-lactamase
 AMR Gene Family	ARO:3007667	imidazole-resistant fungal cytochrome P450 enzyme
@@ -293,7 +313,7 @@ AMR Gene Family	ARO:3004910	isoniazid resistant nat
 AMR Gene Family	ARO:3004911	isoniazid resistant nudC
 AMR Gene Family	ARO:3004913	isoniazid resistant sigI
 AMR Gene Family	ARO:3004202	JOHN beta-lactamase
-AMR Gene Family	ARO:3004962	kanamycin resistant eis
+AMR Gene Family	ARO:3004962	kanamycin-resistant eis
 AMR Gene Family	ARO:3004966	Kanamycin resistant whib7
 AMR Gene Family	ARO:3007205	KBL beta-lactamase
 AMR Gene Family	ARO:3004046	kdpDE
@@ -324,7 +344,7 @@ AMR Gene Family	ARO:3005422	MAL beta-lactamase
 AMR Gene Family	ARO:3005423	MBL beta-lactamase
 AMR Gene Family	ARO:3004268	MCR phosphoethanolamine transferase
 AMR Gene Family	ARO:3007657	metal transporters with antibiotic efflux
-AMR Gene Family	ARO:3001208	methicillin resistant PBP2
+AMR Gene Family	ARO:3001208	methicillin-resistant PBP2
 AMR Gene Family	ARO:3004237	mgt macrolide glycotransferase
 AMR Gene Family	ARO:3004280	MipA-interacting Protein
 AMR Gene Family	ARO:3000058	MIR beta-lactamase
@@ -349,7 +369,6 @@ AMR Gene Family	ARO:3000057	NDM beta-lactamase
 AMR Gene Family	ARO:3007103	nitroimidazole reductase
 AMR Gene Family	ARO:3004195	NmcA beta-lactamase
 AMR Gene Family	ARO:3003065	non-erm 23S ribosomal RNA methyltransferase (A1067)
-AMR Gene Family	ARO:3001298	non-erm 23S ribosomal RNA methyltransferase (G748)
 AMR Gene Family	ARO:3004240	NPS beta-lactamase
 AMR Gene Family	ARO:3007847	NWM beta-lactamase
 AMR Gene Family	ARO:3000094	OCH beta-lactamase
@@ -399,16 +418,17 @@ AMR Gene Family	ARO:3007732	OXA-63-like beta-lactamase
 AMR Gene Family	ARO:3007733	OXA-679-like beta-lactamase
 AMR Gene Family	ARO:3007734	OXA-727-like beta-lactamase
 AMR Gene Family	ARO:3007735	OXA-9-like beta-lactamase
-AMR Gene Family	ARO:3000017	OXA beta-lactamase
+AMR Gene Family	ARO:3009641	OXA beta-lactamase without subfamily
 AMR Gene Family	ARO:3002388	OXY beta-lactamase
 AMR Gene Family	ARO:3005149	PAC beta-lactamase
 AMR Gene Family	ARO:3007872	PAD beta-lactamase
 AMR Gene Family	ARO:3007198	PAM beta-lactamase
 AMR Gene Family	ARO:3005431	PAU beta-lactamase
+AMR Gene Family	ARO:3009312	PBP2-like beta-lactam resistant peptidoglycan transpeptidase
 AMR Gene Family	ARO:3000098	PDC beta-lactamase
 AMR Gene Family	ARO:3007873	PEN-A beta-lactamase
 AMR Gene Family	ARO:3007874	PEN-B beta-lactamase
-AMR Gene Family	ARO:3003938	Penicillin-binding protein mutations conferring resistance to beta-lactam antibiotics
+AMR Gene Family	ARO:3003938	penicillin-binding protein with mutation conferring resistance to beta-lactam antibiotics
 AMR Gene Family	ARO:3000056	PER beta-lactamase
 AMR Gene Family	ARO:3005205	perchlozone resistant ethA
 AMR Gene Family	ARO:3005432	PFM beta-lactamase
@@ -423,6 +443,7 @@ AMR Gene Family	ARO:3005435	PME beta-lactamase
 AMR Gene Family	ARO:3004269	pmr phosphoethanolamine transferase
 AMR Gene Family	ARO:3007875	PNC beta-lactamase
 AMR Gene Family	ARO:3004570	PNGM beta-lactamase
+AMR Gene Family	ARO:3009194	polyene-resistant fungal cytochrome P450 enzyme
 AMR Gene Family	ARO:3007428	polymyxin resistance operon
 AMR Gene Family	ARO:3005436	POM beta-lactamase
 AMR Gene Family	ARO:3007084	PRC beta-lactamase
@@ -508,6 +529,7 @@ AMR Gene Family	ARO:3004970	streptomycin resistant Rv1258c
 AMR Gene Family	ARO:3004965	streptomycin resistant whib7
 AMR Gene Family	ARO:3000869	streptothricin acetyltransferase (SAT)
 AMR Gene Family	ARO:3007663	stress-activated protein kinases
+AMR Gene Family	ARO:3009547	strobilurin resistant fungal cytochrome P450 enzyme
 AMR Gene Family	ARO:3004230	subclass B1 Bacillus anthracis Bla beta-lactamase
 AMR Gene Family	ARO:3000577	subclass B1 Bacillus cereus Bc beta-lactamase
 AMR Gene Family	ARO:3007117	subclass B1 Bacteroides xylanisolvens crx beta-lactamase
@@ -515,6 +537,7 @@ AMR Gene Family	ARO:3004227	subclass B1 PEDO beta-lactamase
 AMR Gene Family	ARO:3004288	Subclass B1 Vibrio cholerae varG beta-lactamase
 AMR Gene Family	ARO:3004226	subclass B3 LRA beta-lactamase
 AMR Gene Family	ARO:3004220	subclass B3 PEDO beta-lactamase
+AMR Gene Family	ARO:3009549	succinate dehydrogenase inhibitor resistant fungal cytochrome P450 enzyme
 AMR Gene Family	ARO:3004279	Sugar Porin (SP)
 AMR Gene Family	ARO:3003415	sulfonamide resistant dihydropteroate synthase folP
 AMR Gene Family	ARO:3004238	sulfonamide resistant sul
@@ -525,6 +548,7 @@ AMR Gene Family	ARO:3000036	tetracycline inactivation enzyme
 AMR Gene Family	ARO:0000002	tetracycline-resistant ribosomal protection protein
 AMR Gene Family	ARO:3004214	THIN-B beta-lactamase
 AMR Gene Family	ARO:3003201	TLA beta-lactamase
+AMR Gene Family	ARO:3001298	TlrA-like 23S rRNA methyltransferase
 AMR Gene Family	ARO:3004104	TMB beta-lactamase
 AMR Gene Family	ARO:3007684	transmembrane protein conferring colistin resistance
 AMR Gene Family	ARO:3007523	triazole-resistant fungal cytochrome P450 enzyme
@@ -532,10 +556,12 @@ AMR Gene Family	ARO:3007550	triazole-resistant fungal transcription factor Upc2
 AMR Gene Family	ARO:3004333	triclosan resistant gyrA
 AMR Gene Family	ARO:3001218	trimethoprim resistant dihydrofolate reductase dfr
 AMR Gene Family	ARO:3004449	TRU beta-lactamase
+AMR Gene Family	ARO:3009652	tsnR 23S rRNA methyltransferase
 AMR Gene Family	ARO:3005454	TTU beta-lactamase
 AMR Gene Family	ARO:3004285	tunicamycin resistance protein
 AMR Gene Family	ARO:3004205	TUS beta-lactamase
 AMR Gene Family	ARO:3007567	UDP-glucuronic acid decarboxylase
+AMR Gene Family	ARO:3004249	UhpA response regulator of fosfomycin resistance
 AMR Gene Family	ARO:3003398	undecaprenyl pyrophosphate related proteins
 AMR Gene Family	ARO:3007065	VAM beta-lactamase
 AMR Gene Family	ARO:3004725	vancomycin-resistant beta prime subunit of RNA polymerase (rpoC)
@@ -571,14 +597,17 @@ AMR Gene Family	ARO:3005000	Zoliflodacin resistant gyrB
 Drug Class	ARO:3000054	acridine dye
 Drug Class	ARO:3007163	albendazole-like antibiotic
 Drug Class	ARO:3005169	alkaloids with antibiotic activity
-Drug Class	ARO:3007498	allylamine antibiotic
+Drug Class	ARO:3007498	allylamine antifungal
 Drug Class	ARO:3000103	aminocoumarin antibiotic
 Drug Class	ARO:0000016	aminoglycoside antibiotic
 Drug Class	ARO:3005168	ansamycin antibiotic
 Drug Class	ARO:3003956	antibacterial free fatty acids
 Drug Class	ARO:3000003	antibiotic without defined classification
+Drug Class	ARO:3007495	azole antibiotic
+Drug Class	ARO:3009317	benzimidazole antifungal
 Drug Class	ARO:3007150	bicyclomycin-like antibiotic
 Drug Class	ARO:3007773	bis-indole alkaloid with antibiotic activity
+Drug Class	ARO:3009323	carbamate fungicides
 Drug Class	ARO:0000020	carbapenem
 Drug Class	ARO:0000032	cephalosporin
 Drug Class	ARO:0000044	cephamycin
@@ -591,13 +620,14 @@ Drug Class	ARO:3005386	disinfecting agents and antiseptics
 Drug Class	ARO:3007496	echinocandin antibiotic
 Drug Class	ARO:3001219	elfamycin antibiotic
 Drug Class	ARO:0000001	fluoroquinolone antibiotic
+Drug Class	ARO:3009539	fungal succinate dehydrogenase inhibitor
 Drug Class	ARO:3007153	fusidane antibiotic
 Drug Class	ARO:3000081	glycopeptide antibiotic
 Drug Class	ARO:0000042	glycylcycline
-Drug Class	ARO:3007057	Helicobacter pylori pbp3 conferring resistance to amoxicillin
 Drug Class	ARO:3007500	imidazole antibiotic
 Drug Class	ARO:3005163	ionophore with antibiotic activity
 Drug Class	ARO:3007152	isoniazid-like antibiotic
+Drug Class	ARO:3009658	lasso peptide antibiotics
 Drug Class	ARO:0000017	lincosamide antibiotic
 Drug Class	ARO:3001318	macrocyclic antibiotic
 Drug Class	ARO:0000000	macrolide antibiotic
@@ -608,6 +638,7 @@ Drug Class	ARO:3007151	mupirocin-like antibiotic
 Drug Class	ARO:3009154	napthoquinone antibiotics
 Drug Class	ARO:3004116	nitrofuran antibiotic
 Drug Class	ARO:3004115	nitroimidazole antibiotic
+Drug Class	ARO:3009657	nonribosomal peptide antibiotics
 Drug Class	ARO:3000034	nucleoside antibiotic
 Drug Class	ARO:3007157	nybomycin-like antibiotic
 Drug Class	ARO:3000551	organoarsenic antibiotic
@@ -620,16 +651,16 @@ Drug Class	ARO:3000387	phenicol antibiotic
 Drug Class	ARO:3007149	phosphonic acid antibiotic
 Drug Class	ARO:3000670	pleuromutilin antibiotic
 Drug Class	ARO:3000527	polyamine antibiotic
-Drug Class	ARO:3007497	polyene antibiotic
+Drug Class	ARO:3007497	polyene antifungal
 Drug Class	ARO:3005171	polyketide with antibiotic activity
 Drug Class	ARO:3007162	protegrin-1-like antibiotic
 Drug Class	ARO:3007155	pyrazine antibiotic
-Drug Class	ARO:3007560	pyrimidine antifungal drug
+Drug Class	ARO:3007560	pyrimidine antifungal
+Drug Class	ARO:3009656	ribosomally synthesized and post-translationally modified peptide antibiotics
 Drug Class	ARO:3000157	rifamycin antibiotic
 Drug Class	ARO:3007159	salicylic acid antibiotic
-Drug Class	ARO:0000034	streptogramin A antibiotic
 Drug Class	ARO:0000026	streptogramin antibiotic
-Drug Class	ARO:0000050	streptogramin B antibiotic
+Drug Class	ARO:3009305	strobilurin fungicide
 Drug Class	ARO:3000282	sulfonamide antibiotic
 Drug Class	ARO:3003401	sulfone antibiotic
 Drug Class	ARO:3005172	terpene with antibiotic activity
@@ -639,7 +670,7 @@ Drug Class	ARO:3007177	thiazolide antibiotic
 Drug Class	ARO:3007156	thioamide antibiotic
 Drug Class	ARO:3007161	thiosemicarbazone antibiotic
 Drug Class	ARO:3007164	triazaacenaphthylene antibiotic
-Drug Class	ARO:3007499	triazole antibiotic
+Drug Class	ARO:3007499	triazole antifungal
 Drug Class	ARO:3007160	zoliflodacin-like antibiotic
 Resistance Mechanism	ARO:0010000	antibiotic efflux
 Resistance Mechanism	ARO:0001004	antibiotic inactivation
@@ -647,6 +678,8 @@ Resistance Mechanism	ARO:0001001	antibiotic target alteration
 Resistance Mechanism	ARO:3007609	antibiotic target overexpression
 Resistance Mechanism	ARO:0001003	antibiotic target protection
 Resistance Mechanism	ARO:0001002	antibiotic target replacement
+Resistance Mechanism	ARO:3009364	fungal aneuploidy
+Resistance Mechanism	ARO:3009576	fungal copy number variation
 Resistance Mechanism	ARO:3007115	modification to cell morphology
 Resistance Mechanism	ARO:3000244	reduced permeability to antibiotic
 Resistance Mechanism	ARO:3003764	resistance by absence
