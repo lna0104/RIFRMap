@@ -768,8 +768,94 @@ get_pubmed_ref_table <- function(pmids) {
     purrr::map_dfr(parse_one_pubmed_ref)
 }
 
+# Ref_code is <first author surname><year> (make_ref_code()), generated one
+# PMID at a time inside parse_one_pubmed_ref(), so it carries no uniqueness
+# guarantee - the generator cannot see a clash even in principle. Two failure
+# modes occur in real data and need OPPOSITE fixes:
+#
+#   A. Two DIFFERENT papers share a code (Heep2000, Taniguchi1996,
+#      Lisitsyn1984, Bland1976). Left alone, the app's reference table -
+#      which filters `Ref_code %in% ref_codes` - shows every paper sharing the
+#      code, so citing one mis-attributes the other alongside it. Must SPLIT.
+#   B. The SAME paper appears twice with differently-worded Full_ref
+#      (Ohno1996, Lavania2016). Must MERGE - suffixing would invent a second
+#      paper that does not exist.
+#
+# Papers are identified by PMID. Rows with no PMID fold into the group's paper
+# when that is unambiguous (exactly one PMID present), which is how a curated
+# entry lacking a PMID picks one up from its resolved twin.
+#
+# Codes already in raw_data/rifreport_references.csv are join keys for
+# raw_data/rifreport_data.csv's own Ref_code column, so they are NEVER
+# renamed; only auto-generated entries take a suffix. Ordering is by PMID, not
+# row order, so the same input always yields the same codes - otherwise
+# published citations would churn between runs.
+disambiguate_ref_codes <- function(refs) {
+  ref_cols <- c("Ref_code", "Year", "Full_ref", "DOI", "PMID")
+
+  suffix_at <- function(i) if (i <= 26) letters[i] else as.character(i)
+
+  has_value <- function(x) !is.na(x) & x != ""
+
+  # Curated first, so each field takes the curated value and falls back to the
+  # generated entry only to fill a blank (e.g. a missing PMID).
+  merge_paper <- function(rows) {
+    rows <- rows[order(!rows$.curated), , drop = FALSE]
+    out <- rows[1, , drop = FALSE]
+    for (cl in intersect(ref_cols, names(rows))) {
+      vals <- rows[[cl]][has_value(rows[[cl]])]
+      if (length(vals) > 0) out[[cl]] <- vals[1]
+    }
+    out$.curated <- any(rows$.curated)
+    out
+  }
+
+  resolve_group <- function(g) {
+    pmids <- sort(unique(g$PMID[has_value(g$PMID)]))
+
+    if (length(pmids) <= 1) {
+      return(merge_paper(g))
+    }
+
+    papers <- lapply(pmids, function(p) merge_paper(g[has_value(g$PMID) & g$PMID == p, , drop = FALSE]))
+    orphans <- g[!has_value(g$PMID), , drop = FALSE]
+    if (nrow(orphans) > 0) {
+      papers <- c(papers, lapply(seq_len(nrow(orphans)), function(i) orphans[i, , drop = FALSE]))
+    }
+    papers <- dplyr::bind_rows(papers)
+
+    code <- g$Ref_code[1]
+    curated_i <- which(papers$.curated)
+
+    if (length(curated_i) > 0) {
+      others <- setdiff(seq_len(nrow(papers)), curated_i[1])
+      papers$Ref_code[curated_i[1]] <- code
+      papers$Ref_code[others] <- paste0(code, vapply(seq_along(others) + 1L, suffix_at, character(1)))
+    } else {
+      papers$Ref_code <- paste0(code, vapply(seq_len(nrow(papers)), suffix_at, character(1)))
+    }
+    papers
+  }
+
+  # Rows with no Ref_code cannot be grouped or suffixed - pass them through.
+  unnamed <- refs[!has_value(refs$Ref_code), , drop = FALSE]
+  named <- refs[has_value(refs$Ref_code), , drop = FALSE]
+
+  if (nrow(named) == 0) {
+    return(refs)
+  }
+
+  resolved <- named |>
+    dplyr::group_by(Ref_code) |>
+    dplyr::group_split() |>
+    lapply(resolve_group) |>
+    dplyr::bind_rows()
+
+  dplyr::bind_rows(resolved, unnamed)
+}
+
 # Builds processed_data/all_references.csv. Diffs against the existing file
-# so only PMIDs not already resolved there get a fresh (slow) MEDLINE fetch -
+# so only PMIDs not already resolved there get a fresh MEDLINE fetch -
 # on a typical run where only 1-2 sources changed, this avoids re-fetching
 # every reference across all 7 datasets every time. Falls back to a full
 # rebuild if the existing file is missing/malformed.
@@ -778,6 +864,7 @@ build_references <- function(combined_data,
                              output_path = "processed_data/all_references.csv") {
   rifreport_refs <- read_csv(rifreport_refs_path, show_col_types = FALSE)
   rifreport_refs_clean <- rifreport_refs |>
+    dplyr::distinct() |>
     dplyr::mutate(
       Ref_code = as.character(Ref_code),
       Year     = as.character(Year),
@@ -844,10 +931,20 @@ build_references <- function(combined_data,
     tibble::tibble()
   }
 
-  ref_table_clean <- dplyr::bind_rows(reused_resolved, newly_resolved_clean) |>
-    dplyr::select(dplyr::any_of(c("Ref_code", "Year", "Full_ref", "DOI", "PMID")))
+  ref_cols <- c("Ref_code", "Year", "Full_ref", "DOI", "PMID")
 
-  combined_refs <- dplyr::bind_rows(rifreport_refs_clean, ref_table_clean)
+  ref_table_clean <- dplyr::bind_rows(reused_resolved, newly_resolved_clean) |>
+    dplyr::select(dplyr::any_of(ref_cols))
+
+  combined_refs <- dplyr::bind_rows(
+    rifreport_refs_clean |> dplyr::mutate(.curated = TRUE),
+    ref_table_clean |> dplyr::mutate(.curated = FALSE)
+  ) |>
+    dplyr::arrange(dplyr::desc(.curated)) |>
+    dplyr::distinct(dplyr::across(dplyr::any_of(ref_cols)), .keep_all = TRUE) |>
+    disambiguate_ref_codes() |>
+    dplyr::select(dplyr::any_of(ref_cols)) |>
+    dplyr::arrange(Ref_code)
 
   write_csv(combined_refs, output_path)
   combined_refs
