@@ -1,12 +1,17 @@
 ## ---- CRAN ----
 cran_pkgs <- c(
   "shiny",
+  "shinyjs",
   "dplyr",
   "tidyr",
   "tidyverse",
   "ggiraph",
   "ggplot2",
   "ggupset",
+  "plotly",
+  "DT",
+  "scales",
+  "viridisLite",
   "htmltools",
   "remotes",
   "shinyWidgets",
@@ -37,7 +42,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 }
 
 BiocManager::install(
-  setdiff(c("Biostrings", "DECIPHER", "BiocGenerics", "IRanges", "GenomeInfoDb", "S4Vectors", "UCSC.utils"), rownames(installed.packages())),
+  setdiff(c("Biostrings", "DECIPHER", "BiocGenerics", "IRanges", "GenomeInfoDb", "S4Vectors", "UCSC.utils", "XVector", "pwalign"), rownames(installed.packages())),
   ask = FALSE,
   force = TRUE,
   update = FALSE
@@ -45,7 +50,15 @@ BiocManager::install(
 
 
 ## ---- GitHub ----
-if (!requireNamespace("ALJEbinf", quietly = TRUE)) {
-  remotes::install_github("JanEngelstaedter/ALJEbinf", build_vignettes = TRUE)
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages(
+    "remotes",
+    repos = "https://cloud.r-project.org"
+  )
 }
 
+if (!requireNamespace("ALJEbinf", quietly = TRUE)) {
+  remotes::install_github(
+    "JanEngelstaedter/ALJEbinf"
+  )
+}
