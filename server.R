@@ -1148,6 +1148,9 @@ function(input, output, session) {
 
       pos_levels <- selected_pos()
 
+      # Datasets a mutation could be reported by, used as the tooltip denominator
+      n_total_sources <- length(setdiff(source_levels, "None"))
+
       clickable_levels <- get_clickable_levels(df)
       sel <- sync_selected_sources(clickable_levels)
 
@@ -1188,6 +1191,7 @@ function(input, output, session) {
         arrange(source, .by_group = TRUE) |>
         mutate(
           all_sources = paste(sort(unique(as.character(source))), collapse = ", "),
+          n_src = sum(unique(as.character(source)) != "None"),
           k = n(),
           i = row_number(),
           ymin = y_num - 0.5,
@@ -1217,7 +1221,7 @@ function(input, output, session) {
             tooltip = paste0(
               "Position: ", AA_pos_Ecoli,
               "<br>AA: ", AA_mutation,
-              "<br>Sources: ", all_sources
+              "<br>Sources (", n_src, "/", n_total_sources, "): ", all_sources
             ),
             data_id = paste(AA_pos_Ecoli, AA_mutation, sep = "|")
           ),
