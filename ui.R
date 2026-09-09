@@ -3,7 +3,7 @@ shinyUI(
     title = "RIFRMap",
     id = "main_nav",
     theme = "www/styles.css",
-    footer = includeHTML("www/footer.html"),
+    # footer = includeHTML("www/footer.html"),
     fluid = TRUE,
     collapsible = TRUE,
     header = tagList(
@@ -77,10 +77,10 @@ shinyUI(
                   ),
                   div(
                     style = "display:flex; align-items:center; gap:6px;",
-                    tags$label("Effect size"),
+                    tags$label("Effect size (log₂ MIC)"),
                     tags$i(
                       class = "fa fa-question-circle info-icon",
-                      title = "Effect size represents the association between a mutation and changes in MIC. Positive values indicate increased resistance, while negative values suggest increased susceptibility.",
+                      title = "Effect size is the GWAS coefficient for the association between a mutation and the rifampicin MIC, in log₂(MIC) units (1 = a two-fold change in MIC). Positive values indicate resistance, negative values susceptibility.",
                       `data-toggle` = "tooltip"
                     )
                   ),
@@ -138,15 +138,33 @@ shinyUI(
                     multiple = TRUE,
                     width = "100%"
                   ),
+                  div(
+                    style = "display:flex; align-items:center; gap:6px;",
+                    tags$label("Number of studies"),
+                    tags$i(
+                      class = "fa fa-question-circle info-icon",
+                      title = "Number of independent published studies in which the mutation was reported to confer resistance. Higher values indicate stronger literature support.",
+                      `data-toggle` = "tooltip"
+                    )
+                  ),
                   sliderInput(
-                    "rifreport_nstudies", "Number of studies",
+                    "rifreport_nstudies", NULL,
                     min = SLIDER_RANGES$rifreport_nstudies[1], max = SLIDER_RANGES$rifreport_nstudies[2],
                     value = SLIDER_RANGES$rifreport_nstudies,
                     step = 1,
                     width = "100%"
                   ),
+                  div(
+                    style = "display:flex; align-items:center; gap:6px;",
+                    tags$label("Number of species"),
+                    tags$i(
+                      class = "fa fa-question-circle info-icon",
+                      title = "Number of bacterial species in which the mutation has been reported across the reviewed literature. Higher values indicate a mutation shared by more taxa.",
+                      `data-toggle` = "tooltip"
+                    )
+                  ),
                   sliderInput(
-                    "rifreport_nspecies", "Number of species",
+                    "rifreport_nspecies", NULL,
                     min = SLIDER_RANGES$rifreport_nspecies[1], max = SLIDER_RANGES$rifreport_nspecies[2],
                     value = SLIDER_RANGES$rifreport_nspecies,
                     step = 1,
@@ -236,8 +254,17 @@ shinyUI(
                       readonly = "readonly"
                     )
                   ),
+                  div(
+                    style = "display:flex; align-items:center; gap:6px;",
+                    tags$label("Effect size (log₂FC)"),
+                    tags$i(
+                      class = "fa fa-question-circle info-icon",
+                      title = "Effect size is the log₂ fold-change in mutant frequency under rifampicin selection.",
+                      `data-toggle` = "tooltip"
+                    )
+                  ),
                   sliderInput(
-                    "yang_log2fc", "log2FC",
+                    "yang_log2fc", NULL,
                     min = SLIDER_RANGES$yang_log2fc[1], max = SLIDER_RANGES$yang_log2fc[2],
                     value = SLIDER_RANGES$yang_log2fc,
                     step = 0.1,
