@@ -156,15 +156,16 @@ function(input, output, session) {
     updateSelectInput(session, "dragdb_species", selected = "All species")
     updateSelectInput(session, "yang_species", selected = "Escherichia coli")
 
-    updateSliderInput(session, "cryptic_coef", value = c(-4, 9.6))
-    updateSliderInput(session, "cryptic_counts", value = c(0, 2326))
+    # Slider bounds come from SLIDER_RANGES (derived from the loaded data in global.R)
+    updateSliderInput(session, "cryptic_coef", value = SLIDER_RANGES$cryptic_coef)
+    updateSliderInput(session, "cryptic_counts", value = SLIDER_RANGES$cryptic_counts)
     updateRadioButtons(session, "cryptic_bhp", selected = 0.05)
     updateSelectInput(session, "cryptic_homoplasy", selected = "")
 
-    updateSliderInput(session, "dragdb_provean", value = c(-10.7, -2.6))
-    updateSliderInput(session, "yang_log2fc", value = c(0, 2.7))
-    updateSliderInput(session, "rifreport_nstudies", value = c(1, 59))
-    updateSliderInput(session, "rifreport_nspecies", value = c(1, 29))
+    updateSliderInput(session, "dragdb_provean", value = SLIDER_RANGES$dragdb_provean)
+    updateSliderInput(session, "yang_log2fc", value = SLIDER_RANGES$yang_log2fc)
+    updateSliderInput(session, "rifreport_nstudies", value = SLIDER_RANGES$rifreport_nstudies)
+    updateSliderInput(session, "rifreport_nspecies", value = SLIDER_RANGES$rifreport_nspecies)
 
     updateTabItems(session, "sidebar", "filters")
   })
