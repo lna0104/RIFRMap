@@ -11,7 +11,25 @@ file_name <- "output/RIFRMap_data_summary.txt"
 all_data <- readRDS("processed_data/allData.rds")
 
 # -----------------------------------------------------------------------------
-# 2. Compute summary statistics — overall
+# 2. Raw inputs and filtering funnels
+# -----------------------------------------------------------------------------
+# report_filtering() traces every source from its raw file to the entries the
+# app serves, one line per inclusion criterion. It lives in code/process_data.R
+# so it sits beside the filters it mirrors and reads the same `globsets`
+# thresholds - see the "Filtering report" section at the bottom of that file.
+#
+# Setting `.pipeline_orchestrating` suppresses process_data.R's standalone
+# driver block, so sourcing it defines the reporting functions without running
+# the pipeline (see the guarded block at the bottom of code/process_data.R).
+.pipeline_orchestrating <- TRUE
+suppressPackageStartupMessages(source("code/process_data.R"))
+
+filtering_funnels <- report_filtering(final_counts = table(all_data$source))
+raw_summary_text <- format_filtering_funnels(filtering_funnels)
+raw_total <- sum(filtering_funnels$kept[filtering_funnels$kind == "raw"])
+
+# -----------------------------------------------------------------------------
+# 3. Compute summary statistics — overall
 # -----------------------------------------------------------------------------
 n_species <- n_distinct(all_data$species)
 n_positions <- n_distinct(all_data$AA_pos_Ecoli)
@@ -21,7 +39,7 @@ pos_min <- min(all_data$AA_pos_Ecoli, na.rm = TRUE)
 pos_max <- max(all_data$AA_pos_Ecoli, na.rm = TRUE)
 
 # -----------------------------------------------------------------------------
-# 3. Top species by unique mutations
+# 4. Top species by unique mutations
 # -----------------------------------------------------------------------------
 top_species <- all_data |>
   mutate(mut_id = paste(AA_pos_Ecoli, AA_mutation)) |>
@@ -50,7 +68,7 @@ top_species_text <- paste(
 )
 
 # -----------------------------------------------------------------------------
-# 4. Per-source summary
+# 5. Per-source summary
 # -----------------------------------------------------------------------------
 per_source <- all_data |>
   group_by(source) |>
@@ -67,7 +85,7 @@ per_source <- all_data |>
   )))
 
 # -----------------------------------------------------------------------------
-# 5. Cross-source overlap
+# 6. Cross-source overlap
 # -----------------------------------------------------------------------------
 overlap <- all_data |>
   mutate(mut_id = paste(AA_pos_Ecoli, AA_mutation)) |>
@@ -96,14 +114,14 @@ all7_text <- if (length(all7_mutations) == 0) {
 }
 
 # -----------------------------------------------------------------------------
-# 6. References cited
+# 7. References cited
 # -----------------------------------------------------------------------------
 refs_lookup <- read_csv("processed_data/all_references.csv", show_col_types = FALSE)
 
 n_refs_total <- nrow(dplyr::distinct(refs_lookup))
 
 # -----------------------------------------------------------------------------
-# 7. Per-source exclusive mutations (not in any other source)
+# 8. Per-source exclusive mutations (not in any other source)
 # -----------------------------------------------------------------------------
 mut_source_membership <- all_data |>
   mutate(mut_id = paste(AA_pos_Ecoli, AA_mutation)) |>
@@ -140,7 +158,7 @@ per_source_text <- paste(
 )
 
 # -----------------------------------------------------------------------------
-# 8. Build and write report
+# 9. Build and write report
 # -----------------------------------------------------------------------------
 report <- paste0(
   "RIFRMap - Data Summary Report\n",
@@ -153,6 +171,16 @@ report <- paste0(
   "    Total unique mutations                      : ", n_AA_mutations, "\n",
   "    Total distinct references                   : ", n_refs_total, "\n",
   "    E. coli position range                      : ", pos_min, " -- ", pos_max, "\n\n",
+  "--------------------------------------------------------------------\n\n",
+  "RAW DATA AND FILTERING\n",
+  "    Records across all raw input files          : ", raw_total, "\n",
+  "    Entries served by RIFRMap                   : ", total_entries, "\n\n",
+  "    Each block below traces one source from its raw file to the entries\n",
+  "    the app serves. Named stages are the inclusion criteria applied in\n",
+  "    code/process_data.R; the drop on the final line covers mutation-code\n",
+  "    parsing, de-duplication and reference-gated mapping, which are not\n",
+  "    broken out individually.\n\n",
+  raw_summary_text, "\n\n",
   "--------------------------------------------------------------------\n\n",
   "TOP 5 SPECIES BY UNIQUE MUTATIONS\n",
   top_species_text, "\n\n",

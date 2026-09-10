@@ -40,6 +40,41 @@ hash_file <- function(path) {
   as.character(openssl::sha1(file(path)))
 }
 
+# A dataset's processed output depends on more than its raw input: the filter
+# settings in globsets and the processing code itself both feed into it.
+# Hashing the raw CSV alone meant that changing a filter - editing
+# globsets$cryptic_min_coef, say - left the raw file untouched, so change
+# detection said "unchanged", process_cryptic() never re-ran, and the commit
+# phase had nothing to write. The .rds stayed stale indefinitely and silently,
+# still holding rows the new filter was meant to exclude. Folding the
+# processing inputs into every dataset's fingerprint closes that gap.
+#
+# This is deliberately blunt: one shared hash across all datasets, so any edit
+# to either file - a comment included - reprocesses everything. Reprocessing
+# is in-memory and must pass validation before it can commit (see update_all.R's
+# all-or-nothing rule), so the cost is run time, not risk. Serving data that
+# predates its own filters is the worse failure.
+PROCESSING_CODE_PATHS <- c("code/process_data.R", "code/helpers.R")
+
+processing_hash <- function() {
+  code_hashes <- vapply(PROCESSING_CODE_PATHS, hash_file, character(1))
+  # globsets is hashed separately from the file that defines it so that a
+  # settings override applied after sourcing still invalidates the cache.
+  settings_hash <- as.character(openssl::sha1(serialize(globsets, NULL)))
+  as.character(openssl::sha1(paste(c(code_hashes, settings_hash), collapse = "|")))
+}
+
+# Combines a raw input's hash with the processing hash into the single value
+# stored per dataset in pipeline_state.rds. NA propagates so that a missing raw
+# file still reads as "needs processing", exactly as it did when the stored
+# value was the raw hash alone.
+dataset_fingerprint <- function(raw_hash, proc_hash) {
+  if (is.na(raw_hash)) {
+    return(NA_character_)
+  }
+  as.character(openssl::sha1(paste(raw_hash, proc_hash, sep = "|")))
+}
+
 load_pipeline_state <- function() {
   if (file.exists(PIPELINE_STATE_PATH)) readRDS(PIPELINE_STATE_PATH) else list()
 }
@@ -118,7 +153,10 @@ run_pipeline_validation <- function() {
 
   # ---- 6. Change detection: decide which datasets need reprocessing ----
   state <- load_pipeline_state()
-  current_hashes <- lapply(RAW_PATHS, hash_file)
+  proc_hash <- processing_hash()
+  current_hashes <- lapply(RAW_PATHS, function(path) {
+    dataset_fingerprint(hash_file(path), proc_hash)
+  })
 
   needs_processing <- vapply(names(RAW_PATHS), function(ds) {
     prev <- state[[ds]]$hash
