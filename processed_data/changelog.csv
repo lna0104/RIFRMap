@@ -5,3 +5,10 @@ run_date,dataset,status,summary
 2026-09-08,CARD,updated,45 record(s) updated (PMID).
 2026-09-08,RifReport,updated,"30 record(s) updated (AA_pos, Ref_codes)."
 2026-09-08,Reference Gene Catalog,updated,Reprocessed with no net record-level changes detected.
+2026-09-10,CARD,updated,Reprocessed with no net record-level changes detected.
+2026-09-10,CRyPTIC,manual-updated,139 mutation record(s) removed.
+2026-09-10,DRAGdb,updated,Reprocessed with no net record-level changes detected.
+2026-09-10,Yang-RIF,manual-updated,Reprocessed with no net record-level changes detected.
+2026-09-10,RifReport,updated,"30 record(s) updated (AA_pos, Ref_codes)."
+2026-09-10,PointFinder,updated,Reprocessed with no net record-level changes detected.
+2026-09-10,Reference Gene Catalog,updated,Reprocessed with no net record-level changes detected.

@@ -119,8 +119,8 @@ shinyUI(
                   radioButtons(
                     "cryptic_bhp",
                     NULL,
-                    choices = c("0.05" = 0.05, "0.01" = 0.01, "0.005" = 0.005, "0.001" = 0.001, "None" = 1.0),
-                    selected = 1.0,
+                    choices = c("0.05" = 0.05, "0.01" = 0.01, "0.005" = 0.005, "0.001" = 0.001),
+                    selected = 0.05,
                     inline = TRUE
                   ),
                 ),

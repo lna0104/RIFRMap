@@ -62,3 +62,10 @@ yang,manual-unchanged,raw data unchanged since last successful run,NA,2026-09-08
 rifreport,updated,Processed RifReport data,841,2026-09-08T18:06:31Z
 pointfinder,skipped,raw data unchanged since last successful run,NA,2026-09-08T18:06:31Z
 refgenes,updated,Processed Reference Gene Catalog data,67,2026-09-08T18:06:31Z
+card,updated,Processed CARD data,213,2026-09-10T02:29:54Z
+cryptic,manual-updated,Processed CRyPTIC data,40,2026-09-10T02:29:54Z
+dragdb,updated,Processed DRAGdb data,162,2026-09-10T02:29:54Z
+yang,manual-updated,Processed Yang data,117,2026-09-10T02:29:54Z
+rifreport,updated,Processed RifReport data,841,2026-09-10T02:29:54Z
+pointfinder,updated,Processed PointFinder data,146,2026-09-10T02:29:54Z
+refgenes,updated,Processed Reference Gene Catalog data,67,2026-09-10T02:29:54Z

@@ -14,7 +14,8 @@ globsets <- list(
   drug_code = "RIF",
   gene_name = "rpoB",
   variant_type = "single resistance variant", # filter variant type for CARD data
-  # p_value = 0.05, # maxmimum p_value for CRyPTIC data
+  cryptic_min_coef = 0, # minimum log2(MIC) for CRyPTIC data
+  cryptic_max_bh_p = 0.05, # maximum BH-corrected p-value for CRyPTIC data
   provean_score = -2.5, # maximum provean score for DRAGdb data
   Yang_min_log2_fc = 0 # minimum log2(foldchange) in frequencies to include a mutation as "selected for"
 )
@@ -73,7 +74,9 @@ process_cryptic <- function(ctx) {
         dplyr::filter(
           drug == globsets$drug_code,
           gene == globsets$gene_name,
-          !stringr::str_detect(muts, "indel")
+          !stringr::str_detect(muts, "indel"),
+          coef > globsets$cryptic_min_coef,
+          bh_corrected_p <= globsets$cryptic_max_bh_p
         ) |>
         tidyr::separate(
           muts,
@@ -948,6 +951,223 @@ build_references <- function(combined_data,
 
   write_csv(combined_refs, output_path)
   combined_refs
+}
+
+# ---- Filtering report ----
+#
+# Reporting only. Nothing here is part of the pipeline: neither
+# run_pipeline_validation() nor the standalone driver below calls it, and it
+# writes nothing. It lives in this file so the stage expressions sit beside the
+# dplyr::filter() calls they mirror and read the same `globsets` thresholds -
+# keep the two in sync when a filter changes.
+#
+# report_filtering() re-reads each raw file and applies that source's inclusion
+# criteria one at a time, recording how many records survive each. It covers
+# only the pre-mapping filters; mutation-code parsing and reference-gated
+# mapping are not replicated and instead surface as the residual on each
+# source's final line. Called by code/reports.R, and usable on its own:
+#
+#   .pipeline_orchestrating <- TRUE
+#   source("code/process_data.R")
+#   cat(format_filtering_funnels(report_filtering()))
+
+# Applies `...` cumulatively as dplyr::filter() stages, recording how many
+# records survive each one. Name every stage with the criterion it applies.
+filter_funnel <- function(df, ...) {
+  stages <- rlang::quos(...)
+  current <- df
+  out <- vector("list", length(stages))
+  for (i in seq_along(stages)) {
+    before <- nrow(current)
+    current <- dplyr::filter(current, !!stages[[i]])
+    out[[i]] <- tibble::tibble(
+      stage = names(stages)[i],
+      kept = nrow(current),
+      dropped = before - nrow(current)
+    )
+  }
+  dplyr::bind_rows(out)
+}
+
+# One source's rows: the raw count, one row per inclusion criterion, and the
+# entry count RIFRMap serves. The gap between the last criterion and `n_final`
+# is reported as that final row's loss, so each source reconciles back to its
+# raw file.
+funnel_rows <- function(source, path, n_raw, stages, n_final,
+                        raw_label = "Records in raw file") {
+  n_last <- if (nrow(stages) > 0) stages$kept[nrow(stages)] else n_raw
+  dplyr::bind_rows(
+    tibble::tibble(
+      source = source, path = path, stage = raw_label,
+      kept = n_raw, dropped = NA_integer_, kind = "raw"
+    ),
+    if (nrow(stages) > 0) {
+      tibble::tibble(
+        source = source, path = path, stage = stages$stage,
+        kept = stages$kept, dropped = stages$dropped, kind = "filter"
+      )
+    },
+    tibble::tibble(
+      source = source, path = path, stage = "Entries served by RIFRMap",
+      kept = n_final, dropped = n_last - n_final, kind = "final"
+    )
+  )
+}
+
+# Returns one row per funnel stage across all seven sources, with columns
+# source / path / stage / kept / dropped / kind ("raw", "filter", "final").
+# `final_counts` is a named count of the entries the app serves per source
+# label; it defaults to processed_data/allData.rds, and any source missing from
+# it reports NA rather than failing.
+report_filtering <- function(final_counts = NULL) {
+  if (is.null(final_counts)) {
+    final_counts <- if (file.exists("processed_data/allData.rds")) {
+      table(readRDS("processed_data/allData.rds")$source)
+    } else {
+      integer(0)
+    }
+  }
+  n_final <- function(label) {
+    if (label %in% names(final_counts)) as.integer(final_counts[[label]]) else NA_integer_
+  }
+
+  ## CARD ----------------------------------------------------------------
+  card_raw <- read_csv("raw_data/card_data.csv", show_col_types = FALSE) |>
+    janitor::clean_names() |>
+    tidyr::separate(
+      card_short_name,
+      into = c("species_abbrev", "gene", "drug"),
+      sep = "_", fill = "right", extra = "merge", remove = FALSE
+    )
+
+  card_stages <- filter_funnel(
+    card_raw,
+    "Drug is RIF"               = drug == globsets$drug_code,
+    "Single resistance variant" = parameter_type == globsets$variant_type,
+    "Gene is rpoB"              = gene == globsets$gene_name
+  )
+
+  ## CRyPTIC -------------------------------------------------------------
+  cryptic_raw <- read_csv("raw_data/cryptic_data.csv", show_col_types = FALSE) |>
+    janitor::clean_names()
+
+  cryptic_stages <- filter_funnel(
+    cryptic_raw,
+    "Drug is RIF"      = drug == globsets$drug_code,
+    "Gene is rpoB"     = gene == globsets$gene_name,
+    "Excluding indels" = !stringr::str_detect(muts, "indel"),
+    !!paste0("Effect size > ", globsets$cryptic_min_coef, " (log2 MIC)") :=
+      coef > globsets$cryptic_min_coef,
+    !!paste0("BH-corrected p <= ", globsets$cryptic_max_bh_p) :=
+      bh_corrected_p <= globsets$cryptic_max_bh_p
+  )
+
+  ## DRAGdb --------------------------------------------------------------
+  # The PROVEAN criterion is split across two stages because the single
+  # dplyr::filter() in parse_dragdb() drops NA alongside scores above the
+  # threshold. Most of DRAGdb's loss here is entries carrying no PROVEAN score
+  # at all, not entries predicted to be neutral - a distinction worth seeing.
+  dragdb_raw <- read_csv("raw_data/dragdb_data.csv", show_col_types = FALSE)
+
+  dragdb_stages <- filter_funnel(
+    dragdb_raw,
+    "Drug is RIF"            = stringr::str_detect(drug, globsets$drug_name),
+    "PROVEAN score reported" = !is.na(provean),
+    !!paste0("PROVEAN score <= ", globsets$provean_score, " (deleterious)") :=
+      provean <= globsets$provean_score
+  )
+
+  ## PointFinder ---------------------------------------------------------
+  # Restricted to rifampicin/rpoB at download time by update_pointfinder(), so
+  # the raw file carries no further inclusion filter.
+  pointfinder_raw <- read_csv("raw_data/pointfinder_data.csv", show_col_types = FALSE)
+  pointfinder_stages <- filter_funnel(pointfinder_raw)
+
+  ## Reference Gene Catalog ----------------------------------------------
+  refgenes_raw <- read_csv(
+    "raw_data/refgenes_catalog.csv",
+    col_types = cols(.default = "c"), show_col_types = FALSE
+  )
+
+  refgenes_stages <- filter_funnel(
+    refgenes_raw,
+    "Subclass includes rifampin" = stringr::str_detect(
+      Subclass, stringr::regex("RIFAMPIN", ignore_case = TRUE)
+    ),
+    "Gene family is rpoB"   = `Gene family` == globsets$gene_name,
+    "Parseable allele code" = stringr::str_detect(`#Allele`, "^\\w+_[A-Z]\\d+[A-Z]$")
+  )
+
+  ## RifReport -----------------------------------------------------------
+  # The raw file is already rpoB/RIF-only and already expanded to one row per
+  # named species by expand_multi_species() (code/update_data.R). Its large drop
+  # is de-duplication, not exclusion: the survey records one row per reporting
+  # study, which process_rifreport() collapses to one row per species/position/
+  # substitution while counting the studies into n_studies. The dedup stage
+  # mirrors that grouping key, uppercasing as process_rifreport() does.
+  rifreport_raw <- read_csv("raw_data/rifreport_data.csv", show_col_types = FALSE)
+
+  rifreport_stages <- filter_funnel(
+    rifreport_raw,
+    "Complete, citable E. coli-mapped record" = !is.na(AA_pos_Ecoli) &
+      !is.na(AA_original) & !is.na(AA_mutation) & !is.na(Ref_code),
+    "Distinct species/position/substitution"  = !duplicated(paste(
+      Species, AA_pos, toupper(AA_original), AA_pos_Ecoli, toupper(AA_mutation)
+    ))
+  )
+
+  ## Yang-RIF ------------------------------------------------------------
+  # The raw file is a position x residue grid, so it is pivoted to one row per
+  # substitution before counting; the raw figure is that pivoted total, not the
+  # grid rows on disk. The stop-codon column is reported separately to reconcile
+  # with the 760 standard substitutions cited in the source publication -
+  # process_yang() does not exclude it explicitly, but none of its cells clear
+  # the log2FC filter, so the final count is the same either way.
+  yang_raw <- read_csv(
+    "raw_data/Yang2023_Fig3a_data_RIF_log2FC.csv", show_col_types = FALSE
+  ) |>
+    tidyr::pivot_longer(`_`:Q, names_to = "AA_mutation", values_to = "log2_fc")
+
+  yang_stages <- filter_funnel(
+    yang_raw,
+    "Standard amino acid substitutions" = AA_mutation != "_",
+    !!paste0("log2 fold-change >= ", globsets$Yang_min_log2_fc, " (RIF-selected)") :=
+      log2_fc >= globsets$Yang_min_log2_fc
+  )
+
+  dplyr::bind_rows(
+    funnel_rows("CARD", "raw_data/card_data.csv",
+                nrow(card_raw), card_stages, n_final("CARD")),
+    funnel_rows("CRyPTIC", "raw_data/cryptic_data.csv",
+                nrow(cryptic_raw), cryptic_stages, n_final("CRyPTIC")),
+    funnel_rows("DRAGdb", "raw_data/dragdb_data.csv",
+                nrow(dragdb_raw), dragdb_stages, n_final("DRAGdb")),
+    funnel_rows("PointFinder", "raw_data/pointfinder_data.csv",
+                nrow(pointfinder_raw), pointfinder_stages, n_final("PointFinder")),
+    funnel_rows("Reference Gene Catalog", "raw_data/refgenes_catalog.csv",
+                nrow(refgenes_raw), refgenes_stages,
+                n_final("Reference Gene Catalog")),
+    funnel_rows("RifReport", "raw_data/rifreport_data.csv",
+                nrow(rifreport_raw), rifreport_stages, n_final("RifReport")),
+    funnel_rows("Yang-RIF", "raw_data/Yang2023_Fig3a_data_RIF_log2FC.csv",
+                nrow(yang_raw), yang_stages, n_final("Yang"),
+                raw_label = "Substitutions in mutagenesis grid")
+  )
+}
+
+# Renders report_filtering()'s tibble as one indented block per source.
+format_filtering_funnels <- function(funnels) {
+  blocks <- vapply(unique(funnels$source), function(src) {
+    rows <- funnels[funnels$source == src, ]
+    lines <- ifelse(
+      is.na(rows$dropped),
+      sprintf("        %-46s : %6d", rows$stage, rows$kept),
+      sprintf("        %-46s : %6d  (-%d)", rows$stage, rows$kept, rows$dropped)
+    )
+    paste(c(paste0("    [", src, "]  ", rows$path[1]), lines), collapse = "\n")
+  }, character(1), USE.NAMES = FALSE)
+
+  paste(blocks, collapse = "\n\n")
 }
 
 # ---- Standalone execution ----
