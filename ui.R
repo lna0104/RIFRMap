@@ -477,7 +477,15 @@ shinyUI(
             "Summary",
             div(
               class = "text-muted-explore",
-              p("Summary table and histograms are generated from all rows in the filtered dataset; mutations reported by multiple sources may appear more than once.")
+              p("Summary table and histograms are generated from all rows in the filtered dataset; mutations reported by multiple sources may appear more than once. Use \"Download filtered data (CSV)\" to export these rows, with the same columns as the full mutation table on the Data tab.")
+            ),
+            div(
+              style = "display:flex; gap:10px; justify-content:flex-end; margin-bottom:8px;",
+              downloadButton(
+                "download_filtered_mutations",
+                "Download filtered data (CSV)",
+                class = "btn btn-outline-primary btn-sm"
+              )
             ),
             fluidRow(
               column(

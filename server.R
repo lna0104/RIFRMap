@@ -1477,6 +1477,13 @@ function(input, output, session) {
       )
   })
 
+  output$download_filtered_mutations <- downloadHandler(
+    filename = function() paste0("RIFRMap_filtered_mutation_table_", APP_VERSION, "_", Sys.Date(), ".csv"),
+    content = function(file) {
+      readr::write_csv(mutation_data(), file)
+    }
+  )
+
   # ----- Data -----
 
   refcode_links_tooltip <- function(ref_codes, ref_table,
