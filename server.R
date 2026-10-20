@@ -138,7 +138,7 @@ function(input, output, session) {
   # ---- Redirect to View tab on Apply ----
   observeEvent(input$apply_filters, {
     filter_action_msg("Loading...")
-    shinyjs::delay(1000, {
+    shinyjs::delay(500, {
       updateNavbarPage(session, inputId = "main_nav", selected = "explore")
       updateTabsetPanel(session, inputId = "explore_steps", selected = "cluster")
       filter_action_msg(NULL)
