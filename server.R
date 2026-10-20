@@ -133,10 +133,16 @@ function(input, output, session) {
   })
 
 
+  filter_action_msg <- reactiveVal(NULL)
+
   # ---- Redirect to View tab on Apply ----
   observeEvent(input$apply_filters, {
-    updateNavbarPage(session, inputId = "main_nav", selected = "explore")
-    updateTabsetPanel(session, inputId = "explore_steps", selected = "cluster")
+    filter_action_msg("Loading...")
+    shinyjs::delay(1000, {
+      updateNavbarPage(session, inputId = "main_nav", selected = "explore")
+      updateTabsetPanel(session, inputId = "explore_steps", selected = "cluster")
+      filter_action_msg(NULL)
+    })
   })
 
   # ---- Reset button: clear inputs + go back Home
@@ -167,7 +173,23 @@ function(input, output, session) {
     updateSliderInput(session, "rifreport_nstudies", value = SLIDER_RANGES$rifreport_nstudies)
     updateSliderInput(session, "rifreport_nspecies", value = SLIDER_RANGES$rifreport_nspecies)
 
-    updateTabItems(session, "sidebar", "filters")
+    filter_action_msg(NULL)
+  })
+
+  output$filter_action_status <- renderUI({
+    msg <- filter_action_msg()
+    if (is.null(msg)) return(NULL)
+    tags$span(
+      icon("spinner", class = "fa-spin"),
+      msg,
+      style = "color:#0dc5c1; margin-left:10px; font-weight:500;"
+    )
+  })
+
+  observeEvent(input$explore_steps, {
+    if (identical(input$explore_steps, "filters")) {
+      filter_action_msg(NULL)
+    }
   })
 
 
@@ -309,30 +331,36 @@ function(input, output, session) {
     observeEvent(
       list(input$apply_filters, input$clustersToPlot, input$colour_by, input$show_all_mutations),
       {
-        df <- cluster_plotting_df()
-        sp <- cluster_species_to_plot()
-        cl <- clusters_to_plot_r()
+      # Defer to the next flush so "Loading..." reaches the browser before
+      # the expensive plotMutations() call starts.
+        session$onFlushed(function() {
+          isolate({
+            df <- cluster_plotting_df()
+            sp <- cluster_species_to_plot()
+            cl <- clusters_to_plot_r()
 
-        if (is.null(df) || !nrow(df) || !length(sp) || !length(cl)) {
-          cluster_dims_r(NULL)
-          return()
-        }
+            if (is.null(df) || !nrow(df) || !length(sp) || !length(cl)) {
+              cluster_dims_r(NULL)
+              return()
+            }
 
-        cluster_dims_r(
-          plotMutations(
-            muts            = df,
-            clusters        = clusters,
-            seqs            = seqs,
-            coordinates     = coordinates,
-            refs            = refs_seqs,
-            gene            = "rpoB",
-            clustersToPlot  = cl,
-            speciesToPlot   = sp,
-            colour_by       = input$colour_by,
-            mergeDuplicates = TRUE,
-            return_dims     = TRUE
-          )
-        )
+            cluster_dims_r(
+              plotMutations(
+                muts            = df,
+                clusters        = clusters,
+                seqs            = seqs,
+                coordinates     = coordinates,
+                refs            = refs_seqs,
+                gene            = "rpoB",
+                clustersToPlot  = cl,
+                speciesToPlot   = sp,
+                colour_by       = input$colour_by,
+                mergeDuplicates = TRUE,
+                return_dims     = TRUE
+              )
+            )
+          })
+        }, once = TRUE)
       },
       ignoreInit = TRUE
     )

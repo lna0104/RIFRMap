@@ -275,7 +275,8 @@ shinyUI(
             ),
             br(),
             actionButton("apply_filters", "APPLY", icon = icon("play"), class = "btn-primary"),
-            actionButton("reset_filters", "RESET", icon = icon("rotate-left"))
+            actionButton("reset_filters", "RESET", icon = icon("rotate-left")),
+            uiOutput("filter_action_status", inline = TRUE)
           ),
 
           ## ---- Mutation Map ----
