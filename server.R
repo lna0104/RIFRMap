@@ -1477,7 +1477,28 @@ function(input, output, session) {
       )
   })
 
-  output$download_filtered_mutations <- downloadHandler(
+  output$explore_mutation_table <- DT::renderDataTable({
+    data <- mutation_data()
+
+    data <- data |>
+      dplyr::mutate(Ref_codes = refcode_links_tooltip(
+        Ref_codes,
+        refs_paper,
+        code_col  = "Ref_code",
+        url_col   = "DOI",
+        title_col = "Full_ref"
+      )) |>
+      dplyr::select(-PMID)
+
+    DT::datatable(
+      data,
+      escape = FALSE,
+      rownames = FALSE,
+      options = list(scrollX = TRUE, pageLength = 25)
+    )
+  })
+
+  output$explore_download_mutations <- downloadHandler(
     filename = function() paste0("RIFRMap_filtered_mutation_table_", APP_VERSION, "_", Sys.Date(), ".csv"),
     content = function(file) {
       readr::write_csv(mutation_data(), file)

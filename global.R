@@ -54,8 +54,7 @@ DATASET_LAST_UPDATED <- list(
 
 # "What's new" history for the Data tab, written by update_all.R's
 # append_changelog() (see update_report.R) - one row per dataset that
-# actually changed in a given run. Absent until the first run that produces
-# a real change, so this must tolerate not existing yet.
+# actually changed in a given run.
 CHANGELOG <- if (file.exists("processed_data/changelog.csv")) {
   readr::read_csv("processed_data/changelog.csv", show_col_types = FALSE)
 } else {

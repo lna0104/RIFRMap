@@ -477,15 +477,7 @@ shinyUI(
             "Summary",
             div(
               class = "text-muted-explore",
-              p("Summary table and histograms are generated from all rows in the filtered dataset; mutations reported by multiple sources may appear more than once. Use \"Download filtered data (CSV)\" to export these rows, with the same columns as the full mutation table on the Data tab.")
-            ),
-            div(
-              style = "display:flex; gap:10px; justify-content:flex-end; margin-bottom:8px;",
-              downloadButton(
-                "download_filtered_mutations",
-                "Download filtered data (CSV)",
-                class = "btn btn-outline-primary btn-sm"
-              )
+              p("Summary table and histograms are generated from all rows in the filtered dataset; mutations reported by multiple sources may appear more than once. See the Mutation Data tab to view or export these rows.")
             ),
             fluidRow(
               column(
@@ -519,6 +511,32 @@ shinyUI(
                 )
               )
             )
+          ),
+
+          ## ---- Filtered Data ----
+          tabPanel(
+            "Filtered Data",
+            div(
+              class = "text-muted-explore",
+              p("This table shows the mutation data filtered using the settings on the Data Filters tab (per-source enable/species/numeric filters); mutations reported by multiple sources may appear more than once. For the complete, unfiltered dataset, see the Data tab.")
+            ),
+            div(
+              class = "table-header",
+              h3("Mutation Data")
+            ),
+            p(
+              class = "text-muted",
+              tags$em(paste0("Version: ", APP_VERSION, " | Last updated: ", DATA_LAST_UPDATED))
+            ),
+            div(
+              style = "display:flex; gap:10px; justify-content:flex-end; margin-bottom:8px;",
+              downloadButton(
+                "explore_download_mutations",
+                "Download filtered mutations (CSV)",
+                class = "btn btn-outline-primary btn-sm"
+              )
+            ),
+            DT::DTOutput("explore_mutation_table")
           )
         )
       )
