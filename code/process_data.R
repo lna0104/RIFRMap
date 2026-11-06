@@ -1,10 +1,7 @@
 library(tidyverse)
-library(tidyr)
-library(dplyr)
 library(ALJEbinf)
 library(Biostrings)
 library(rentrez)
-library(xml2)
 
 source("code/helpers.R")
 
@@ -295,11 +292,16 @@ map_dragdb <- function(parsed, ctx) {
     {
       dragdb_mapped_ecoli <- parsed |>
         filter(species %in% ctx$refs$Species) |>
-        mutate(species_sq = str_replace(species, " ", "_")) |>
+        mutate(species_sq = str_replace_all(species, " ", "_")) |>
         group_by(species_sq) |>
         group_modify(\(df, key) {
           sp <- key$species_sq[1]
           rpoB_target <- get_rpoB_for_species(sp, ctx$seqs)
+
+          if (is.null(rpoB_target)) {
+            return(tibble())
+          }
+
           map_to_ecoli(df, rpoB_target, ctx$rpoB_Ecoli)
         }) |>
         ungroup() |>
@@ -521,7 +523,7 @@ parse_refgenes <- function() {
   refgenes_data |>
     filter(
       str_detect(Subclass, regex("RIFAMPIN", ignore_case = TRUE)),
-      `Gene family` == "rpoB"
+      `Gene family` == globsets$gene_name
     ) |>
     extract(
       `#Allele`,

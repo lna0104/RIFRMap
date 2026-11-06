@@ -1,3 +1,11 @@
+#' Retry an expression until it succeeds
+#'
+#' Evaluates `expr`, re-evaluating it after any error, up to `max_tries` times
+#' in total. The final attempt runs without error handling, so its error
+#' propagates to the caller.
+#'
+#' @param expr the expression to evaluate.
+#' @param max_tries the maximum number of attempts.
 #' @param envir the environment in which to run the expression.
 #'
 #' @returns the return value of the expression on its successful execution
@@ -104,13 +112,11 @@ download_file <- function(summary, suffix = "_cds_from_genomic.fna.gz", dir = "o
   if(!dir.exists(dir)) {
     dir.create(dir, recursive = TRUE)
   }
-  
-  name <- gsub(".*/([^/]+)/?", "\\1", summary$ftppath_refseq)
-  file_name <- paste0(name, suffix)
-  # file_path <- file.path(dir, file_name)
+
   file_path <- get_genome_file_path(summary, suffix = suffix, dir = dir)
-  
-  if ((!overwrite) && (file.exists(sub(".gz", "", file_path)))) {
+  file_name <- basename(file_path)
+
+  if ((!overwrite) && (file.exists(sub("\\.gz$", "", file_path)))) {
     cat("  --> File already exists, skipped.\n")
   } else {
     url <- paste0(summary$ftppath_refseq, "/", file_name)
@@ -127,128 +133,18 @@ download_file <- function(summary, suffix = "_cds_from_genomic.fna.gz", dir = "o
   return(file_path)
 }
 
-#Takes an list of Entrez summaries, and downloads and unzips the fasta files from refseq.
-#Each summary object must have an `ftppath_refseq` entry.
-#Downloaded files are placed in the `dir` directory, which is created if it does not exist.
-#' Download Fasta Files From RefSeq
-#'
-#' Given a list of esummary objects, downloads (and unzips if necessary) a set of corresponding fasta files of a given type from RefSeq.
-#'
-#' @param summaries a list of esummary objects with a `ftppath_refseq` entries.
-#' @param suffix a character string giving the suffix of the files to be downloaded (following the assembly name).
-#' @param dir a character string giving the directory to place the downloaded files in (created if it does not exist).
-#' @param max_tries the maximum number of times to try each web request before throwing an error.
-#'
-#' @details
-#' The URLs from which to download the files are constructed from the `ftppath_refseq` entry of each summary and the given `suffix`.
-#' `suffix` must include the file extension, including `.gz` if applicable.
-#' Each web request will be attempted `max_tries` times to protect against intermittent internet failure.
-#' The downloaded files are unzipped if they end in `gz`, and the original `.gz` files are removed.
-#'
-#' @returns a vector of character strings giving the paths to the downloaded (and unzipped if applicable) files
-#' @export
-#'
-#' @examples
-#' withr::with_tempfile("td", {
-#'   summaries <- get_summaries('assembly', 'GCA_000006945.2[Assembly Accession] OR GCA_016028495.1[Assembly Accession] AND (latest[filter] AND all[filter] NOT anomalous[filter])')
-#'   files <- download_files(summaries, dir = td)
-#' })
-download_files <- function(summaries, suffix = "_cds_from_genomic.fna.gz", dir = "output/genomes", max_tries = 10) {
-  file_paths <- list()
-  for(i in 1:length(summaries)) {
-    cat(paste0("Downloading genome for species #", i, "/", length(summaries), "\n..."))
-    try( # continue to download the genomes if any download fails
-      file_path <- download_file(summaries[[i]], suffix = suffix, dir = dir, max_tries = max_tries)
-    )
-    file_paths[[i]] <- file_path
-  }
-  return(file_paths)
-}
-
-
-
-#' Find the rpoB sequence inside the annotated genomic file based on the presence of the gene or protein name 
-#'
-#' @param fna_file a genomic(cds) fna file
-#' @param target_gene a character string object giving the name of a gene("rpoB") to be retrieved
-#' Find all rpoB sequences inside the annotated genomic file based on the presence of the gene or protein name 
-#'
-#' @param fna_file a genomic(cds) fna file
-#' @param target_gene a character string object giving the name of a gene("rpoB") to be retrieved
-#' @param target_protein a character string object giving the name of a protein ("rpoB") to be retrieved. 
-#' This is used as an alternative to target_gene.
-#'
-#' @return DNAStringSet object containing the genes of interest 
-#' @export
-#'
-#' @examples get_target_genes(cds_from_genome.fna)
-get_target_genes <- function(fna_file, target_gene, target_protein) {
-  lines <- readLines(fna_file)
-  
-  # We want to split the lines into a list of headings
-  all_genes <- base::split(lines, cumsum(grepl("^>", lines)))
-  target_gene_list <- list()
-  for(gene in all_genes) {
-    if (grepl(sprintf("\\[gene=%s\\]", target_gene), gene[1]) || 
-        grepl(sprintf("\\[protein=%s\\]", target_protein), gene[1])) {
-      # Stitch all the lines together, except the first
-      target_gene_list <- c(target_gene_list, DNAString(paste(gene[-1], collapse = "")))
-    }
-  }
-  return(target_gene_list)
-}
-
-
-#' Extract the rpoB sequences from a set of downloaded genomes
-#'
-#' @param summaries A list of multiple esummaries from an entrez database containing information about genomes
-#' @param file_paths A list of paths to downloaded fasta files, corresponding to the list of summaries (not necessarily in the same order)
-#' @param target_gene a character string object giving the name of a gene ("rpoB") to be retrieved
-#' @param target_protein a character string object giving the name of a protein ("rpoB") to be retrieved. 
-#'
-#' @return a list of DNA string objects (rpoB sequences) and their corresponding identifications (species name and accession number), in the same order as the summaries
-#' @export 
-#'
-#' @examples
-#' withr::with_tempfile("td", {
-#'   summaries <- get_summaries('assembly', 'GCA_000006945.2[Assembly Accession] OR GCA_016028495.1[Assembly Accession] AND (latest[filter] AND all[filter] NOT anomalous[filter])')
-#'   files <- download_files(summaries, dir = td)
-#'   rpoB_target_sequences <- get_rpoB_target_sequences(summaries, files)
-#' })
-get_rpoB_target_sequences <- function(summaries,
-                                      suffix = "_cds_from_genomic.fna", 
-                                      dir = "output/genomes",
-                                      target_gene = 'rpoB',
-                                      target_protein = "DNA-directed RNA polymerase subunit beta($|[^'])|DNA-directed RNA polymerase subunit beta chain|RNA polymerase, beta subunit|DNA-directed RNA polymerase subunit beta/beta'") {
-  # file_paths <- sort(unlist(file_paths))
-  # file_paths <- file_paths[order(order(unlist(lapply(summaries, `[[`, "assemblyaccession"))))]
-  rpoB_target_sequences <- list()
-  for(i in 1:length(summaries)) {
-    cat(paste0("Extracting gene(s) for species #", i, "/", length(summaries), "\n..."))
-    file_path <- get_genome_file_path(summaries[[i]], suffix = suffix, dir = dir)
-    targets <- get_target_genes(file_path, 
-                                target_gene = target_gene, 
-                                target_protein = target_protein) #extract the rpoB genes
-    if (length(targets) == 0L) {
-      targets <- list(DNAString())  
-    }
-    names(targets) <- paste0("rpoB_", 1:length(targets), "_", summaries[[i]]$speciesname, "_", summaries[[i]]$assemblyaccession)
-    rpoB_target_sequences <- c(rpoB_target_sequences, targets)
-  }
-  return(rpoB_target_sequences)
-}
-
 map_to_ecoli <- function(data, rpoB_target, rpoB_ecoli) { 
   
   # get target coordinates relative to E. coli in nucleotide positions:
-  target_coords <- getCoordinates(rpoB_target, rpoB_ecoli, aligOutput = FALSE)
-  
+  target_coords <- ALJEbinf::getCoordinates(rpoB_target, rpoB_ecoli, aligOutput = FALSE)
+
+  positions <- sort(unique(data$AA_pos))
   aa_map <- data.frame(
-    AA_pos = sort(unique(data$AA_pos)),
+    AA_pos = positions,
     AA_pos_Ecoli = vapply(
-      sort(unique(data$AA_pos)),
+      positions,
       function(pos) {
-        translateCoordinate(
+        ALJEbinf::translateCoordinate(
           pos = pos,
           coordinates = target_coords,
           direction = "FocalToRef",
@@ -263,8 +159,8 @@ map_to_ecoli <- function(data, rpoB_target, rpoB_ecoli) {
   
   mapped_muts <- data |>
     dplyr::left_join(aa_map, by = "AA_pos") |>
-    filter(!is.na(AA_pos_Ecoli))|>
-    distinct() 
+    dplyr::filter(!is.na(AA_pos_Ecoli)) |>
+    dplyr::distinct()
   
   return(mapped_muts)
 }
@@ -288,11 +184,3 @@ get_rpoB_for_species <- function(species, seqs) {
   
   seqs[[hit[1]]]
 }
-
-
-
-
-
-
-
-

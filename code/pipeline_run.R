@@ -30,8 +30,8 @@ RAW_PATHS <- list(
   refgenes    = "raw_data/refgenes_catalog.csv"
 )
 
+# Everything not listed here (cryptic, yang) is manual-only.
 SCRIPTED_DATASETS <- c("card", "dragdb", "pointfinder", "rifreport", "refgenes")
-MANUAL_DATASETS <- c("cryptic", "yang")
 
 hash_file <- function(path) {
   if (!file.exists(path)) {
@@ -109,9 +109,8 @@ run_pipeline_validation <- function() {
   update_results$pointfinder <- update_pointfinder()
   update_results$refgenes <- update_refgenes()
 
-  # usethis::create_github_token()
-  # Generate a new token select all scopes
-  # gitcreds::gitcreds_set()
+  # GitHub token setup (one-off): usethis::create_github_token() to generate
+  # a token (select all scopes), then gitcreds::gitcreds_set() to store it.
   token <- tryCatch(gitcreds::gitcreds_get()$password, error = function(e) NA_character_)
   rifreport_dl <- update_rifreport_download(token)
   update_results$rifreport <- rifreport_dl

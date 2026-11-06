@@ -1,20 +1,15 @@
-# library(usethis)
-# create_github_token()
-# gitcreds_set()
+# RifReport needs a GitHub token stored via gitcreds - see the setup comment
+# in code/pipeline_run.R.
 library(tidyverse)
 library(fs)
 library(httr2)
-library(rvest)
-library(gitcreds)
 library(Biostrings)
 
 source("code/helpers.R")
 
 # ----- Helper functions -----
 
-download_github_csv <- function(repo, path, output_path, token,
-                                filter_species = FALSE,
-                                modify_fun = NULL) {
+download_github_csv <- function(repo, path, token, filter_species = FALSE) {
   repo_api <- paste0(
     "https://api.github.com/repos/",
     repo,
@@ -50,8 +45,6 @@ get_pmid_from_doi <- function(doi) {
     return(NA_character_)
   }
 
-  query <- paste0(doi, "[doi]")
-
   res <- tryCatch(
     rentrez::entrez_search(
       db = "pubmed",
@@ -59,7 +52,6 @@ get_pmid_from_doi <- function(doi) {
     ),
     error = function(e) NULL
   )
-
 
   if (is.null(res) || length(res$ids) == 0) {
     message("PMID not found for DOI: ", doi)
@@ -71,10 +63,9 @@ get_pmid_from_doi <- function(doi) {
 
 download_and_extract_card <- function(
   url = "https://card.mcmaster.ca/latest/data",
-  dest_file = "data/card-data.tar.bz2",
+  dest_file = tempfile(fileext = ".tar.bz2"),
   extract_dir = "raw_data/card_data"
 ) {
-  dir_create(path_dir(dest_file))
   dir_create(extract_dir)
 
   download.file(
@@ -537,7 +528,7 @@ update_rifreport_finalize <- function(raw_mutations, refs, seqs, coordinates) {
       }
 
       rifreport_filled <- raw_mutations |>
-        fillMutationsTable(refs, seqs, coordinates)
+        ALJEbinf::fillMutationsTable(refs, seqs, coordinates)
 
       rifreport_mutations_clean <- rifreport_filled |>
         filter(!is.na(AA_mut_name_Ecoli))
@@ -580,7 +571,13 @@ update_rifreport_finalize <- function(raw_mutations, refs, seqs, coordinates) {
 # update_all.R sets `.pipeline_orchestrating` before sourcing this file, so
 # this block is skipped there and only the functions above get defined.
 if (!exists(".pipeline_orchestrating", inherits = FALSE)) {
+  # Sourcing process_refseqs.R standalone would run its own driver, which
+  # regenerates coordinates as a side effect; set the sentinel so only its
+  # functions are defined, then build `coordinates` explicitly here.
+  .pipeline_orchestrating <- TRUE
   source("code/process_refseqs.R")
+  rm(.pipeline_orchestrating)
+  coordinates <- regenerate_coordinates_if_needed()
 
   refs <- read_csv("raw_data/rpoB_references.csv", show_col_types = FALSE)
   seqs <- readDNAStringSet("raw_data/rpoB_references.fasta")

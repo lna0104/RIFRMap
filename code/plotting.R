@@ -1,15 +1,9 @@
 library(dplyr)
-library(stringr)
 library(ggplot2)
 library(ggpubr)
-library(RColorBrewer)
 
 
-all_data <- readRDS("processed_data/allData.rds") |>
-  mutate(
-    genus = stringr::word(species, 1),
-    source = if_else(source == "Yang", "Yang-RIF", source)
-  )
+all_data <- readRDS("processed_data/allData.rds")
 
 plot_data <- all_data |>
   group_by(source) |>
@@ -92,7 +86,6 @@ top25_species <- mut_species_totals |>
   pull(species)
 
 source_palette_c <- c(source_palette, "Multiple" = "#404040")
-source_palette_c <- source_palette_c[names(source_palette_c) != "None"]
 
 # Filter and set factor levels (ordered by total, descending)
 species_data_top25 <- species_data |>

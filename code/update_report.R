@@ -5,32 +5,22 @@
 # (Stage 2) - see code/pipeline_run.R's run_pipeline_validation(), which
 # both call:
 #
-#   Stage 1 (validation, internal): run_validation_checks() inspects each
-#   freshly-processed-but-not-yet-persisted dataset (still only in memory -
-#   see process_data.R) plus the reference catalog as a whole, and returns a
-#   tibble of findings. Every finding is a "warning": validation reports, it
-#   does not adjudicate, and no finding has ever blocked a release since the
-#   error severity was retired. build_validation_report() always writes this to
-#   output/validation_reports/, even when there's nothing to report - this
-#   file is never read by the Shiny app. validate_all.R always stops after
-#   writing it; update_all.R writes the same report before deciding whether
-#   to proceed.
+# Stage 1 (validation): `run_validation_checks()` inspects freshly processed,
+# in-memory datasets and the reference catalog, returning a tibble of findings.
+# All findings are warnings and never block a release. `build_validation_report()`
+# always writes a report to `output/validation_reports/`, even when no findings
+# exist. `validate_all.R` stops after generating the report, while `update_all.R`
+# performs the same validation before proceeding.
 #
-#   Stage 2 (release, public, whole-run gate): update_all.R only proceeds
-#   past its own validation_report call if the *entire* run is clean - which
-#   now means exactly one thing: zero processing failures, anywhere. A crashed
-#   source produced no data, so publishing around it would silently serve that
-#   source's stale data. Findings themselves never block. If clean,
-#   diff_dataset() compares each committed dataset's new data against a
-#   pre-processing snapshot of the old data (`old_data_snapshot`, built in
-#   run_pipeline_validation()), and build_release_report() +
-#   append_changelog() turn that into a detailed report
-#   (output/release_reports/) and a durable, git-tracked one-line-per-
-#   dataset changelog (processed_data/changelog.csv) that the Shiny app's
-#   Data tab reads as its "what's new" summary. If anything in the run
-#   wasn't clean, update_all.R stops before ever calling either of those -
-#   nothing commits for *any* dataset, even ones with zero problems of their
-#   own - so only a fully-validated run is ever published.
+# Stage 2 (release): `update_all.R` proceeds only if the entire run has zero
+# processing failures. Findings do not block publication, but any processing
+# failure prevents the release to avoid publishing stale data. If the run is
+# clean, `diff_dataset()` compares new data against the pre-processing snapshot
+# (`old_data_snapshot`). `build_release_report()` and `append_changelog()` then
+# generate a detailed report in `output/release_reports/` and update the
+# Git-tracked `processed_data/changelog.csv`, which provides the Shiny app's
+# Data tab with its "What's new" summary. If any source fails, no datasets
+# are committed.
 #
 # Sourced by validate_all.R/update_all.R only - diffing needs a before/after
 # snapshot that only run_pipeline_validation() (code/pipeline_run.R)
@@ -47,6 +37,15 @@ DATASET_DISPLAY_NAMES <- c(
   refgenes    = "Reference Gene Catalog"
 )
 
+# Display name for a dataset id. Findings not tied to one dataset (NA, e.g.
+# check_refstrain_gaps()) are about the reference catalog as a whole.
+.display_name <- function(ds) {
+  if (is.na(ds) || !ds %in% names(DATASET_DISPLAY_NAMES)) {
+    "Reference catalog (all datasets)"
+  } else {
+    DATASET_DISPLAY_NAMES[[ds]]
+  }
+}
 
 DIFF_KEY_COLS <- c("species", "AA_original", "AA_pos_Ecoli", "AA_mutation")
 
@@ -334,31 +333,23 @@ build_validation_report <- function(validation_findings, summary_df, run_time,
                                     out_dir = "output/validation_reports") {
   if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
 
-  display <- function(ds) {
-    if (is.na(ds) || !ds %in% names(DATASET_DISPLAY_NAMES)) {
-      "Reference catalog (all datasets)"
-    } else {
-      DATASET_DISPLAY_NAMES[[ds]]
-    }
-  }
-
   # Findings are warnings only - the report informs, it does not adjudicate.
   # A crashed dataset is reported separately below, since that is a missing
   # dataset rather than a finding about one.
   failed <- summary_df |> dplyr::filter(status == "failed")
-  warnings_ <- validation_findings |> dplyr::filter(severity == "warning")
+  warnings_ <- validation_findings
 
   sections <- character(0)
 
   if (nrow(failed) > 0) {
-    lines <- sprintf("    - %s: %s", vapply(failed$dataset, display, character(1)), failed$reason)
+    lines <- sprintf("    - %s: %s", vapply(failed$dataset, .display_name, character(1)), failed$reason)
     sections <- c(sections, paste0("  PROCESSING FAILURES\n", paste(lines, collapse = "\n"), "\n"))
   }
 
   if (nrow(warnings_) > 0) {
     lines <- sprintf(
       "    - [%s] %s\n        %s",
-      vapply(warnings_$dataset, display, character(1)), warnings_$subject, warnings_$reason
+      vapply(warnings_$dataset, .display_name, character(1)), warnings_$subject, warnings_$reason
     )
     sections <- c(sections, paste0(
       "  WARNINGS (informational, does not block)\n", paste(lines, collapse = "\n"), "\n"
@@ -391,16 +382,15 @@ build_release_report <- function(summary_df, diffs, run_time,
                                  out_dir = "output/release_reports") {
   if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
 
-  display <- function(ds) DATASET_DISPLAY_NAMES[[ds]]
-
+  # No "failed" section: this is only ever built for a clean run, which by
+  # definition has zero processing failures.
   unchanged <- summary_df |> dplyr::filter(status %in% c("skipped", "manual-unchanged"))
   updated <- summary_df |> dplyr::filter(status %in% c("updated", "manual-updated"))
-  failed <- summary_df |> dplyr::filter(status == "failed")
 
   unchanged_text <- if (nrow(unchanged) == 0) {
     "    None.\n"
   } else {
-    paste0("    - ", vapply(unchanged$dataset, display, character(1)), "\n", collapse = "")
+    paste0("    - ", vapply(unchanged$dataset, .display_name, character(1)), "\n", collapse = "")
   }
 
   updated_text <- if (nrow(updated) == 0) {
@@ -408,7 +398,7 @@ build_release_report <- function(summary_df, diffs, run_time,
   } else {
     paste(vapply(updated$dataset, function(ds) {
       diff <- diffs[[ds]]
-      lines <- sprintf("    [%s]", display(ds))
+      lines <- sprintf("    [%s]", .display_name(ds))
       lines <- c(lines, sprintf("        Rows: %s", summary_df$rows[summary_df$dataset == ds]))
 
       if (!is.null(diff)) {
@@ -426,12 +416,6 @@ build_release_report <- function(summary_df, diffs, run_time,
     }, character(1)), collapse = "\n\n")
   }
 
-  failed_text <- if (nrow(failed) == 0) {
-    "    None.\n"
-  } else {
-    paste0("    - ", vapply(failed$dataset, display, character(1)), ": ", failed$reason, "\n", collapse = "")
-  }
-
   report <- paste0(
     "RIFRMap - Release Report (Stage 2, public)\n",
     "Run date: ", format(run_time), "\n",
@@ -439,8 +423,6 @@ build_release_report <- function(summary_df, diffs, run_time,
     "UNCHANGED DATASETS\n", unchanged_text, "\n",
     "--------------------------------------------------------------------\n\n",
     "UPDATED DATASETS (published to processed_data/changelog.csv)\n\n", updated_text, "\n\n",
-    "--------------------------------------------------------------------\n\n",
-    "FAILED DATASETS\n", failed_text, "\n",
     "--------------------------------------------------------------------\n"
   )
 
@@ -463,7 +445,7 @@ append_changelog <- function(summary_df, diffs, run_time,
 
   entries <- tibble::tibble(
     run_date = as.character(as.Date(run_time)),
-    dataset = vapply(changed$dataset, function(ds) DATASET_DISPLAY_NAMES[[ds]], character(1)),
+    dataset = vapply(changed$dataset, .display_name, character(1)),
     status = changed$status,
     summary = vapply(changed$dataset, function(ds) {
       diff <- diffs[[ds]]

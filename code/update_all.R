@@ -13,9 +13,7 @@
 #     (output/release_reports/) + processed_data/changelog.csv (read by the
 #     Shiny app's Data tab's "What's new" panel);
 #
-#   - otherwise: stops immediately. This is whole-run, all-or-nothing - if
-#     *anything* is wrong *anywhere*, nothing commits for *any* dataset,
-#     even ones with zero problems of their own. Every dataset that would
+#   - otherwise: stops immediately. Every dataset that would
 #     have updated is relabelled "blocked" and logged to
 #     processed_data/last_update_log.csv for the audit trail, but nothing
 #     else happens - no processed_data/ writes, no pipeline_state.rds
@@ -26,10 +24,9 @@
 # Run with (working directory = repo root):
 #   source("code/update_all.R")
 
-library(tidyverse)
-library(Biostrings)
-library(openssl)
-
+# The sentinel stops each sourced script's standalone driver from running.
+# It is only checked at source time, so clear it straight away - leaving it
+# set would silently disable the drivers for the rest of the R session.
 .pipeline_orchestrating <- TRUE
 
 source("code/helpers.R")
@@ -38,6 +35,8 @@ source("code/process_data.R")
 source("code/process_refseqs.R")
 source("code/update_report.R")
 source("code/pipeline_run.R")
+
+rm(.pipeline_orchestrating)
 
 message("=== RIFRMap release run starting ===")
 result <- run_pipeline_validation()

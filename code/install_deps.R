@@ -2,13 +2,10 @@
 cran_pkgs <- c(
   "shiny",
   "shinyjs",
-  "dplyr",
-  "tidyr",
-  "tidyverse",
+  "tidyverse", # dplyr, tidyr, readr, ggplot2, stringr, purrr
   "ggiraph",
-  "ggplot2",
   "ggupset",
-  "plotly",
+  "ggpubr",
   "DT",
   "scales",
   "viridisLite",
@@ -19,16 +16,14 @@ cran_pkgs <- c(
   "gtsummary",
   "gt",
   "wesanderson",
-  "RColorBrewer",
   "grantham",
   "rentrez",
   "httr2",
-  "rvest",
   "gitcreds",
   "fs",
   "janitor",
-  "xml2",
-  "openssl"
+  "openssl",
+  "R.utils"
 )
 
 install.packages(
@@ -50,13 +45,7 @@ BiocManager::install(
 
 
 ## ---- GitHub ----
-if (!requireNamespace("remotes", quietly = TRUE)) {
-  install.packages(
-    "remotes",
-    repos = "https://cloud.r-project.org"
-  )
-}
-
+# remotes is installed with the CRAN packages above.
 if (!requireNamespace("ALJEbinf", quietly = TRUE)) {
   remotes::install_github(
     "JanEngelstaedter/ALJEbinf"

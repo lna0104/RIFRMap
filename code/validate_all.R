@@ -12,10 +12,9 @@
 # Run with (working directory = repo root):
 #   source("code/validate_all.R")
 
-library(tidyverse)
-library(Biostrings)
-library(openssl)
-
+# The sentinel stops each sourced script's standalone driver from running.
+# It is only checked at source time, so clear it straight away - leaving it
+# set would silently disable the drivers for the rest of the R session.
 .pipeline_orchestrating <- TRUE
 
 source("code/helpers.R")
@@ -24,6 +23,8 @@ source("code/process_data.R")
 source("code/process_refseqs.R")
 source("code/update_report.R")
 source("code/pipeline_run.R")
+
+rm(.pipeline_orchestrating)
 
 message("=== RIFRMap validation run starting ===")
 result <- run_pipeline_validation()
