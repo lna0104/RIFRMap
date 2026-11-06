@@ -145,7 +145,7 @@ function(input, output, session) {
     })
   })
 
-  # ---- Reset button: clear inputs + go back Home
+  # ---- Reset button: restore every filter input to its default
   observeEvent(input$reset_filters, {
     updateCheckboxInput(session, "card_enabled", value = FALSE)
     updateCheckboxInput(session, "pointfinder_enabled", value = FALSE)
@@ -158,15 +158,13 @@ function(input, output, session) {
     updateSelectInput(session, "card_species", selected = "All species")
     updateSelectInput(session, "pointfinder_species", selected = "All species")
     updateSelectInput(session, "refgenes_species", selected = "All species")
-    updateSelectInput(session, "cryptic_species", selected = "Mycobacterium tuberculosis")
     updateSelectInput(session, "dragdb_species", selected = "All species")
-    updateSelectInput(session, "yang_species", selected = "Escherichia coli")
+    updateSelectInput(session, "rifreport_species", selected = "All species")
 
     # Slider bounds come from SLIDER_RANGES (derived from the loaded data in global.R)
     updateSliderInput(session, "cryptic_coef", value = SLIDER_RANGES$cryptic_coef)
     updateSliderInput(session, "cryptic_counts", value = SLIDER_RANGES$cryptic_counts)
     updateRadioButtons(session, "cryptic_bhp", selected = 0.05)
-    updateSelectInput(session, "cryptic_homoplasy", selected = "")
 
     updateSliderInput(session, "dragdb_provean", value = SLIDER_RANGES$dragdb_provean)
     updateSliderInput(session, "yang_log2fc", value = SLIDER_RANGES$yang_log2fc)
@@ -996,7 +994,7 @@ function(input, output, session) {
     ### ---- Helpers ----
     safe_id <- function(x) gsub("[^A-Za-z0-9_]+", "_", x)
 
-    notify_reselect <- function(where = "heatmap") {
+    notify_reselect <- function() {
       shiny::showNotification("Please select the legend again", type = "message", duration = 6)
     }
 
@@ -1057,14 +1055,6 @@ function(input, output, session) {
         distinct()
 
       df
-    })
-
-    clickable_levels_r <- reactive({
-      df <- hm_plotting_df()
-      if (is.null(df) || !nrow(df)) {
-        return(character(0))
-      }
-      get_clickable_levels(df)
     })
 
     ### ---- Dynamic height ----
@@ -1314,7 +1304,7 @@ function(input, output, session) {
           )
         },
         error = function(e) {
-          notify_reselect("heatmap")
+          notify_reselect()
           ggiraph::girafe(ggobj = ggplot() +
             theme_void())
         }

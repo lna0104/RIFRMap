@@ -2,21 +2,14 @@
 library(shiny)
 library(shinyjs)
 
-# Data
-library(dplyr)
-library(tidyr)
 library(tidyverse)
-library(readr)
 library(gtsummary)
 
 # Plots / widgets
-library(ggplot2)
 library(ggiraph)
-library(plotly)
 library(ggupset)
 library(gt)
 library(wesanderson)
-library(RColorBrewer)
 
 # BioC + GitHub
 library(Biostrings)
@@ -244,14 +237,6 @@ SLIDER_RANGES <- list(
   rifreport_nstudies = slider_bounds(rifreport$n_studies, 1),
   rifreport_nspecies = slider_bounds(rifreport$n_species, 1)
 )
-
-# helper to apply multi-select categorical only if column exists
-filter_in_if <- function(df, col, selected) {
-  if (!col %in% names(df) || is.null(selected) || length(selected) == 0 || selected == "") {
-    return(df)
-  }
-  df |> dplyr::filter(.data[[col]] %in% selected)
-}
 
 # ----  Cluster plot ----
 
@@ -534,7 +519,7 @@ getPositionOrderedBlockData <- function(muts,
   return(block)
 }
 
-renderBlock <- function(block, x0, y0, dx, dy, colcat = NULL, pars) {
+renderBlock <- function(block, x0, y0, dx, dy, pars) {
   # positions:
   text(x0 + (block$RelX[block$RelY == -1L] - 1L) * dx,
     1 - y0,
@@ -765,9 +750,6 @@ plotMutations <- function(muts,
   pal_distribution <- COLOURING_PALETTES$distribution
   pal_aa_type <- COLOURING_PALETTES$aa_type
   pal_aa_distance <- COLOURING_PALETTES$aa_distance
-
-  # determine mutation categories for colouring
-  mutCounts <- NULL
 
   # calculate distribution
   filteredMuts <- muts |>

@@ -187,7 +187,6 @@ $(function () {
 
   function resetInteractionState() {
     lastBand = null;
-    lastXPlot = null;
     lastXpx = null;
     pending = null;
   }
@@ -295,7 +294,6 @@ $(function () {
 
   // ---- state for throttled drawing ----
   let lastBand = null;    // {ymin,ymax} in plot coords
-  let lastXPlot = null;   // snapped x in plot coords
   let lastXpx = null;     // snapped x in CSS pixels
 
   // draw scheduling (single RAF for BOTH x and y changes)
@@ -374,7 +372,6 @@ $(function () {
       if (zone && s[zone]) band = s[zone];
     }
 
-    lastXPlot = xSnapPlot;
     requestDraw(ctx, pr, band, xpx);
   }
 
@@ -433,8 +430,6 @@ $(function () {
   // ---------- Shiny message handler ----------
   if (window.Shiny) {
     Shiny.addCustomMessageHandler("hoverMap", function (msg) {
-      // console.log(msg);
-
       if (msg === "NULL" || msg == null) {
         HOVER_ENABLED = false;
         SPECIES_BANDS = [];
@@ -472,8 +467,6 @@ $(function () {
       // a resize/load event that may not come.
       bindHoverOverlay();
       syncCanvasBackingStore();
-
-      // console.log("hoverMap:", "bands=", SPECIES_BANDS.length, "xcols=", XCOLS.length, "dx=", DX, "plt=", PLT);
     });
   }
 

@@ -2,8 +2,6 @@ shinyUI(
   navbarPage(
     title = "RIFRMap",
     id = "main_nav",
-    theme = "www/styles.css",
-    # footer = includeHTML("www/footer.html"),
     fluid = TRUE,
     collapsible = TRUE,
     header = tagList(
@@ -478,7 +476,7 @@ shinyUI(
             "Summary",
             div(
               class = "text-muted-explore",
-              p("Summary table and histograms are generated from all rows in the filtered dataset; mutations reported by multiple sources may appear more than once. See the Mutation Data tab to view or export these rows.")
+              p("Summary table and histograms are generated from all rows in the filtered dataset; mutations reported by multiple sources may appear more than once. See the Filtered Data module to view or export these rows.")
             ),
             fluidRow(
               column(
@@ -519,7 +517,7 @@ shinyUI(
             "Filtered Data",
             div(
               class = "text-muted-explore",
-              p("This table shows the mutation data filtered using the settings on the Data Filters tab (per-source enable/species/numeric filters); mutations reported by multiple sources may appear more than once. For the complete, unfiltered dataset, see the Data tab.")
+              p("This table shows the mutation data filtered using the settings on the Data Filters module (per-source enable/species/numeric filters); mutations reported by multiple sources may appear more than once. For the complete, unfiltered dataset, see the Data tab.")
             ),
             div(
               class = "table-header",
