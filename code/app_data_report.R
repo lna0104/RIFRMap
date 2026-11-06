@@ -40,7 +40,7 @@ DATASETS <- tribble(
   "card",        "CARD",
   "cryptic",     "CRyPTIC",
   "dragdb",      "DRAGdb",
-  "yang",        "Yang",
+  "yang",        "Yang-RIF",
   "rifreport",   "RifReport",
   "pointfinder", "PointFinder",
   "refgenes",    "Reference Gene Catalog"
@@ -81,7 +81,9 @@ emit("not cover the data range, the uncovered rows are unreachable in the app.")
 emit("")
 
 # The numeric filters applied in server.R's combined_rows(). cryptic_bhp is a
-# radioButtons rather than a slider, so it has no SLIDER_RANGES entry.
+# radioButtons rather than a slider, so it has no SLIDER_RANGES entry; its
+# widest choice (ui.R's cryptic_bhp `choices`) is recorded here instead.
+CRYPTIC_BHP_MAX <- 0.05
 FILTER_CONTROLS <- tribble(
   ~control,             ~dataset,    ~column,
   "cryptic_coef",       "cryptic",   "coef",
@@ -112,10 +114,11 @@ for (i in seq_len(nrow(FILTER_CONTROLS))) {
   ui_rng <- SLIDER_RANGES[[ctl]]
 
   if (is.null(ui_rng)) {
-    # radioButtons: choices are 0.05 / 0.01 / 0.005 / 0.001 / None (= 1.0),
-    # defaulting to None, so the widest reachable filter is <= 1.
-    ui_txt <- "<= 1 (radio)"
-    covers <- data_rng[2] <= 1
+    # radioButtons (cryptic_bhp): the widest reachable filter is its largest
+    # choice. Keep CRYPTIC_BHP_MAX in step with the choices in ui.R.
+    ui_txt <- sprintf("<= %s (radio)", fmt(CRYPTIC_BHP_MAX))
+    covers <- data_rng[2] <= CRYPTIC_BHP_MAX
+    if (!covers) uncovered[[ctl]] <- list(d = d, col = col, ui = c(-Inf, CRYPTIC_BHP_MAX))
   } else {
     ui_txt <- sprintf("%s - %s", fmt(ui_rng[1]), fmt(ui_rng[2]))
     covers <- ui_rng[1] <= data_rng[1] && ui_rng[2] >= data_rng[2]
@@ -157,8 +160,11 @@ if (length(uncovered) > 0) {
 }
 
 emit("")
-emit("cryptic_bhp is a radioButtons (0.05 / 0.01 / 0.005 / 0.001 / None), and")
-emit("defaults to None = 1.0, so by default it filters nothing.")
+emit("cryptic_bhp is a radioButtons (0.05 / 0.01 / 0.005 / 0.001), defaulting to")
+emit(sprintf(
+  "its widest choice, <= %s. Rows with a larger or NA p-value are never shown.",
+  fmt(CRYPTIC_BHP_MAX)
+))
 emit("")
 
 # ---- 2. Species per source ----------------------------------------------

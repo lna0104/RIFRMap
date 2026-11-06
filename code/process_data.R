@@ -340,7 +340,7 @@ process_yang <- function(ctx) {
           AA_pos_Ecoli = as.integer(paste0("5", pos)),
           AA_pos = AA_pos_Ecoli,
           species = "Escherichia coli",
-          source = "Yang",
+          source = "Yang-RIF",
           AA_original = NA,
           PMID = "37648864"
         ) |>
@@ -1152,7 +1152,7 @@ report_filtering <- function(final_counts = NULL) {
     funnel_rows("RifReport", "raw_data/rifreport_data.csv",
                 nrow(rifreport_raw), rifreport_stages, n_final("RifReport")),
     funnel_rows("Yang-RIF", "raw_data/Yang2023_Fig3a_data_RIF_log2FC.csv",
-                nrow(yang_raw), yang_stages, n_final("Yang"),
+                nrow(yang_raw), yang_stages, n_final("Yang-RIF"),
                 raw_label = "Substitutions in mutagenesis grid")
   )
 }

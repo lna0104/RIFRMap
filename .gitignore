@@ -11,3 +11,6 @@ tmp.R
 .DS_Store
 .quarto
 raw_data/rpoB_references
+code/app_data_report.R
+output/*
+processed_data/*
