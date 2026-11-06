@@ -1,9 +1,15 @@
 # RIFRMap — Data Summary Script
 library(dplyr)
-library(tidyr)
 library(readr)
 
 file_name <- "output/RIFRMap_data_summary.txt"
+
+# Display order of the per-source sections (values of allData$source);
+# anything not listed sorts last.
+SOURCE_ORDER <- c(
+  "CARD", "CRyPTIC", "DRAGdb", "PointFinder",
+  "Reference Gene Catalog", "RifReport", "Yang-RIF"
+)
 
 # -----------------------------------------------------------------------------
 # 1. Load data
@@ -23,6 +29,7 @@ all_data <- readRDS("processed_data/allData.rds")
 # the pipeline (see the guarded block at the bottom of code/process_data.R).
 .pipeline_orchestrating <- TRUE
 suppressPackageStartupMessages(source("code/process_data.R"))
+rm(.pipeline_orchestrating) # only checked at source time; don't leave it set
 
 filtering_funnels <- report_filtering(final_counts = table(all_data$source))
 raw_summary_text <- format_filtering_funnels(filtering_funnels)
@@ -79,38 +86,42 @@ per_source <- all_data |>
     n_entries = n(),
     .groups = "drop"
   ) |>
-  arrange(match(source, c(
-    "CARD", "CRyPTIC", "DRAGdb", "PointFinder",
-    "RefGenesCatalog", "Curated", "Yang"
-  )))
+  arrange(match(source, SOURCE_ORDER))
 
 # -----------------------------------------------------------------------------
 # 6. Cross-source overlap
 # -----------------------------------------------------------------------------
+# Mutation identity is (AA_pos_Ecoli, AA_mutation) - AA_original is not part
+# of the key, since species differ in which residue sits at a given E. coli
+# position. The differing originals are collapsed into the label (e.g. D/Q516K).
 overlap <- all_data |>
   mutate(mut_id = paste(AA_pos_Ecoli, AA_mutation)) |>
-  group_by(mut_id) |>
-  summarise(n_sources = n_distinct(source), .groups = "drop")
+  group_by(mut_id, AA_pos_Ecoli, AA_mutation) |>
+  summarise(
+    n_sources = n_distinct(source),
+    label = paste0(
+      paste(sort(unique(na.omit(AA_original))), collapse = "/"),
+      dplyr::first(AA_pos_Ecoli), dplyr::first(AA_mutation) # S4Vectors masks first()
+    ),
+    .groups = "drop"
+  )
 
+n_sources_total <- n_distinct(all_data$source)
 n_pairs_1_source <- sum(overlap$n_sources == 1)
 n_pairs_2plus <- sum(overlap$n_sources >= 2)
 n_pairs_3plus <- sum(overlap$n_sources >= 3)
-n_pairs_all7 <- sum(overlap$n_sources == 7)
+n_pairs_all <- sum(overlap$n_sources == n_sources_total)
 
-# Mutations shared across all 7 sources — compact list only
-all7_mutations <- all_data |>
-  mutate(mut_id = paste(AA_pos_Ecoli, AA_mutation)) |>
-  group_by(mut_id, AA_pos_Ecoli, AA_original, AA_mutation) |>
-  summarise(n_sources = n_distinct(source), .groups = "drop") |>
-  filter(n_sources == 7) |>
-  arrange(AA_pos_Ecoli) |>
-  mutate(label = paste0(AA_original, AA_pos_Ecoli, AA_mutation)) |>
+# Mutations shared across every source — compact list only
+all_sources_mutations <- overlap |>
+  filter(n_sources == n_sources_total) |>
+  arrange(AA_pos_Ecoli, AA_mutation) |>
   pull(label)
 
-all7_text <- if (length(all7_mutations) == 0) {
+all_sources_text <- if (length(all_sources_mutations) == 0) {
   "    None found.\n"
 } else {
-  paste0("    ", paste(all7_mutations, collapse = ", "), "\n")
+  paste0("    ", paste(all_sources_mutations, collapse = ", "), "\n")
 }
 
 # -----------------------------------------------------------------------------
@@ -123,21 +134,12 @@ n_refs_total <- nrow(dplyr::distinct(refs_lookup))
 # -----------------------------------------------------------------------------
 # 8. Per-source exclusive mutations (not in any other source)
 # -----------------------------------------------------------------------------
-mut_source_membership <- all_data |>
-  mutate(mut_id = paste(AA_pos_Ecoli, AA_mutation)) |>
-  group_by(mut_id) |>
-  summarise(n_sources = n_distinct(source), .groups = "drop")
-
 unique_per_source <- all_data |>
   mutate(mut_id = paste(AA_pos_Ecoli, AA_mutation)) |>
-  left_join(mut_source_membership, by = "mut_id") |>
+  left_join(select(overlap, mut_id, n_sources), by = "mut_id") |>
   filter(n_sources == 1) |>
   group_by(source) |>
-  summarise(n_unique_pairs = n_distinct(mut_id), .groups = "drop") |>
-  arrange(match(source, c(
-    "CARD", "CRyPTIC", "DRAGdb", "PointFinder",
-    "RefGenesCatalog", "Curated", "Yang"
-  )))
+  summarise(n_unique_pairs = n_distinct(mut_id), .groups = "drop")
 
 per_source <- per_source |>
   left_join(unique_per_source, by = "source") |>
@@ -192,9 +194,9 @@ report <- paste0(
   "    Mutations in exactly 1 source       : ", n_pairs_1_source, "\n",
   "    Mutations in >= 2 sources           : ", n_pairs_2plus, "\n",
   "    Mutations in >= 3 sources           : ", n_pairs_3plus, "\n",
-  "    Mutations in all 7 sources          : ", n_pairs_all7, "\n\n",
-  "MUTATIONS REPORTED IN ALL 7 SOURCES\n",
-  all7_text, "\n",
+  "    Mutations in all ", n_sources_total, " sources          : ", n_pairs_all, "\n\n",
+  "MUTATIONS REPORTED IN ALL ", n_sources_total, " SOURCES\n",
+  all_sources_text, "\n",
   "--------------------------------------------------------------------\n"
 )
 
